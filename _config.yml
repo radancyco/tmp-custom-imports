@@ -1,0 +1,6 @@
+markdown: kramdown
+destination: _httpdocs
+repo: https://github.com/tmpworldwide/custom-imports/
+ghpage: https://tmpworldwide.github.io/custom-imports/
+gems:
+  - jekyll-last-modified-at
