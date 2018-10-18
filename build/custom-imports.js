@@ -47,7 +47,7 @@ if (typeof qaMpode === 'undefined') {
         // set qaMode to true do it does not load the script again
         qaMode = true;
         // Load the QA version of the custom script loacated on github
-        $.getScript("https://clientfiles.tmpwebeng.com/tmp/tb-assets/ajd/ajd-scripts-qa.js", function() {
+        $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
             alert("Custom Importants QA now loaded");
             customImports();
         });
