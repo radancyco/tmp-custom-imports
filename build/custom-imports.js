@@ -45,10 +45,10 @@ jQuery.fn.exists = function(){return ($(this).length > 0);};
 // var fruits = ["Banana", "Orange", "Apple", "Mango"];
 // matches("apple", fruits);
 function matches(name, source) {
-    if ( typeof name !== 'undefined' && typeof source !== 'undefined' ) {
+    if ( typeof name != 'undefined' && typeof source != 'undefined' ) {
         var name = name.toString().toLowerCase();
         var source = source.toString().toLowerCase();
-        return (source.indexOf(name) > 0);
+        return (source.indexOf(name) > -1);
     } else {
         return false;
     }
@@ -61,7 +61,7 @@ function matches(name, source) {
 
 
 if (typeof qaMode === 'undefined') {
-    $var qaMode = "";
+    var qaMode = "";
 }
 
 (function() { // On Document ready
