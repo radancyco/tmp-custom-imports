@@ -60,7 +60,7 @@ function matches(name, source) {
 // By default the script will load dependencies and css
 
 
-if (typeof qaMpode === 'undefined') {
+if (typeof qaMode === 'undefined') {
     var qaMode = "";
 }
 
