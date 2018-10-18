@@ -61,7 +61,7 @@ function matches(name, source) {
 
 
 if (typeof qaMode === 'undefined') {
-    var qaMode = "";
+    $var qaMode = "";
 }
 
 (function() { // On Document ready
