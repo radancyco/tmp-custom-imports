@@ -1,30 +1,11 @@
 // The prod verison of this file exists on https://services1.tmpwebeng.com/custom-imports/custom-imports.js
 
-
-// // Function to get scripts
-// function getScript(source, callback) {
-//     var script = document.createElement('script');
-//     var prior = document.getElementsByTagName('script')[0];
-//     script.async = 1;
-
-//     script.onload = script.onreadystatechange = function( _, isAbort ) {
-//         if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-//             script.onload = script.onreadystatechange = null;
-//             script = undefined;
-
-//             if(!isAbort) { if(callback) callback(); }
-//         }
-//     };
-
-//     script.src = source;
-//     prior.parentNode.insertBefore(script, prior);
-// }
-
+// Check to See if Jquery is running, if it is not report the error as this script and many of the scripts is calls requires jQuery
 if (!window.jQuery) {
     console.error("CI Debug - Error: jQuery is needed for the Custom Imports script to work");
 }
 
-// Function to get paramatures often times found in urls after a ?
+// Function to get parameters often times found in urls after a ?
 // Use case:
 // getParameter("scripts","www.brock.com/?scripts=charts,inpagenav,inview?no-styles=charts?no-dependencies=inview")
 // Expected result: ["charts", "inpagenav", "inview"]
@@ -72,7 +53,7 @@ if (typeof localMode === 'undefined') {
 var url = window.location.href;
 
 // The following document ready code will determine what version of the script will run
-// if there are no addtional parameters in the url of thr browser it will load the production version of the script
+// if there are no additional parameters in the url of thr browser it will load the production version of the script
 // if it contains ?custom-local-mode it will load the local version of the script
 // if it contains ?custom-qa-mode it will load the qa version of the script
 // if it contains ?custom-debug, it will not change what version of the script is running but it will so all the console logs
@@ -88,6 +69,7 @@ var url = window.location.href;
       if ( qaMode == "" ) {
         // set qaMode to true do it does not load the script again
         qaMode = true;
+        localMode = false;
         // Load the QA version of the custom script loacated on github
         $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
             alert("Custom Imports QA Script now loaded");
@@ -100,6 +82,7 @@ var url = window.location.href;
         if ( localMode == "" ) {
           // set qaMode to true do it does not load the script again
           localMode = true;
+          qaMode = false;
           // Load the local version of the custom script loacated on github
           $.getScript("http://localhost/custom-imports/build/custom-imports.js", function() {
               alert("Custom Imports Local Script now loaded");
@@ -108,8 +91,9 @@ var url = window.location.href;
         }
   
     } else {
-      // Set QA mode to false so the script does not run again
+      // Set QA and local mode to false so the script does not run again
       qaMode = false;
+      localMode = false;
       // Run the script as normal
       customImports();
     }
@@ -125,7 +109,7 @@ function customImports() {
     if ( matches("?custom-debug", url) ) {
         if ( qaMode ) {
         console.log("CI Debug - Loading: QA Script")
-        } if ( localMode ) {
+        } else if ( localMode ) {
             console.log("CI Debug - Loading: Local Script")
         } else {
             console.log("CI Debug - Loading: Prod Custom Imports")
@@ -143,14 +127,14 @@ function customImports() {
     // Find parameters from the src of script file
     // please note script tag MUST contain ID js-custom-imports
 
-    // when calling script you tell it what you want to do based on your url parapamaters the main pararamaer is "scripts" wring like "?scripts=charts" 
+    // when calling script you tell it what you want to do based on your url parameter. The main parameter is "scripts" wring like "?scripts=charts" 
     // if you want to put multiple scripts you can put in a comma like "?scripts=charts,inpagenav,inview"
     // By default the script will load dependencies and css
 
-    if ( $('#js-custom-imports').exists() ) { 
+    if ( $('script#js-custom-imports').exists() ) { 
 
         // Variables of parameters
-        var scriptSrc = $('#js-custom-imports').attr('src');
+        var scriptSrc = $('script#js-custom-imports').attr('src');
         var scripts = getParameter("scripts", scriptSrc);
         var css = getParameter("css", scriptSrc);
         var noStyles = getParameter("no-styles", scriptSrc);
