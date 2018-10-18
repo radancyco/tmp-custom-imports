@@ -1,3 +1,29 @@
+// The prod verison of this file exists on https://services1.tmpwebeng.com/custom-imports/custom-imports.js
+
+
+// // Function to get scripts
+// function getScript(source, callback) {
+//     var script = document.createElement('script');
+//     var prior = document.getElementsByTagName('script')[0];
+//     script.async = 1;
+
+//     script.onload = script.onreadystatechange = function( _, isAbort ) {
+//         if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+//             script.onload = script.onreadystatechange = null;
+//             script = undefined;
+
+//             if(!isAbort) { if(callback) callback(); }
+//         }
+//     };
+
+//     script.src = source;
+//     prior.parentNode.insertBefore(script, prior);
+// }
+
+if (!window.jQuery) {
+    alert("Jquery needed for this script")
+}
+
 // Function to get paramatures often times found in urls after a ?
 // Use case:
 // getParameter("scripts","www.brock.com/?scripts=charts,inpagenav,inview?no-styles=charts?no-dependencies=inview")
@@ -19,9 +45,13 @@ jQuery.fn.exists = function(){return ($(this).length > 0);};
 // var fruits = ["Banana", "Orange", "Apple", "Mango"];
 // matches("apple", fruits);
 function matches(name, source) {
-    var name = name.toString().toLowerCase();
-    var source = source.toString().toLowerCase();
-    return (source.indexOf(name) > 0);
+    if ( typeof name !== 'undefined' && typeof source !== 'undefined' ) {
+        var name = name.toString().toLowerCase();
+        var source = source.toString().toLowerCase();
+        return (source.indexOf(name) > 0);
+    } else {
+        return false;
+    }
 };
 
 
@@ -55,14 +85,18 @@ if (typeof qaMpode === 'undefined') {
   
     } else {
       // Set QA mode to false so the script does not run again
-      var qaMode = "false";
+      qaMode = false;
       // Run the script as normal
       customImports();
-    }
-
-    function customImports() {
-        alert("Custom Imports Functoin Run qaMode: " + qaMode);
     }
   
   })();  // end on doc ready
   
+//
+// The function that will call all other functions
+//
+function customImports() {
+    alert("Custom Imports Functoin Run qaMode: " + qaMode);
+
+    console.log("Testing QA Path")
+} // End of customImports function
