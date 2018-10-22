@@ -52,7 +52,7 @@
   width: 100%; height: 100%;
 }  
 
-.ci-pie-chart__center-test {
+.ci-pie-chart__center-text {
   position: absolute;
   text-align: center;
   left: 50%;
