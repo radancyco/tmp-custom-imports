@@ -1,26 +1,68 @@
-#tooltip {
-    position: fixed;
-    font-size: 18px;
-    text-align: center;
-    background: white;
-    padding: 6px 15px;
-    z-index: 555;
-    line-height: 18px;
-    margin: 0 auto;
-    color: #21669e;
-    border-radius: 5px;
-    box-shadow: 0 0 1px 1px #ddd;
-    transform: translate(-50%, -50%);
-  }
-  #tooltip:before {
-    content: " ";
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 10px 0 10px;
-    border-color: #ffffff transparent transparent transparent;
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+#js-ci-chart__tooltip {
+  position: fixed;
+  font-size: 18px;
+  text-align: center;
+  background: white;
+  padding: 6px 15px;
+  z-index: 555;
+  line-height: 18px;
+  margin: 0 auto;
+  color: #21669e;
+  border-radius: 5px;
+  box-shadow: 0 0 1px 1px #ddd;
+  transform: translate(-50%, -50%);
+}
+#js-ci-chart__tooltip:before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: #ffffff transparent transparent transparent;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.js-ci-pie-chart__data {
+  position: relative;
+}
+.js-ci-pie-chart__data-icon {
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  background: #000;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+
+.js-ci-pie-chart__svg-wrap {
+  height: 0;
+  padding-top: 100%;
+  position: relative;
+  width: 100% !important;
+}
+
+.js-ci-pie-chart__svg {
+  position: absolute;
+  top: 0;
+  left: 0; 
+  width: 100%; height: 100%;
+}  
+
+.ci-pie-chart__center-test {
+  position: absolute;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 12;
+  margin: 0;
+  width: 100%;
+}
+
+.js-ci-pie-chart__graph {
+  position: relative;
+}

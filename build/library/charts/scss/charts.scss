@@ -1,4 +1,4 @@
-#tooltip {
+#js-ci-chart-tooltip {
     position: fixed;
     font-size: 18px;
     text-align: center;
@@ -23,5 +23,19 @@
       bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
+    }
+}
+
+.js-ci-pie-chart-data {
+    position: relative;
+    &:before {
+        content: '';
+        border-radius: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        background: #000;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
     }
 }

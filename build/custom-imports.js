@@ -70,7 +70,7 @@ var url = window.location.href;
         // set qaMode to true do it does not load the script again
         qaMode = true;
         localMode = false;
-        // Load the QA version of the custom script loacated on github
+        // Load the QA version of the custom script located on github
         $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
             alert("Custom Imports QA Script now loaded");
             customImports();
@@ -83,7 +83,7 @@ var url = window.location.href;
           // set qaMode to true do it does not load the script again
           localMode = true;
           qaMode = false;
-          // Load the local version of the custom script loacated on github
+          // Load the local version of the custom script located on github
           $.getScript("http://localhost/custom-imports/build/custom-imports.js", function() {
               alert("Custom Imports Local Script now loaded");
               customImports();
@@ -181,6 +181,10 @@ function customImports() {
 
                         }
                     });
+                if ( !matches("charts", noStyles) ) {
+                    $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/charts/charts.css" + '" />'));
+                }
+
                 }
             } // End Charts Script
 

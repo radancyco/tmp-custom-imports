@@ -6,52 +6,238 @@
     <title>Custom Imports test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://services1.tmpwebeng.com/Scripts/jquery-1.10.2.min.js"></script>
-    <script id="js-custom-imports" src="../build/custom-imports.js?scripts=charts,inpagenav,inview&no-styles=charts&no-dependencies=inview"></script>
+    <script id="js-custom-imports" src="../build/custom-imports.js?scripts=charts,inpagenav,inview&no-styles=inview&no-dependencies=inview"></script>
+    <link href="https://fonts.googleapis.com/css?family=Mali:400,700" rel="stylesheet">
 </head>
 <body>
 
 
-    <div class="pie-chart-legend" data-width="300" data-height="300" data-outer-radius="100" data-inner-radius="75" data-fade-in="true" data-stroke="true" data-stroke-width="4" data-stroke-color="#fff" data-center-image="https://tbcdn.talentbrew.com/company/4673/v2_0/img/ajd/img-chris-hart.jpg" data-hover-effect="true">
+<section class="layout two-col">
 
-        <span data-label="Analytical" data-value="25" data-color="#0299ff">Analytical</span>
-        
-        <span data-label="Courageous" data-value="25" data-color="#fdda04">Courageous</span>
-      
-        <span data-label="Entrepreneurial" data-value="25" data-color="#013dae">Entrepreneurial</span>
-        
-        <span data-label="Leadership" data-value="25" data-color="#010101">Leadership</span>
-        
-        <span data-label="Trustworthy" data-value="25" data-color="#01af55">Trustworthy</span>
-        
-        <span data-label="Helpful" data-value="25" data-color="#af027e">Helpful</span>
-        
-      </div>
-      
-      <div class="pie-chart-svg-wrap">
-      
-      </div>
+    <h1>Custom Import examples</h1>
 
 
-      <div class="pie-chart-legend" data-width="300" data-height="300" data-outer-radius="100" data-inner-radius="75" data-fade-in="true" data-stroke="true" data-stroke-width="4" data-stroke-color="#fff" data-center-image="https://tbcdn.talentbrew.com/company/4673/v2_0/img/ajd/img-chris-hart.jpg" data-hover-effect="true">
+    <h2>Charts Examples</h2>
 
-        <span data-label="Analytical" data-value="25" data-color="#000000">Analytical</span>
+    <div class="col">
+
+        <h3>Donut chart with image and legend dots auto generated, legend is on top</h3>
+
+        <div class="ci-pie-chart">
+            <div class="js-ci-pie-chart__legend unique-style__legend" 
+            data-chart="1" 
+            data-width="300" 
+            data-height="300" 
+            data-outer-radius="150" 
+            data-inner-radius="100" 
+            data-fade-in="true" 
+            data-stroke="true" 
+            data-stroke-width="4" 
+            data-stroke-color="#fff" 
+            data-center-image="https://tbcdn.talentbrew.com/company/4673/v2_0/img/ajd/img-chris-hart.jpg" 
+            data-hover-effect="true" 
+            data-icons="true" 
+            data-ratio-padding="true"
+            data-tooltip="true">
         
-        <span data-label="Courageous" data-value="25" data-color="#fdda04">Courageous</span>
-      //
-        <span data-label="Entrepreneurial" data-value="25" data-color="#eeeeee">Entrepreneurial</span>
+
+                <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="25" data-color="#0299ff">Analytical</span>
+                
+                <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="25" data-color="#fdda04">Courageous</span>
+            
+                <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="25" data-color="#013dae">Entrepreneurial</span>
+                
+                <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="25" data-color="#010101">Leadership</span>
+                
+                <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="25" data-color="#01af55">Trustworthy</span>
+                
+                <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="25" data-color="#af027e">Helpful</span>
+                
+            </div>
+            
+            <div class="js-ci-pie-chart__graph unique-style__graph" data-chart="1"></div>
+        </div> <!--end pie chart-->
+
+     </div>
+     <div class="col">
+
+        <h3>Donut chart with text, legend is on the bottom and legend has words auto colored instead of dots it is also an ordered list</h3>
+
+        <div class="ci-pie-chart">
+
+                <div class="js-ci-pie-chart__graph unique-style__graph" data-chart="2">
+                    <span class="ci-pie-chart__center-test">Text in the center</span>
+                </div                                                                                                                                                >
+
+            <ol class="js-ci-pie-chart__legend unique-style__legend" 
+            data-chart="2" 
+            data-width="200" 
+            data-height="200" 
+            data-outer-radius="100" 
+            data-inner-radius="75" 
+            data-fade-in="true" 
+            data-stroke="true" 
+            data-stroke-width="4" 
+            data-stroke-color="#fff" 
+            data-hover-effect="true" 
+            data-icons="true" 
+            data-ratio-padding="true"
+            data-tooltip="true">
+
+                <li class="js-ci-pie-chart__data" data-label="Analytical <span style='color:red;'>25%</span>" data-value="50" data-color="#be819f"><span class="js-ci-pie-chart__data-icon">Analytical</span></li>
+                
+                <li class="js-ci-pie-chart__data" data-label="Courageous 10 Units" data-value="10" data-color="#8e5f0f"><span class="js-ci-pie-chart__data-icon">Courageous</span></li>
+            
+                <li class="js-ci-pie-chart__data" data-label="Tooltip differnt from legend" data-value="40" data-color="#e0f27c"><span class="js-ci-pie-chart__data-icon">Entrepreneurial</span></li>
+                
+                <li class="js-ci-pie-chart__data" data-label="Leadership" data-value="25" data-color="#e549bd"><span class="js-ci-pie-chart__data-icon">Leadership</span></li>
+                
+                <li class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="25" data-color="#64b39c"><span class="js-ci-pie-chart__data-icon">Trustworthy</span></li>
+                
+                <li class="js-ci-pie-chart__data" data-label="Helpful" data-value="25" data-color="#e4cfef"><span class="js-ci-pie-chart__data-icon">Helpful</span></li>
+                
+            </ol>
         
-        <span data-label="Leadership" data-value="25" data-color="#010101">Leadership</span>
-        
-        <span data-label="Trustworthy" data-value="25" data-color="#01af55">Trustworthy</span>
-        
-        <span data-label="Helpful" data-value="25" data-color="#af027e">Helpful</span>
-        
-      </div>
-      
-      <div class="pie-chart-svg-wrap">
-      
-      </div>
+        </div>  <!--end pie chart-->
+    </div>
+
+    <div class="layout two-col">
 
 
+        <div class="col">
+
+                <h3>Pie chart with legend dots auto generated, legend is on bottom no tool tip</h3>
+
+                <div class="js-ci-pie-chart__graph unique-style__graph" data-chart="3"></div>
+        
+                <div class="ci-pie-chart">
+                    <div class="js-ci-pie-chart__legend unique-style__legend" 
+                    data-chart="3" 
+                    data-width="300" 
+                    data-height="300" 
+                    data-outer-radius="149" 
+                    data-inner-radius="0" 
+                    data-fade-in="true" 
+                    data-stroke="true" 
+                    data-stroke-width="1" 
+                    data-stroke-color="#000"  
+                    data-hover-effect="true" 
+                    data-icons="true" 
+                    data-ratio-padding="true" 
+                    data-tooltip="false">
+        
+                        <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="100" data-color="#0299ff">Analytical</span>
+                        
+                        <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="1000" data-color="#fdda04">Courageous</span>
+                    
+                        <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="200" data-color="#013dae">Entrepreneurial</span>
+                        
+                        <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="300" data-color="#010101">Leadership</span>
+                        
+                        <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="500" data-color="#01af55">Trustworthy</span>
+                        
+                        <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="66" data-color="#af027e">Helpful</span>
+                        
+                    </div>
+                    
+                </div> <!--end pie chart-->
+        
+            </div>
+            <div class="col">
+        
+                <h3>Pie chart with legend dots auto generated, no visable legend (using wai class so it is still accessible) also tool tip works NOT IDEAL FOR MOBILE </h3>
+
+                <div class="js-ci-pie-chart__graph unique-style__graph" data-chart="4"></div>
+        
+                <div class="ci-pie-chart">
+                    <div class="js-ci-pie-chart__legend unique-style__legend wai" 
+                    data-chart="4" 
+                    data-width="300" 
+                    data-height="300" 
+                    data-outer-radius="149" 
+                    data-inner-radius="0" 
+                    data-fade-in="true" 
+                    data-stroke="false" 
+                    data-stroke-width="0" 
+                    data-stroke-color="#000"  
+                    data-hover-effect="true" 
+                    data-icons="false" 
+                    data-ratio-padding="true" 
+                    data-tooltip="true">
+        
+                            <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="100" data-color="#87a29c">Analytical</span>
+                        
+                            <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="1000" data-color="#a65f55">Courageous</span>
+                        
+                            <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="200" data-color="#013dae">Entrepreneurial</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="300" data-color="#db92c4">Leadership</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="500" data-color="#6ab02a">Trustworthy</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="66" data-color="#8f8c59">Helpful</span>
+                        
+                    </div>
+                    
+                </div> <!--end pie chart-->
+
+            </div>
+
+        </div>
+
+</section>
+
+    <style>
+        h1 {
+            font-size: 50px;
+        }
+        h2 {
+            font-size: 30px;
+        }
+        h1, h2, h3, h3 {
+            font-family: 'Mali', cursive;
+        }
+
+        .unique-style__graph[data-chart="2"] .ci-pie-chart__center-test {
+            max-width: 37%;
+        }
+        .unique-style__legend[data-chart="2"] .js-ci-pie-chart__data-icon {
+            border-radius: 0;
+            width: auto;
+            height: auto;
+            background: transparent !important;
+            font-weight: bold;
+        }
+
+        .layout {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .col {
+            margin-bottom: 20px;
+        }
+
+        @media screen and (min-width: 800px) {
+            .layout.two-col > .col {
+                width: 49%;
+                float: left;
+            }
+            .layout.two-col > .col:first-of-type {
+                margin-right: 2%;
+            }
+        }
+
+        .wai {
+        position: absolute !important;
+        display: block !important;
+        overflow: hidden !important;
+        width: 1px !important;
+        height: 1px !important;
+        }
+
+    </style>
+
+   
 </body>
 </html>
