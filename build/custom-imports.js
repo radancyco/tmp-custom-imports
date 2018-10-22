@@ -172,14 +172,14 @@ function customImports() {
                     $.getScript( scriptPath + "library/d3/d3.v5.min.js", function() {
                         if ( matches("?custom-debug", url) ) {
                             console.log("CI Debug - Charts Script: D3 Dependancy Loaded")
-                            // After D3 runs then run the charts script
-                            $.getScript( scriptPath + "library/charts/charts.js", function() {
-                                if ( matches("?custom-debug", url) ) {
-                                    console.log("CI Debug - Charts Script: Loaded")
-                                }
-                            });
-
                         }
+                        // After D3 runs then run the charts script
+                        $.getScript( scriptPath + "library/charts/charts.js", function() {
+                            if ( matches("?custom-debug", url) ) {
+                                console.log("CI Debug - Charts Script: Loaded")
+                            }
+                        });
+
                     });
                 if ( !matches("charts", noStyles) ) {
                     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/charts/charts.css" + '" />'));

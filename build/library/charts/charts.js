@@ -59,9 +59,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     console.log( 'CI Debug - Donut/Pie Chart ' + chartNumber + ' label ' + $(this).data('label')  + ' Data Color: ' + $(this).data('color') )
                 }
                 var color = $(this).data('color');
-
-                console.log( 'THIS IS THE LENGTH ' + $(this).find('.js-ci-pie-chart__data-icon').length )
-
+                
                 // check to see if a custom icon is already added and if not prepend the icon
                 if( $(this).find('.js-ci-pie-chart__data-icon').length <= 0 ) {
                     $(this).prepend('<span class="js-ci-pie-chart__data-icon"></span>')
