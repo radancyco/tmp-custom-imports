@@ -138,7 +138,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .delay(function(d,i) { return 350 * pieChartData.length; })
             .style('opacity',1)
         }
-  
+
         var paths = svg.selectAll('path') // Create virtual path element
         .data(pie(pieChartData))
         .enter()
@@ -162,17 +162,19 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .style('opacity',1); // set opacity to 1 animated
         }
 
-         // Fade-In is set in legend
-         if(tooltip) {
+        // Fade-In is set in legend
+        if(tooltip) {
             donutChartTooltip(paths, hoverEffect) 
-         }
+        }
 
     })
 
     function donutChartTooltip(paths, hoverEffect) {
 
         paths.on('mousemove',function(d,i){ // On mousemove over the paths
-            console.log('Mouse move')
+            if ( matches("?custom-debug", url) ) {
+                console.log('Mouse move')
+            }
             // Tooltip
             var toolTipText = $(d.data).data('label'); // Get the tooltip label
             d3.select("#js-ci-chart__tooltip") // Select tooltip
@@ -184,8 +186,16 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             //Hover effect
             if(hoverEffect) {
                 var originalColor = $(d.data).data('color');
+                var hoverColor = $(d.data).data('hover-color');
                 var darkenedColor = LightenDarkenColor(originalColor,50);
-                $(this).attr('fill',darkenedColor);
+                if (hoverColor) {
+                    $(this).attr('fill',hoverColor);
+                } else {
+                    $(this).attr('fill',darkenedColor);
+                    if ( matches("?custom-debug", url) ) {
+                        console.log('CI Debug - Charts Hover Status: Missing hoverColor')
+                    }
+                }
             }
         
         });
@@ -211,7 +221,6 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     .style('pointer-events','none') // get rid of pointer events on tooltip
     .style('visiblity','hidden') // Set to invisible
     .text(""); // Set text to blank
-
 
     // Lighten or Darken Color
     function LightenDarkenColor(col, amt) {

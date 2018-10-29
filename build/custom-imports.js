@@ -62,44 +62,44 @@ var url = window.location.href;
 (function() { // On Document ready
 
     // Check URL and see if it wants qa version or prod
-  
+
     if ( matches("?custom-qa-mode", url) ) {
     
-      // Check variable to make sure it is empty so that a loading script loop does not happen
-      if ( qaMode == "" ) {
-        // set qaMode to true do it does not load the script again
-        qaMode = true;
-        localMode = false;
-        // Load the QA version of the custom script located on github
-        $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
-            alert("Custom Imports QA Script now loaded");
-            customImports();
-        });
-      }
+        // Check variable to make sure it is empty so that a loading script loop does not happen
+        if ( qaMode == "" ) {
+            // set qaMode to true do it does not load the script again
+            qaMode = true;
+            localMode = false;
+            // Load the QA version of the custom script located on github
+            $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
+                alert("Custom Imports QA Script now loaded");
+                customImports();
+            });
+        }
     } else if ( matches("?custom-local-mode", url) ) {
     
         // Check variable to make sure it is empty so that a loading script loop does not happen
         if ( localMode == "" ) {
-          // set qaMode to true do it does not load the script again
-          localMode = true;
-          qaMode = false;
-          // Load the local version of the custom script located on github
-          $.getScript("http://localhost/custom-imports/build/custom-imports.js", function() {
-              alert("Custom Imports Local Script now loaded");
-              customImports();
-          });
+            // set qaMode to true do it does not load the script again
+            localMode = true;
+            qaMode = false;
+            // Load the local version of the custom script located on github
+            $.getScript("http://localhost/custom-imports/build/custom-imports.js", function() {
+                alert("Custom Imports Local Script now loaded");
+                customImports();
+            });
         }
-  
+
     } else {
-      // Set QA and local mode to false so the script does not run again
-      qaMode = false;
-      localMode = false;
-      // Run the script as normal
-      customImports();
+        // Set QA and local mode to false so the script does not run again
+        qaMode = false;
+        localMode = false;
+        // Run the script as normal
+        customImports();
     }
-  
-  })();  // end on doc ready
-  
+
+})();  // end on doc ready
+
 //
 // The function that will call all other functions
 //
