@@ -29,6 +29,7 @@ jQuery.fn.exists = function(){return ($(this).length > 0);};
 // Use case:
 // var fruits = ["Banana", "Orange", "Apple", "Mango"];
 // matches("apple", fruits);
+// This has a built in default of false if the source is not present
 function matches(name, source) {
     if ( typeof name != 'undefined' && typeof source != 'undefined' ) {
         var name = name.toString().toLowerCase();
@@ -38,6 +39,22 @@ function matches(name, source) {
         return false;
     }
 };
+
+
+// Function to check to see if URL exists and report its status code
+// Originally from https://stackoverflow.com/a/3915698/5476295
+
+function UrlExists(url, cb){
+    jQuery.ajax({
+        url:      url,
+        dataType: 'text',
+        type:     'GET',
+        complete:  function(xhr){
+            if(typeof cb === 'function')
+            cb.apply(this, [xhr.status]);
+        }
+    });
+}
 
 // Variable needed to see if QA script has been ran
 if (typeof qaMode === 'undefined') {
@@ -71,7 +88,7 @@ var url = window.location.href;
             qaMode = true;
             localMode = false;
             // Load the QA version of the custom script located on github
-            $.getScript("https://tmpworldwide.github.io/custom-imports/build/custom-imports.js", function() {
+            $.getScript("https://tmpworldwide.github.io/custom-imports/build/tmp-custom-imports.js", function() {
                 alert("Custom Imports QA Script now loaded");
                 customImports();
             });
@@ -84,7 +101,7 @@ var url = window.location.href;
             localMode = true;
             qaMode = false;
             // Load the local version of the custom script located on github
-            $.getScript("http://localhost/custom-imports/build/custom-imports.js", function() {
+            $.getScript("http://localhost/custom-imports/build/tmp-custom-imports.js", function() {
                 alert("Custom Imports Local Script now loaded");
                 customImports();
             });
@@ -119,9 +136,9 @@ function customImports() {
     // Global variable for paths for scripts
     var scriptPath = "https://services1.tmpwebeng.com/custom-imports/"
     if ( qaMode ) {
-        scriptPath = "https://tmpworldwide.github.io/custom-imports/build/";
+        scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
     } else if ( localMode ) {
-        scriptPath = "http://localhost/custom-imports/build/";
+        scriptPath = "http://localhost/tmp-custom-imports/build/";
     }
 
     // Find parameters from the src of script file
@@ -187,6 +204,9 @@ function customImports() {
 
                 }
             } // End Charts Script
+
+
+
 
 
         }
