@@ -88,7 +88,7 @@ var url = window.location.href;
             qaMode = true;
             localMode = false;
             // Load the QA version of the custom script located on github
-            $.getScript("https://tmpworldwide.github.io/custom-imports/build/tmp-custom-imports.js", function() {
+            $.getScript("https://tmpworldwide.github.io/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports QA Script now loaded");
                 customImports();
             });
@@ -101,7 +101,7 @@ var url = window.location.href;
             localMode = true;
             qaMode = false;
             // Load the local version of the custom script located on github
-            $.getScript("http://localhost/custom-imports/build/tmp-custom-imports.js", function() {
+            $.getScript("http://localhost/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports Local Script now loaded");
                 customImports();
             });
