@@ -37,6 +37,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         var innerRadius = pieChartLegend.data('inner-radius');
 
         var centerImage = pieChartLegend.data('center-image');
+        var imageScale = parseFloat( pieChartLegend.data('center-image-scale') ) != NaN && parseFloat( pieChartLegend.data('center-image-scale') ) <= 1 ? pieChartLegend.data('center-image-scale') : 1;
 
         var fadeIn = pieChartLegend.data('fade-in') == true ? true : false;
 
@@ -137,6 +138,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .duration(500)
             .delay(function(d,i) { return 350 * pieChartData.length; })
             .style('opacity',1)
+            .style('transform', 'scale(' + imageScale + ')')
         }
 
         var paths = svg.selectAll('path') // Create virtual path element
