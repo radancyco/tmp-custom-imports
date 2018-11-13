@@ -75,8 +75,12 @@ var url = window.location.href;
 // if it contains ?custom-qa-mode it will load the qa version of the script
 // if it contains ?custom-debug, it will not change what version of the script is running but it will so all the console logs
 
+var ciAnimateGraph = new Event('ciAnimateGraph');
+
+
 
 (function() { // On Document ready
+
 
     // Check URL and see if it wants qa version or prod
 
@@ -176,6 +180,12 @@ function customImports() {
             // Charts script
             // if charts is present in the scripts param
             if ( matches("charts", scripts) ) {
+
+                // Load styles for charts script
+                if ( !matches("charts", noStyles) ) {
+                    $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/charts/charts.css" + '" />'));
+                }
+
                 // check to see if dependancy param on D3 is turned off
                 if ( matches("charts", noDepends) ) {
                     // Run the charts script with out loading in D3 first
@@ -198,15 +208,52 @@ function customImports() {
                         });
 
                     });
-                if ( !matches("charts", noStyles) ) {
-                    $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/charts/charts.css" + '" />'));
-                }
+
 
                 }
             } // End Charts Script
 
 
+            // Video script
+            // if Video is present in the scripts param
+            if ( matches("video", scripts) ) {
 
+                // Load styles for video script
+                if ( !matches("charts", noStyles) ) {
+                    $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/video/video.css" + '" />'));
+                }
+
+                // check to see if dependancy param on D3 is turned off
+                if ( matches("video", noDepends) ) {
+                    // Run the charts script with out loading in D3 first
+                    $.getScript( scriptPath + "library/video/video.js", function() {
+                        if ( matches("?custom-debug", url) ) {
+                            console.log("CI Debug - Video Script: Loaded")
+                        }
+                    });
+                } else {
+
+                    // Load styles for Fancybox
+                    if ( !matches("fancybox", noStyles) ) {
+                        $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
+                    }
+
+                    // Run FancyBox3
+                    $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
+                        if ( matches("?custom-debug", url) ) {
+                            console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
+                        }
+                        // After FancyBox3 runs then run the Video script
+                        $.getScript( scriptPath + "library/video/video.js", function() {
+                            if ( matches("?custom-debug", url) ) {
+                                console.log("CI Debug - Video Script: Loaded")
+                            }
+                        });
+
+                    });
+
+                }
+            } // End Video Script
 
 
         }

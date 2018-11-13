@@ -28,8 +28,10 @@
             data-width="300" 
             data-height="300" 
             data-outer-radius="150"
-            data-inner-radius="100" 
-            data-fade-in="true" 
+            data-inner-radius="100"
+            data-animate="true" 
+            data-animate-type="fadein" 
+            data-animate-legend="true"
             data-stroke="true" 
             data-stroke-width="4" 
             data-stroke-color="#fff" 
@@ -40,17 +42,17 @@
             data-tooltip="true">
         
 
-                <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="25" data-color="#0299ff">Analytical</span>
+                <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="25" data-color="#0299ff" data-animate-legend-item>Analytical</span>
                 
-                <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="25" data-color="#fdda04">Courageous</span>
+                <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="25" data-color="#fdda04" data-animate-legend-item>Courageous</span>
             
-                <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="25" data-color="#013dae">Entrepreneurial</span>
+                <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="25" data-color="#013dae" data-animate-legend-item>Entrepreneurial</span>
                 
-                <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="25" data-color="#010101">Leadership</span>
+                <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="25" data-color="#010101" data-animate-legend-item>Leadership</span>
                 
-                <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="25" data-color="#01af55">Trustworthy</span>
+                <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="25" data-color="#01af55" data-animate-legend-item>Trustworthy</span>
                 
-                <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="25" data-color="#af027e">Helpful</span>
+                <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="25" data-color="#af027e" data-animate-legend-item>Helpful</span>
                 
             </div>
             
@@ -74,7 +76,8 @@
             data-height="200" 
             data-outer-radius="100" 
             data-inner-radius="75" 
-            data-fade-in="true" 
+            data-animate="false"
+            data-animate-legend="false"
             data-stroke="true" 
             data-stroke-width="4" 
             data-stroke-color="#fff" 
@@ -116,7 +119,10 @@
                     data-height="300" 
                     data-outer-radius="149" 
                     data-inner-radius="0" 
-                    data-fade-in="true" 
+                    data-animate="true"
+                    data-animate-type="fadein" 
+                    data-animate-legend="true"
+                    data-stroke="true" 
                     data-stroke="true" 
                     data-stroke-width="1" 
                     data-stroke-color="#000"  
@@ -124,18 +130,22 @@
                     data-icons="true" 
                     data-ratio-padding="true" 
                     data-tooltip="false">
-        
-                        <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="100" data-color="#0299ff">Analytical</span>
+
+                        <div data-animate-legend-item>
+            
+                            <span class="js-ci-pie-chart__data" data-label="Analytical" data-value="100" data-color="#0299ff" >Analytical</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="1000" data-color="#fdda04" >Courageous</span>
                         
-                        <span class="js-ci-pie-chart__data" data-label="Courageous" data-value="1000" data-color="#fdda04">Courageous</span>
-                    
-                        <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="200" data-color="#013dae">Entrepreneurial</span>
-                        
-                        <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="300" data-color="#010101">Leadership</span>
-                        
-                        <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="500" data-color="#01af55">Trustworthy</span>
-                        
-                        <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="66" data-color="#af027e">Helpful</span>
+                            <span class="js-ci-pie-chart__data" data-label="Entrepreneurial" data-value="200" data-color="#013dae">Entrepreneurial</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Leadership" data-value="300" data-color="#010101">Leadership</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Trustworthy" data-value="500" data-color="#01af55">Trustworthy</span>
+                            
+                            <span class="js-ci-pie-chart__data" data-label="Helpful" data-value="66" data-color="#af027e">Helpful</span>
+
+                        </div>
                         
                     </div>
                     
@@ -155,7 +165,10 @@
                     data-height="300" 
                     data-outer-radius="149" 
                     data-inner-radius="0" 
-                    data-fade-in="true" 
+                    data-animate="true" 
+                    data-animate-type="fadein" 
+                    data-animate-duration="200"
+                    data-animate-delay="100"
                     data-stroke="false" 
                     data-stroke-width="0" 
                     data-stroke-color="#000"  
@@ -186,7 +199,41 @@
 
 </section>
 
+<section class="layout two-col">
 
+    <h2>Video Examples</h2>
+
+
+    <a data-fancybox="gallery" href="https://picsum.photos/2000/1000?image=0"><img src="https://picsum.photos/200/300?image=0"></a>
+<a data-fancybox="gallery" href="https://picsum.photos/2000/1000?image=2"><img src="https://picsum.photos/200/300?image=2"></a>
+
+<a id="video-pop1" data-fancybox href="https://www.w3schools.com/html/mov_bbb.mp4">Video Pop</a>
+
+
+    <div class="col">
+
+        <h3>video 1</h3>
+
+
+
+    </div>
+    <div class="col">
+
+        <h3>video 2</h3>
+
+        <a data-fancybox href="#myVideo">
+            HTML5 video element
+        </a>
+        
+        <video  controls id="myVideo" style="display:none;">
+            <source src="https://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4" type="video/mp4">
+            Your browser doesn't support HTML5 video tag.
+        </video>
+
+
+    </div>
+
+</section>
 
 
 

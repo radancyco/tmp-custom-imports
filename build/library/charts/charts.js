@@ -19,6 +19,8 @@ function ratioForPadding(width, height) {
     return precent;
 }
 
+var ciAnimateGraph = new Event('ciAnimateGraph');
+
 if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
 
     $('.js-ci-pie-chart__legend').each(function() {
@@ -39,7 +41,11 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         var centerImage = pieChartLegend.data('center-image');
         var imageScale = parseFloat( pieChartLegend.data('center-image-scale') ) != NaN && parseFloat( pieChartLegend.data('center-image-scale') ) <= 1 ? pieChartLegend.data('center-image-scale') : 1;
 
-        var fadeIn = pieChartLegend.data('fade-in') == true ? true : false;
+        var animate = pieChartLegend.data('animate') == true ? true : false;
+        var animateType = pieChartLegend.data('animate-type');
+        var animateDuration = pieChartLegend.data('animate-duration') != undefined ? pieChartLegend.data('animate-duration') : 400;
+        var animateDelay= pieChartLegend.data('animate-delay') != undefined ? pieChartLegend.data('animate-delay') : 400;
+        var animateLegend = pieChartLegend.data('animate-legend') == true ? true : false;
 
         var hoverEffect = pieChartLegend.data('hover-effect') == true ? true : false;
 
@@ -120,7 +126,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             var imageGroup = svg.append('g');
             imageGroup.append('defs')
             .append('clipPath')
-            .attr('id','test')
+            .attr('id','centerimage')
             .append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
@@ -132,12 +138,8 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .attr('width', innerRadius * 2)
             .attr('height', innerRadius * 2)
             .attr('xlink:href',centerImage)
-            .attr('clip-path','url(#test)')
-            .style('opacity', 0)
-            .transition()
-            .duration(500)
-            .delay(function(d,i) { return 350 * pieChartData.length; })
-            .style('opacity',1)
+            .attr('clip-path','url(#centerimage)')
+            .attr('class','ci-pie-chart__center-img')
             .style('transform', 'scale(' + imageScale + ')')
         }
 
@@ -156,20 +158,58 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
 
         // Fade-In is set in legend
-        if(fadeIn) {
-            paths.style('opacity',0) // set opacity to 0, to animate
-            .transition() // enable transition
-            .duration(400) // set 400 duration
-            .delay(function(d,i){ return 400 * i }) // delay every path by 400
-            .style('opacity',1); // set opacity to 1 animated
+        if(animate) {
+            if ( matches("fadein", animateType) ) {
+
+
+                $(pieChartHolder).on('ciAnimateGraph', function (e) {
+                console.log('got event fire');
+                var items = 0;
+
+                paths.interrupt()
+                .style('opacity',0) // set opacity to 0, to animate
+                .transition() // enable transition
+                .duration(animateDuration) // set animateSpeed duration
+                .delay(function(d,i){return animateDelay * i }) // delay every path by 400
+                .style('opacity',1) // set opacity to 1 animated
+                .each(function(d,i){ return items += 1 });
+                
+                d3.select( pieChartHolder + ' .ci-pie-chart__center-img')
+                .interrupt()
+                .style('opacity',0) // set opacity to 0, to animate
+                .transition() // enable transition
+                .duration(animateDuration) // set animateSpeed duration
+                .delay( animateDelay * items ) // delay every path by animateSpeed
+                .style('opacity',1); // set opacity to 1 animated
+                
+                if ( animateLegend ) {
+
+                    var legendItems = 0;
+
+                    d3.selectAll( '.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"] [data-animate-legend-item]' )
+                    .each(function(d,i){ 
+                        d3.select(this).interrupt()
+                    .style('opacity',0) // set opacity to 0, to animate
+                    .transition() // enable transition
+                    .duration(animateDuration) // set animateSpeed duration
+                    .delay( animateDelay * legendItems ) // delay every path by animateSpeed
+                    .style('opacity',1) // set opacity to 1 animated
+                    return legendItems += 1 });
+
+
+                }
+            });
+            // TODO: Add more animations
         }
 
-        // Fade-In is set in legend
+        }
+
+        // Tooltip is set in legend
         if(tooltip) {
             donutChartTooltip(paths, hoverEffect) 
         }
 
-    })
+    }) // end loop for each legend
 
     function donutChartTooltip(paths, hoverEffect) {
 
@@ -180,7 +220,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             // Tooltip
             var toolTipText = $(d.data).data('label'); // Get the tooltip label
             d3.select("#js-ci-chart__tooltip") // Select tooltip
-            .style('visibility','visible') // Set to visibile
+            .style('visibility','visible') // Set to visible
             .style('left', d3.event.pageX + "px") // set left
             .style('top',d3.event.pageY - 25 + "px") // set top
             .html(toolTipText) // set tooltip text
@@ -221,7 +261,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     .style("position", "absolute") // set to absolute;
     .style("z-index", "100000") // Add crazy z-index
     .style('pointer-events','none') // get rid of pointer events on tooltip
-    .style('visiblity','hidden') // Set to invisible
+    .style('visibility','hidden') // Set to invisible
     .text(""); // Set text to blank
 
     // Lighten or Darken Color
