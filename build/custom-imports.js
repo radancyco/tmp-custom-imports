@@ -56,6 +56,22 @@ function UrlExists(url, cb){
     });
 }
 
+// PollyFill for Event
+(function () {
+    if ( typeof window.CustomEvent === "function" ) return false; // Check to make sure CustomEvent is not a function
+
+    function CustomEvent ( event, params ) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent( 'CustomEvent' );
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+        return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+    window.Event = CustomEvent;
+})();
+
+
 // Variable needed to see if QA script has been ran
 if (typeof qaMode === 'undefined') {
     var qaMode = "";
@@ -74,9 +90,6 @@ var url = window.location.href;
 // if it contains ?custom-local-mode it will load the local version of the script
 // if it contains ?custom-qa-mode it will load the qa version of the script
 // if it contains ?custom-debug, it will not change what version of the script is running but it will so all the console logs
-
-var ciAnimateGraph = new Event('ciAnimateGraph');
-
 
 
 (function() { // On Document ready

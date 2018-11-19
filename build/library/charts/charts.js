@@ -21,6 +21,7 @@ function ratioForPadding(width, height) {
 
 var ciAnimateGraph = new Event('ciAnimateGraph');
 
+
 if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
 
     $('.js-ci-pie-chart__legend').each(function() {
@@ -162,8 +163,12 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             if ( matches("fadein", animateType) ) {
 
 
-                $(pieChartHolder).on('ciAnimateGraph', function (e) {
-                console.log('got event fire');
+            $(pieChartHolder).on('ciAnimateGraph', function (e) {
+                
+                if ( matches("?custom-debug", url) ) {
+                    console.log("CI Debug - Donut/Pie Chart: Event Fired")
+                }
+                
                 var items = 0;
 
                 paths.interrupt()
