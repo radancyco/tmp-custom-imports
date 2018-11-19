@@ -141,7 +141,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .attr('xlink:href',centerImage)
             .attr('clip-path','url(#centerimage)')
             .attr('class','ci-pie-chart__center-img')
-            .style('transform', 'scale(' + imageScale + ')')
+            .attr('transform', 'scale(' + imageScale + ')')
         }
 
         var paths = svg.selectAll('path') // Create virtual path element
