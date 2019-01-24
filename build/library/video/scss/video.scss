@@ -33,6 +33,9 @@
 		transition: transform 200ms ease-in;
 		@media (min-width: 1920px) {
 			top: 40px;
+			left: calc(50% - 22px);
+			border: 30px solid transparent;
+			border-left: 52px solid white;
 		}
 	}
 	&:hover, &:focus{
@@ -41,7 +44,7 @@
 			transform: scale(1.1);
 		}
 		&::after {
-			border-left: 2.7vw solid #035A8F;
+			border-left-color: #035A8F;
 			transform: scale(1.1);
 		}
 	}
