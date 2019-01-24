@@ -4,7 +4,6 @@
     display: block;
     position: absolute;
     max-width: 200px;
-    transition: all 200ms ease-in;
 	top: 50%;
 	left: 50%;
 	margin: 0 -50% 0 0;
@@ -18,7 +17,11 @@
 		border-radius: 50%;
 		border: 0.25vw solid #fff;
 		background-color: rgba(0,0,0,0.45);
-		transition: all 200ms ease-in;
+		transition: transform 200ms ease-in;
+		@media (min-width: 1920px) {
+			width: 140px;
+			height: 140px;
+		}
 	}
 	&::after {
 		content: "";
@@ -27,7 +30,10 @@
 		top: 2.2vw;
 		border: 1.7vw solid transparent;
 		border-left: 2.7vw solid white;
-		transition: all 200ms ease-in;
+		transition: transform 200ms ease-in;
+		@media (min-width: 1920px) {
+			top: 40px;
+		}
 	}
 	&:hover, &:focus{
 		&::before {
