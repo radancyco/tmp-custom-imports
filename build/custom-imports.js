@@ -281,13 +281,11 @@ function customImports() {
 
                 $.getScript( scriptPath + "library/hub/hub.js", function() {
                     if ( matches("?custom-debug", url) ) {
-                        console.log("CI Debug - Video Script: Loaded")
+                        console.log("CI Debug - HUB Script: Loaded")
                     }
                 });
 
             } // End HUB script
-
-            } // End Video Script
 
 
         }
