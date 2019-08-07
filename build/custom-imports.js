@@ -272,6 +272,10 @@ function customImports() {
             // if hub is present in the scripts param
             if ( matches("hub", scripts) ) {
 
+                if ( matches("?custom-debug", url) ) {
+                    console.log("CI Debug - HUB Script: request detected")
+                }
+
                 // Load styles for hub script
                 // if ( !matches("charts", noStyles) ) {
                 //     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/video/video.css" + '" />'));
