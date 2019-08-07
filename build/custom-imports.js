@@ -118,7 +118,7 @@ var url = window.location.href;
             localMode = true;
             qaMode = false;
             // Load the local version of the custom script located on github
-            $.getScript("http://localhost/tmp-custom-imports/build/custom-imports.js", function() {
+            $.getScript("http://localhost/sites/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports Local Script now loaded");
                 customImports();
             });
@@ -155,7 +155,7 @@ function customImports() {
     if ( qaMode ) {
         scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
     } else if ( localMode ) {
-        scriptPath = "http://localhost/tmp-custom-imports/build/";
+        scriptPath = "http://localhost/sites/tmp-custom-imports/build/";
     }
 
     // Find parameters from the src of script file
@@ -266,6 +266,27 @@ function customImports() {
                     });
 
                 }
+            } // End Video Script
+
+            // HUB script
+            // if hub is present in the scripts param
+            if ( matches("hub", scripts) ) {
+
+                // Load styles for hub script
+                // if ( !matches("charts", noStyles) ) {
+                //     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/video/video.css" + '" />'));
+                // }
+
+                // Run Script
+
+                $.getScript( scriptPath + "library/hub/hub.js", function() {
+                    if ( matches("?custom-debug", url) ) {
+                        console.log("CI Debug - Video Script: Loaded")
+                    }
+                });
+
+            } // End HUB script
+
             } // End Video Script
 
 
