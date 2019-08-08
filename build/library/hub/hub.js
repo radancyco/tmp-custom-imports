@@ -326,7 +326,7 @@ var hubFeature = {
         
         //Find out if we are over maxLoad
         
-        if ( (maxLoad != 0 && setCount >= maxLoad ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
+        if ( (maxLoad != 0 && setCount >= maxLoad) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
             overMax = 1;
             console.log("Over Max")
         } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
