@@ -99,14 +99,14 @@ var hubFeature = {
             
             if( loadMore == 0 ) { // if load more setting is set to zero then show all 
                 thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').removeClass('hidden-by-load').addClass('showing-by-load'); // show all tilest
-                currentLoad = 0; // set current load to zero so that if filtered it shows all
+                currentLoad = maxLoad; // set current load to maxload so that
             } else {
                 thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').slice(0, loadMore).removeClass('hidden-by-load').addClass('showing-by-load'); // Revals X ammount of more tiles based on the data-content-load-more-ammount set
                 currentLoad = currentLoad + loadMore; // Get the new current load ammount by adding the previous current to how many were just shown
             }
             
             //Find out if we are over maxLoad
-            if ( ( maxLoad != 0 && currentLoad >= maxLoad ) || (  maxLoad != 0 && loadMore == 0  ) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load or if maxload is not set to zero but loadMore is set to show all 
+            if ( ( maxLoad != 0 && currentLoad >= maxLoad ) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load or if maxload is not set to zero but loadMore is set to show all 
                 overMax = 1;
                 console.log("Over Max")
             } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
@@ -251,9 +251,6 @@ var hubFeature = {
         $(hubID + " .js-hub-content > li").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
             .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
-
-        // Reset Classes so load more is not accidently hidding anything
-        hubFeature.loadMoreReset(hubID);
     },
     filterData: function(hubID){
         var curField, 
@@ -321,10 +318,15 @@ var hubFeature = {
             thisHub.attr('data-load-more-current', setCount); // Set the current load ammount back to ammount of tiles to be visable on load
             console.log("Current  Does not Exist but is now set")
         }
+
+        if ( setCount == 0 ) {
+            thisHub.attr('data-load-more-current', maxLoad); // Set the current load ammount to maxload
+            console.log("Set count Updated")
+        }
         
         //Find out if we are over maxLoad
         
-        if ( maxLoad != 0 && setCount >= maxLoad ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
+        if ( (maxLoad != 0 && setCount >= maxLoad ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
             overMax = 1;
             console.log("Over Max")
         } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
