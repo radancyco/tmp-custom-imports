@@ -251,6 +251,9 @@ var hubFeature = {
         $(hubID + " .js-hub-content > li").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
             .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
+
+            // Reset Classes so load more is not accidently hidding anything
+            hubFeature.loadMoreReset(hubID);
     },
     filterData: function(hubID){
         var curField, 
