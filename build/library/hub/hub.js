@@ -1,5 +1,5 @@
 
- var hubFeature = {
+var hubFeature = {
     Init: function(hubID){
         //===============================
         // runs on load
@@ -196,14 +196,13 @@
         var direction = $(hubID + " .js-hub-content").attr("data-date-direction");
 
         items.each(function() {
-           // Convert the string in 'data-event-date' attribute to a more
-           // standardized date format
-           var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
-           BCDate = BCDate.split("/");
-           var standardDate = BCDate[0]+" "+BCDate[1]+" "+BCDate[2];
-           standardDate = new Date(standardDate).getTime();
-           $(this).attr("data-hub-date-updated-sorting", standardDate);
-     
+            // Convert the string in 'data-event-date' attribute to a more
+            // standardized date format
+            var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
+            BCDate = BCDate.split("/");
+            var standardDate = BCDate[0]+" "+BCDate[1]+" "+BCDate[2];
+            standardDate = new Date(standardDate).getTime();
+            $(this).attr("data-hub-date-updated-sorting", standardDate);
         });
     
         items.sort(function(a,b){
@@ -215,14 +214,14 @@
         });
     },
     filterSort: function(hubID){
-      // sort done after filters applied and is done by weight  
-      $(hubID + " .js-hub-content > li").sort(sort_li).appendTo(hubID + " .js-hub-content");
-      
-      function sort_li(a, b) {
-          console.log("sort LI ran");
-        return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
-      }
-      
+    // sort done after filters applied and is done by weight  
+    $(hubID + " .js-hub-content > li").sort(sort_li).appendTo(hubID + " .js-hub-content");
+    
+    function sort_li(a, b) {
+        console.log("sort LI ran");
+    return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
+    }
+    
     },
     resetData: function(hubID){
         var dateSorting = $(hubID + " .js-hub-content").attr("data-date-sort");
@@ -252,6 +251,9 @@
         $(hubID + " .js-hub-content > li").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
             .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
+
+        // Reset Classes so load more is not accidently hidding anything
+        hubFeature.loadMoreReset(hubID);
     },
     filterData: function(hubID){
         var curField, 
@@ -274,14 +276,14 @@
                         .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
                     $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
-                      $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
+                    $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
                     })
                     a = a + 1;
                 } else{
                     console.log("not-weighted running");
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
                     $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
-                      $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
+                    $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
                     })
                 }
             }
@@ -317,7 +319,7 @@
         } else {
             setCount = +thisHub.attr('data-load-more-default'); // get the ammount of tiles to be visable on load
             thisHub.attr('data-load-more-current', setCount); // Set the current load ammount back to ammount of tiles to be visable on load
-             console.log("Current  Does not Exist but is now set")
+            console.log("Current  Does not Exist but is now set")
         }
         
         //Find out if we are over maxLoad
@@ -360,7 +362,7 @@
 // JQUERY READY FUNCTION  
 $(function(){  
   // initiates hub
-  console.log("HUB JS INIT FOUND")
+    console.log("HUB JS INIT FOUND")
     if($(".js-hub").length){
         // in case we have multiple hubs on a page
         $(".js-hub").each(function(){
