@@ -69,9 +69,6 @@ var hubFeature = {
                     var bValue = $(this).attr("data-query");
                     hubFeature.preFilterData(hubID, bValue);
                 }
-
-                // Reset Classes so load more is not accidently hidding anything
-                hubFeature.loadMoreReset(hubID);
                 
             }
         })
@@ -160,6 +157,9 @@ var hubFeature = {
             console.log("Hub ID:" + hubID + "Message: FINISHED");
             hubFeature.setupFilters(hubID);
         }
+
+        // Reset Classes so load more is not accidently hidding anything
+        hubFeature.loadMoreReset(hubID);
     },
     setupFilters: function(hubID){
         var keyA = [];
