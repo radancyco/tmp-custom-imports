@@ -105,10 +105,10 @@ var hubFeature = {
             //Find out if we are over maxLoad
             if ( ( maxLoad != 0 && currentLoad >= maxLoad ) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load or if maxload is not set to zero but loadMore is set to show all 
                 overMax = 1;
-                console.log("Hub ID: " + hubID + " Message: Over Max")
+                console.log("Hub ID: " + thisHub.attr('id') + " Message: Over Max")
             } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
                 overMax = 0;
-                console.log("Hub ID: " + hubID + " Message: Not Over Max")
+                console.log("Hub ID: " + hubID.attr('id') + " Message: Not Over Max")
             }
             
             if( overMax == 1 ) { // If we have hit our max show
