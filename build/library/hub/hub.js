@@ -364,7 +364,7 @@ var hubFeature = {
 // JQUERY READY FUNCTION  
 $(function(){  
   // initiates hub
-    console.log("Hub ID:" + thisHub + "Message: HUB JS INIT FOUND")
+    console.log("Message: HUB JS INIT FOUND")
     if($(".js-hub").length){
         // in case we have multiple hubs on a page
         $(".js-hub").each(function(){
