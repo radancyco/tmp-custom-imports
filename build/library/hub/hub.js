@@ -322,7 +322,8 @@ var hubFeature = {
             console.log("Hub ID:" + hubID + "Message: Current  Does not Exist but is now set")
         }
 
-        if ( setCount == 0 ) {
+        if ( setCount == 0 ) { // if set count is zero we need to make sure we know what maxload is
+            setCount = maxLoad; // Set the current load ammount to maxload
             thisHub.attr('data-load-more-current', maxLoad); // Set the current load ammount to maxload
             console.log("Hub ID:" + hubID + "Message: Set count Updated")
         }
