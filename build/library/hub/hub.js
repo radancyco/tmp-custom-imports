@@ -105,10 +105,10 @@ var hubFeature = {
             //Find out if we are over maxLoad
             if ( ( maxLoad != 0 && currentLoad >= maxLoad ) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load or if maxload is not set to zero but loadMore is set to show all 
                 overMax = 1;
-                console.log("Hub ID:" + hubID + "Message: Over Max")
+                console.log("Hub ID: " + hubID + " Message: Over Max")
             } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
                 overMax = 0;
-                console.log("Hub ID:" + hubID + "Message: Not Over Max")
+                console.log("Hub ID: " + hubID + " Message: Not Over Max")
             }
             
             if( overMax == 1 ) { // If we have hit our max show
@@ -150,11 +150,11 @@ var hubFeature = {
             
         })
         $(hubID + " .mappings li:not(.js-keep-data)").remove();
-        console.log("Hub ID:" + hubID + "Message: Mappings Deleted");
+        console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
         $(hubID + " .js-hub-content > li:not(.pre-filtered)").remove();
         
         if(setupFilters == 1){
-            console.log("Hub ID:" + hubID + "Message: FINISHED");
+            console.log("Hub ID: " + hubID + " Message: FINISHED");
             hubFeature.setupFilters(hubID);
         }
 
@@ -218,7 +218,7 @@ var hubFeature = {
     $(hubID + " .js-hub-content > li").sort(sort_li).appendTo(hubID + " .js-hub-content");
     
     function sort_li(a, b) {
-        console.log("Hub ID:" + hubID + "Message: sort LI ran");
+        console.log("Hub ID: " + hubID + " Message: sort LI ran");
     return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
     }
     
@@ -271,7 +271,7 @@ var hubFeature = {
             if(curValue != "none"){
                 // weighted search
                 if(isWeighted == "1"){
-                    console.log("Hub ID:" + hubID + "Message: weighted running");
+                    console.log("Hub ID: " + hubID + " Message: weighted running");
                     $(hubID + " ul.mappings > li[" + curField + "='" + curValue + "']")
                         .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
@@ -280,7 +280,7 @@ var hubFeature = {
                     })
                     a = a + 1;
                 } else{
-                    console.log("Hub ID:" + hubID + "Message: not-weighted running");
+                    console.log("Hub ID: " + hubID + " Message: not-weighted running");
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
                     $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
                     $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
@@ -291,7 +291,7 @@ var hubFeature = {
         
         // not weighted
         if(isWeighted != "1"){
-            console.log("Hub ID:" + hubID + "Message: fields matched " + fieldsUsed);
+            console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
             $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
                 $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
             })
@@ -315,27 +315,27 @@ var hubFeature = {
         // get the ammount of tiles to be visable on load or reset
         if ( thisHub.attr('data-load-more-current') != null ) { // if it is not null then that means it has run before and we should ue current count instead of default
             setCount = +thisHub.attr('data-load-more-current');
-            console.log("Hub ID:" + hubID + "Message: Current Already Exists")
+            console.log("Hub ID: " + hubID + " Message: Current Already Exists")
         } else {
             setCount = +thisHub.attr('data-load-more-default'); // get the ammount of tiles to be visable on load
             thisHub.attr('data-load-more-current', setCount); // Set the current load ammount back to ammount of tiles to be visable on load
-            console.log("Hub ID:" + hubID + "Message: Current  Does not Exist but is now set")
+            console.log("Hub ID: " + hubID + " Message: Current  Does not Exist but is now set")
         }
 
         if ( setCount == 0 ) { // if set count is zero we need to make sure we know what maxload is
             setCount = maxLoad; // Set the current load ammount to maxload
             thisHub.attr('data-load-more-current', maxLoad); // Set the current load ammount to maxload
-            console.log("Hub ID:" + hubID + "Message: Set count Updated")
+            console.log("Hub ID: " + hubID + " Message: Set count Updated")
         }
         
         //Find out if we are over maxLoad
         
         if ( (maxLoad != 0 && setCount >= maxLoad) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
             overMax = 1;
-            console.log("Hub ID:" + hubID + "Message: Over Max")
+            console.log("Hub ID: " + hubID + " Message: Over Max")
         } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
             overMax = 0;
-            console.log("Hub ID:" + hubID + "Message: Not Over Max")
+            console.log("Hub ID: " + hubID + " Message: Not Over Max")
         }
 
         
