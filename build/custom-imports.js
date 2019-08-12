@@ -277,9 +277,9 @@ function customImports() {
                 }
 
                 // Load styles for hub script
-                // if ( !matches("charts", noStyles) ) {
-                //     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/video/video.css" + '" />'));
-                // }
+                if ( !matches("charts", noStyles) ) {
+                    $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/hub/hub-functionality.css" + '" />'));
+                }
 
                 // Run Script
 

@@ -1,0 +1,22 @@
+// Content Hub Defaults are for FE reference and DO NOT get pulled in via JS
+
+.hub-load-more {
+    &__button { // .hub-load-more__button
+        transition-property: visibility, opacity;
+        transition-duration: .2s;
+        transition-timing-function: linear;
+        opacity: 1;
+        visibility: visible;
+        line-height:40px;
+        cursor:pointer;
+        margin:0 auto;
+        display:block;
+        border:none;
+
+        &:disabled {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+}
+
