@@ -13,6 +13,9 @@ var hubFeature = {
         } else{
             if(showFiltersForm == 1){
                 hubFeature.setupFilters(hubID);
+            } else {
+                // If prefilters are not setup and the filter form is not setup make sure to run load more
+                hubFeature.loadMoreReset(hubID);
             }
         }
         $(hubID).addClass("initialized");
