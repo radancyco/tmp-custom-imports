@@ -36,6 +36,14 @@ $end-large: 900px;
     display:none !important;
     visibility:hidden;
 }
+
+.hub-visually-hidden {
+    position: absolute !important;
+    display: block !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+}
     
 
 

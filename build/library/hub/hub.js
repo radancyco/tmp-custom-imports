@@ -111,7 +111,7 @@ var hubFeature = {
                 console.log("Hub ID: " + thisHub.attr('id') + " Message: Over Max")
             } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
                 overMax = 0;
-                console.log("Hub ID: " + hubID.attr('id') + " Message: Not Over Max")
+                console.log("Hub ID: " + thisHub.attr('id') + " Message: Not Over Max")
             }
             
             if( overMax == 1 ) { // If we have hit our max show
