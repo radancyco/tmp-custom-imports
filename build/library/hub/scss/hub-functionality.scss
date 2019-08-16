@@ -32,7 +32,8 @@ $end-large: 900px;
     display: none;
 }
 
-.hidden-by-load, .hidden-by-filter {
+.hidden-by-load, 
+.hidden-by-filter {
     display:none !important;
     visibility:hidden;
 }
@@ -44,26 +45,26 @@ $end-large: 900px;
     width: 1px !important;
     height: 1px !important;
 }
-    
 
+.hub-content {
+    &__list {
+        list-style:none outside;
+        height:100%;
+        max-width:1200px;
+        margin:30px auto;
+        display:inline-block;
+        width:100%;
+        float:left;
+    }
 
-.hub-content__list {
-    list-style:none outside;
-    height:100%;
-    max-width:1200px;
-    margin:30px auto;
-    display:inline-block;
-    width:100%;
-    float:left;
-    
-    > li {
+    &__item {
         width:100%;
         margin:15px auto;
         padding:0;
         display:inline-block;
     }
     
-    &:not([data-system-css-columns="0"]){
+    &:not([data-system-css-columns="0"]) {
         display: -ms-flexbox;
         display: -webkit-flex;
         display: flex;
@@ -84,8 +85,7 @@ $end-large: 900px;
         align-items: stretch;
         float:none;
         
-        
-        > li{
+        .hub-content__item {
             -webkit-order: 0;
             -ms-flex-order: 0;
             order: 0;
@@ -99,32 +99,32 @@ $end-large: 900px;
             margin:15px auto;
             padding:0;
             display:inline-block;
-            }
+        }
     }
     
-    &[data-system-css-columns="2"]{
-        > li{
+    &[data-system-css-columns="2"] {
+        .hub-content__item {
             @include breakpoint($end-small){
                 width:calc(50% - 15px);
             }
         }
     }
-    &[data-system-css-columns="3"]{
-        > li{
+    &[data-system-css-columns="3"] {
+        .hub-content__item {
             @include breakpoint($end-small){
                 width:calc(100% / 3 - 15px);
             }
         }
     }
-    &[data-system-css-columns="4"]{
-        > li{
+    &[data-system-css-columns="4"] {
+        .hub-content__item {
             @include breakpoint($end-small){
                 width:calc(25% - 15px);
             }
         }
     }
-    &[data-system-css-columns="5"]{
-        > li{
+    &[data-system-css-columns="5"] {
+        .hub-content__item {
             @include breakpoint($end-small){
                 width:calc(100% / 3 - 15px);
             }
@@ -133,8 +133,8 @@ $end-large: 900px;
             }
         }
     }
-    &[data-system-css-columns="6"]{
-        > li{
+    &[data-system-css-columns="6"] {
+        .hub-content__item {
             @include breakpoint($end-small){
                 width:calc(100% / 3 - 15px);
             }
