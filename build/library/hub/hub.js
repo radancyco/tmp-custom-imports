@@ -154,7 +154,7 @@ var hubFeature = {
         })
         $(hubID + " .mappings li:not(.js-keep-data)").remove();
         console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
-        $(hubID + " .js-hub-content > li:not(.pre-filtered)").remove();
+        $(hubID + " .js-hub-item:not(.pre-filtered)").remove();
         
         if(setupFilters == 1){
             console.log("Hub ID: " + hubID + " Message: FINISHED");
@@ -218,7 +218,7 @@ var hubFeature = {
     },
     filterSort: function(hubID){
     // sort done after filters applied and is done by weight  
-    $(hubID + " .js-hub-content > li").sort(sort_li).appendTo(hubID + " .js-hub-content");
+    $(hubID + " .js-hub-item").sort(sort_li).appendTo(hubID + " .js-hub-content");
     
     function sort_li(a, b) {
         console.log("Hub ID: " + hubID + " Message: sort LI ran");
@@ -228,7 +228,7 @@ var hubFeature = {
     },
     resetData: function(hubID){
         var dateSorting = $(hubID + " .js-hub-content").attr("data-date-sort");
-        $(hubID + " .js-hub-content > li").attr('data-weight','0').removeClass("hidden-by-filter").addClass("showing-by-filter");
+        $(hubID + " .js-hub-item").attr('data-weight','0').removeClass("hidden-by-filter").addClass("showing-by-filter");
         if(dateSorting === "1"){
             // resets the data and then applies a sort based on the date
             hubFeature.applyDateSort(hubID);
@@ -251,7 +251,7 @@ var hubFeature = {
     preFilterData:function(hubID, dataAttrString){
         var getString = dataAttrString;
         console.log(getString); 
-        $(hubID + " .js-hub-content > li").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
+        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
             .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
 
@@ -265,7 +265,7 @@ var hubFeature = {
             fieldsUsed ="",
             a = 1;
         isWeighted = $(hubID + " .js-hub-content").attr("data-filter-weight");
-        $(hubID + " .js-hub-content > li").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
+        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         
         // filtered
         $(hubID + " .hub-filter div select").each(function(){
