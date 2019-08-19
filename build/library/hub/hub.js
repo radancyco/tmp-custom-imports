@@ -1,4 +1,3 @@
-
 var hubFeature = {
     Init: function(hubID){
         //===============================
@@ -18,7 +17,7 @@ var hubFeature = {
                 hubFeature.loadMoreReset(hubID);
             }
         }
-        $(hubID).addClass("initialized");
+        $(hubID).addClass("initialized").removeClass("initializing");
         //===============================
         //filter button on form
         $(".js-hub-submit-filters").on('click',function(i){
@@ -197,13 +196,14 @@ var hubFeature = {
         var container = $(hubID + " .js-hub-content");
         var items = $(hubID + " .js-hub-item");
         var direction = $(hubID + " .js-hub-content").attr("data-date-direction");
+        console.log("SORTING DATE");
 
         items.each(function() {
             // Convert the string in 'data-event-date' attribute to a more
             // standardized date format
             var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
             BCDate = BCDate.split("/");
-            var standardDate = BCDate[0]+" "+BCDate[1]+" "+BCDate[2];
+            var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
             standardDate = new Date(standardDate).getTime();
             $(this).attr("data-hub-date-updated-sorting", standardDate);
         });
@@ -216,13 +216,47 @@ var hubFeature = {
             container.prepend(this);
         });
     },
+    randomSort:function(hubID, selector){
+            $parents = $(hubID + " .js-hub-content");
+        $parents.each(function(){
+            $(this).children(selector).sort(function(){
+                return Math.round(Math.random()) - 0.5;
+            }).detach().appendTo(this);
+        });
+        
+        return this;
+    },
+    exactSort:function(hubID){
+        var topPosts = $(hubID + " .js-hub-item.showing-by-filter");
+        var bottomPosts = $(hubID + " .js-hub-item:not(.showing-by-filter)");
+        $(hubID + " .js-hub-content").empty()
+        
+        topPosts.each(function(i){
+            var newItem = $(this);
+            $(newItem).appendTo($(hubID + " .js-hub-content"));
+        })
+        bottomPosts.each(function(i){
+            var newItem = $(this);
+            $(newItem).appendTo($(hubID + " .js-hub-content"));
+        })
+
+
+        /* Exact Match */
+        /* console.log('running exact sort');
+        var topList = $(hubID + " .js-hub-item.showing-by-filter");
+        var bottomList = topList + $(hubID + " .js-hub-item:not(.showing-by-filter)");
+        $(hubID + " .js-hub-content").empty();
+        bottomList.appendTo($(hubID + " .js-hub-content"));
+        topList.appendTo($(hubID + " .js-hub-content"));
+        */
+    },
     filterSort: function(hubID){
     // sort done after filters applied and is done by weight  
     $(hubID + " .js-hub-item").sort(sort_li).appendTo(hubID + " .js-hub-content");
     
     function sort_li(a, b) {
         console.log("Hub ID: " + hubID + " Message: sort LI ran");
-    return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
+        return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
     }
     
     },
@@ -297,7 +331,9 @@ var hubFeature = {
             console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
             $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
                 $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
-            })
+            });
+            hubFeature.exactSort(hubID);
+            
         } else{
             hubFeature.filterSort(hubID);
         }
