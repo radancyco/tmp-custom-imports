@@ -80,6 +80,7 @@ if (typeof qaMode === 'undefined') {
 // Variable needed to see if Local script has been 
 if (typeof localMode === 'undefined') {
     var localMode = "";
+    var localModePath = "";
 }
 
 // Set global vairable for url
@@ -118,9 +119,18 @@ var url = window.location.href;
             localMode = true;
             qaMode = false;
             // Load the local version of the custom script located on github
+
+
             $.getScript("http://localhost/sites/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports Local Script now loaded");
+                localModePath = "http://localhost/sites/tmp-custom-imports/build/";
                 customImports();
+            }).fail(function(){
+                $.getScript("http://localhost:61651/tmp-custom-imports/build/custom-imports.js", function() {
+                    alert("Drew's custom path  for Custom Imports Local Script now loaded");
+                    localModePath = "http://localhost:61651/tmp-custom-imports/build/";
+                    customImports();
+                })
             });
         }
 
@@ -155,7 +165,7 @@ function customImports() {
     if ( qaMode ) {
         scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
     } else if ( localMode ) {
-        scriptPath = "http://localhost/sites/tmp-custom-imports/build/";
+        scriptPath = localModePath;
     }
 
     // Find parameters from the src of script file
