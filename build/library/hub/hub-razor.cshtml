@@ -1,0 +1,294 @@
+@using Tmp.TalentBrew.Core
+@using Tmp.TalentBrew.Model
+@model PublishedCustomHTMLModuleModel
+@using Tmp.TalentBrew.Core.HtmlHelpers
+
+
+@{
+    var publishedContentPages = Html.GetPublishedContentPages();
+
+    /* ======================= */
+    /* ID FOR THIS HUB - Should always be data-hub-variable */ 
+    /* ======================= */
+    var thisHubID = "data-hub-1";
+
+    /* ======================= */
+    /* BASE FACETS: DO NOT MODIFY */ 
+    /* ======================= */
+    var customFacetFieldNames = new List<string>();
+    customFacetFieldNames.Add("Campaign");
+    customFacetFieldNames.Add("Company Name");
+    customFacetFieldNames.Add("Industry");
+    customFacetFieldNames.Add("Is Manager");
+    customFacetFieldNames.Add("Is Telecommute");
+    customFacetFieldNames.Add("Job Level");
+    customFacetFieldNames.Add("Job Status");
+    customFacetFieldNames.Add("Job Type");
+    customFacetFieldNames.Add("Travel");
+    customFacetFieldNames.Add("Hours Per Week");
+    customFacetFieldNames.Add("Salary Relocation");
+    customFacetFieldNames.Add("Salary Time");
+
+    /* ======================= */
+    /* ADD ANY CUSTOM FACETS YOU MAY NEED */
+    /* ======================= */
+    customFacetFieldNames.Add("ContentType"); 
+
+    /* ======================= */
+    /* INCLUDE FILTER BY FORM */
+    /* ======================= */
+    /* 1 = True / 0 = False */
+    int showFilterForm = 1;
+    
+    /* ======================= */
+    /* INCLUDE FILTER BY BUTTONS */
+    /* ======================= */
+    int showFilterButtons = 0;
+
+    
+    /* ======================= */
+    /* QUERY FILTERS */
+    /* ======================= */
+    /* SHOW ONLY PAGES WITH IMAGES (1 = True / 0 = False) */
+    int imagesOnly = 1;
+    /* SHOW CONTENT PAGE TYPE PAGES (1 = True / 0 = False) */
+    int contentPageType = 1;
+    /* SHOW SELF-SERVICE PAGE TYPE PAGES (1 = True / 0 = False) */
+    int selfServicePageType = 1;
+
+    /* ======================= */
+    /* PRE-FILTERS */
+    /* ======================= */
+    int usePreFilter = 0;
+
+    /* ======================= */
+    /* SORTING */
+    /* ======================= */
+    /* DEFAULT SORT BY DATE ON LOAD (1 = Sort by date / 0 = False) */
+    int dateSort = 1;
+    /* DATE SORT DIRECTION (1 = Descending / 0 = Ascending) */
+    int dateSortDirection = 1;
+    /* CUSTOMIZE : FILTER WEIGHTED (1 = True / 0 = False) */
+    int filterWeighted = 0;
+    
+    /* ======================= */
+    /* HOW MANY TO SHOW ON LOAD AND HOW MANY TO SHOW PER CLICK */
+    /* ======================= */
+    /* NUMBER OF RECORDS TO SHOW BEFORE MORE BUTTON (0 disables "more" feature) */
+    int moreDefaultCount = 9;
+    /* NUMBER OF RECORDS TO SHOW WHEN CLICKING MORE (0 will show all) */
+    int moreButtonCount = 3;
+    /* MAX NUMBER OF RECORDS ABLE TO BE SHOW (0 will be no limit) */
+    int moreMaxCount = 0;
+    
+    /* ======================= */
+    /* HOW MANY FLEX COLUMNS */
+    /* ======================= */
+    /* NUMBER OF COLUMNS USING THE DEFAULT STYLES (0 through 6 columns, 0 makes it not flexed and you can ignore default styles) */
+    int systemStyledColumns = 3;
+
+}
+
+    @* ======================= *@
+    @* HELPER: BUILD FILTERS ON PAGE *@
+    @* ======================= *@
+    @helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
+        if(selectShow == 1){
+            <div class="hub-filter__select-wrapper">
+                <label class="hub-filter__label hub-visually-hidden">@selectLabel</label>
+                <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
+            </div>
+        }
+    }
+    
+    @* ======================= *@
+    @* HELPER: PREFILTER ITEMS ON PAGE *@
+    @* ======================= *@
+    @helper addPreFilters(string cat, string loc, string fName, string fValue, string currentHub) {
+    var thisFacet = "";
+    var thisLoc = "";
+    var thisCat = "";
+        if(fName != "ALL"){
+            thisFacet = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
+        }
+        if(loc != "ALL"){
+            thisLoc = "[" + @currentHub + "-location='" + @loc + "']";
+        }
+        if(cat != "ALL"){
+            thisCat = "[" + @currentHub + "-category='" + @cat + "']";
+        }
+        <li class="js-hub-prefilter" data-query="@thisCat@thisLoc@thisFacet"></li>
+    }
+     
+    @* ======================= *@
+    @* HELPER: YOUR FILTER BY BUTTONS *@
+    @* ======================= *@
+    @helper addfilterButton(string cat, string loc, string fName, string fValue, string buttonLabel, string currentHub) {
+        var thisString = "";
+        if(fName != "ALL"){
+            thisString = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
+        }
+        <li class="hub-filter-btn__item">
+            <button class="js-hub-filter-button hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub">@buttonLabel</button>
+        </li>
+    }
+
+
+     
+    @* ======================= *@
+    @* HELPER: MAPPINGS FOR ARTICLES *@
+    @* ======================= *@
+    @helper addMapping(string categoryValue, string locationValue , string facetName, string facetValue, string currentHub) {
+        if(facetName == ""){
+            <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue"></li>
+        }else{
+            <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue" @currentHub-facet-@facetName="@facetValue"></li>
+        }
+    }
+     
+    
+
+<section class="js-hub hub__wrapper" 
+         id="@thisHubID" 
+         data-show-form="@showFilterForm" 
+         data-prefilter="@usePreFilter"
+         data-load-more-default="@moreDefaultCount" 
+         data-load-more-amount="@moreButtonCount"
+         data-load-more-max="@moreMaxCount">
+        @if(usePreFilter == 1){
+            <ul class="hub-prefilter" aria-hidden="true">
+                @* ======================= *@
+                @* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) *@
+                @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
+                @* ======================= *@
+                
+                @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID)
+                @addPreFilters("Account Services","ALL","ALL","ALL",thisHubID)
+            </ul>
+        }
+
+        @if(showFilterButtons == 1){
+            @* ======================= *@
+            @* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub) *@
+            @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
+            @* ======================= *@
+            <div class="hub-filter-btn__wrapper">
+                <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
+                <ul class="hub-filter-btn__list">
+                    <li class="hub-filter-btn__item"><button class="js-hub-filter-button-reset js-hub-filter-button hub-filter-btn__button current-active" data-hub-id="@thisHubID">Show All</button></li>
+                @addfilterButton("Medical Services","New York, NY (City)","job-type","Full Time","Medical (NYC/Full-Time)",thisHubID)
+                @addfilterButton("Account Services","ALL","ALL","ALL","Account Services (Global)",thisHubID)
+                </ul>
+            </div>
+        }
+
+        
+        @if(showFilterForm == 1){
+            <form class="hub-filter">
+                <h2 class="hub-filter__heading">Filter stories</h2>
+                <legend class="hub-filter__info-text hub-visually-hidden">Please choose from the available otions and press submit to filter.</legend>
+                @* ======================= *@
+                @* Creating filters (Label, field, default value, Hide/Show, ID) *@
+                @* ======================= *@
+                @addFilter("Content Type","facet-contenttype","Type",1, thisHubID)
+                @addFilter("Category","category","Role",1, thisHubID)
+                @addFilter("Is-telecommute","facet-is-telecommute","Is telecommute",0, thisHubID)
+                @addFilter("Campaign","facet-campaign","Type",0, thisHubID)
+                @addFilter("Location","location","Select Location",0, thisHubID)
+                @addFilter("Company Name","facet-companyname","Hidden",0, thisHubID)
+                @addFilter("Industry","facet-industry","Hidden",0, thisHubID)
+                @addFilter("Is Manager","facet-is-manager","Hidden",0, thisHubID)
+                @addFilter("Division","facet-job-level","Select Division",0, thisHubID)
+                @addFilter("Job Status","facet-job-status","Hidden",0, thisHubID)
+                @addFilter("Cleared","facet-job-type","Select Level",0, thisHubID)
+                @addFilter("Travel","facet-travel","Hidden",0, thisHubID)
+                @addFilter("Hours Per Week","facet-hours-per-week","Hidden",0, thisHubID)
+                @addFilter("Salary Relocation","facet-salary-relocation","Hidden",0, thisHubID)
+                @addFilter("Salary Time","facet-salary-time","Hidden",0, thisHubID)
+                <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID">Filter</button>
+                <button class="js-hub-reset-filters hub-filter__button" data-hub-id="@thisHubID">Reset</button>
+            </form>
+        }
+        <ul class="js-hub-content hub-content__list" 
+            data-date-sort="@dateSort" 
+            data-filter-weight="@filterWeighted" 
+            data-date-direction="@dateSortDirection"
+            data-system-css-columns="@systemStyledColumns">
+            @foreach (var contentPage in publishedContentPages){
+                if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
+                    var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";
+                    if(pageCreated == "PB created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1){
+                        if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
+                            int v = 0;
+                            var ltype = "";
+                            var lltype = "";
+                            <li class="js-hub-item hub-content__item showing-by-filter"
+                                data-hub-origin="@contentPage.IsCmsCreated"  
+                                data-hub-title="@contentPage.Title"  
+                                data-hub-meta="@contentPage.Description" 
+                                data-hub-url="@contentPage.PageUrl" 
+                                data-hub-link="@contentPage.LinkUrl" 
+                                data-hub-image="@contentPage.ThumbnailFilePath" 
+                                data-hub-created-by="@pageCreated" 
+                                data-hub-date-updated="@contentPage.DateUpdated" 
+                                data-hub-date-created="@contentPage.DateCreated">
+                                
+                                @* ========================== *@
+                                @* Content to return for each record *@
+                                @* ========================== *@
+                                @if(contentPage.LinkUrl.Contains("youtube")){
+                                    ltype = "video-link youtube";
+                                } else if(contentPage.LinkUrl.Contains("vimeo")){
+                                    ltype = "video-link vimeo";
+                                } else if(contentPage.LinkUrl.Contains(".mp4")){
+                                    ltype = "video-link mp4";
+                                }
+                                
+                                @*// Example of adding a class to the link based on custom facet *@
+                                @foreach (var mapping in contentPage.KeywordPageMappings){
+                                    if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                        if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
+                                            lltype = "video-type";
+                                        }
+                                    }
+                                }
+
+                                
+                                <a href="@contentPage.LinkUrl" class="js-hub-item-link hub-item__link @ltype @lltype">
+                                    <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
+                                    <div class="hub-item__text">
+                                        <span class="hub-item__title">@contentPage.Title</span>
+                                        <span class="hub-item__description">
+                                            @contentPage.Description
+                                            <span class="hub-item__fake-button">Learn More</span>
+                                        </span>
+                                        
+                                    </div>
+                                </a>
+                                
+                                @* ========================== *@
+                                @* Required for filtering *@
+                                @* ========================== *@
+                                <ul class="mappings hidden" aria-hidden="true">
+                                    @foreach (var mapping in contentPage.KeywordPageMappings){
+                                        var cat = mapping.CategoryDisplay;
+                                        var loc = mapping.LocationDisplay;
+                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                            var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
+                                            var fValue = mapping.CustomFacetFieldValueDisplay;
+                                            @addMapping(cat, loc, fName , fValue, thisHubID);
+                                        } else{
+                                            @addMapping(cat, loc, "IGNORE", "", thisHubID);
+                                        }                                    
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
+                }
+            }
+        </ul>    
+        @if(moreDefaultCount > 0){
+            <button class="js-hub-load-more-button hub-load-more__button" disabled="true">Load more stories</button>
+        }
+</section>

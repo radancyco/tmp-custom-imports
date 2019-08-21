@@ -1,5 +1,149 @@
 // Content Hub Defaults are for FE reference and DO NOT get pulled in via JS
 
+//
+// Content Hub
+//
+
+.hub-filter {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+
+
+
+    &__heading { // .hub-filter__heading 
+        width:100%;
+        text-align: center;
+        color: #ccc;
+        text-align: left;
+        margin: 0 0 15px 0; 
+        font-size: 16px;       
+        @include breakpoint($end-small){
+            text-align: left;
+            font-size: 12px;
+        }
+    }
+
+    &__button, // .hub-filter__button
+    &__select-wrapper { // .hub-filter__select-wrapper 
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 0 1 auto;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: auto;
+        padding:0;
+        margin:0 0 15px;
+        width:100%;
+
+        @include breakpoint($end-small){
+            max-width:calc(100% / 4 - 10px); // Divide by how many options you have in the form field
+        }
+    }
+
+    &__select-wrapper {
+        @include breakpoint($end-small){
+            margin: 0;
+            max-width: calc(50% - 135px);
+        }
+    }
+
+    &__select { // .hub-filter__select
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        font-size: 16px;
+        border: 0;
+        border-bottom: 2px solid #ccc;
+        &:hover,
+        &:focus {
+            font-size: 19px;
+            color: #2e5c98;
+            padding: 8px;
+            border-color: #2e5c98;
+        }
+    }
+
+
+
+    &__button {  // .hub-filter__button
+        display:inline-block;
+        line-height:40px;
+        border:none;
+        outline:none;
+        padding:0 15px;
+        background: #2c5d9b; 
+
+        @include breakpoint($end-small){
+            margin: 0;
+            width: 110px;
+        }
+    }
+    &__label { // .hub-filter__label
+    }
+}
+
+.hub-item {
+    &__link { // .hub-item__link
+        position: relative;
+        display: block;
+        overflow: hidden;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__image { // .hub-item__image
+        margin: 0;
+        max-width: 100%;
+        display: block;
+    }
+
+    &__title { // .hub-item__title
+        font-size: 18px;
+        width: 100%;
+        display: block;
+    }
+
+
+    &__description { // .hub-item__description
+        width: 100%;
+    }
+
+    &__text { // .hub-item__text
+        padding: 20px;
+
+    }
+
+    &__fake-button { // .hub-item__fake-button
+        display: block;
+        width: 125px;
+        margin: 10px 0 0 0;
+        &::after {
+            content: '\20\203a'
+        }
+    }
+}
+
+
 .hub-load-more {
     &__button { // .hub-load-more__button
         transition-property: visibility, opacity;
@@ -20,3 +164,4 @@
     }
 }
 
+// End Content Hub
