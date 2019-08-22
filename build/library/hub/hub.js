@@ -27,7 +27,7 @@ var hubFeature = {
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id"),
                 valsExist = "";
-            $(hubID + " .js-hub-filter select").each(function(w){
+            $(hubID + " .js-hub-filter-form select").each(function(w){
                 var getVals = "#" + $(this).attr('id'),
                     hasVals = $(hubID + " " + getVals).val();
                 if(hasVals != "none"){
@@ -62,7 +62,7 @@ var hubFeature = {
 
         //===============================
         //Listening for filters to be selected
-        $(hubID + " .js-hub-filter select").change(function(){
+        $(hubID + " .js-hub-filter-form select").change(function(){
             if($(this).val() != "none"){
                 $(hubID + " .js-hub-submit-filters").prop("disabled", false);
             }
@@ -302,9 +302,9 @@ var hubFeature = {
         }
         
         // reset filters
-        $(hubID + " .js-hub-filter select").each(function(){
+        $(hubID + " .js-hub-filter-form select").each(function(){
             var gID = "#" + $(this).attr("id"); 
-            $(hubID + " .js-hub-filter div " + gID + " option" ).prop('selected', function() {
+            $(hubID + " .js-hub-filter-form " + gID + " option" ).prop('selected', function() {
                 return this.defaultSelected;
             })
         })
@@ -335,7 +335,7 @@ var hubFeature = {
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         
         // filtered
-        $(hubID + " .js-hub-filter div select").each(function(){
+        $(hubID + " .js-hub-filter-form select").each(function(){
             curField = $(this).attr("id");
             curValue = $(this).val();
             if(curValue != "none"){
