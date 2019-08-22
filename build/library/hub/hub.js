@@ -6,6 +6,9 @@ var hubFeature = {
         $(hubID).addClass("initializing");
         var isPrefiltered = $(hubID).attr("data-prefilter");
         var showFiltersForm = $(hubID).attr("data-show-form");
+        // disable form filter and reset on load
+        $(hubID + " .js-hub-reset-filters").prop('disabled', true);
+        $(hubID + " .js-hub-submit-filters").prop('disabled', true);
         // populates filter options
         if(isPrefiltered == 1){
             hubFeature.setupPreFilters(hubID, showFiltersForm);
@@ -24,7 +27,7 @@ var hubFeature = {
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id"),
                 valsExist = "";
-            $(hubID + " .hub-filter select").each(function(w){
+            $(hubID + " .js-hub-filter select").each(function(w){
                 var getVals = "#" + $(this).attr('id'),
                     hasVals = $(hubID + " " + getVals).val();
                 if(hasVals != "none"){
@@ -32,8 +35,13 @@ var hubFeature = {
                 }
             })
             
-            if(valsExist != "" && hubID != undefined){
-                hubFeature.filterData(hubID);
+            if(hubID != undefined){
+                if(valsExist != ""){
+                    hubFeature.filterData(hubID);
+                    $(hubID).addClass("filtered");
+                    $(hubID + " .js-hub-reset-filters").prop('disabled', false);
+
+                }
             }
         });
 
@@ -43,14 +51,25 @@ var hubFeature = {
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
             if(hubID != undefined){
-                hubFeature.resetData(hubID);
-                setTimeout(function(){
-                    hubFeature.applyDateSort(hubID);
-                }, 250); 
+                if( $(hubID).hasClass("filtered") ) {
+                    $(hubID).removeClass("filtered");
+                    $(hubID + " .js-hub-reset-filters").prop('disabled', true);
+                    $(hubID + " .js-hub-submit-filters").prop("disabled", true);
+                    hubFeature.resetData(hubID);
+                }
             }
         });
 
-        
+        //===============================
+        //Listening for filters to be selected
+        $(hubID + " .js-hub-filter select").change(function(){
+            if($(this).val() != "none"){
+                $(hubID + " .js-hub-submit-filters").prop("disabled", false);
+            }
+        });
+
+
+
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
         $(".js-hub-filter-button").click(function(i){
@@ -64,9 +83,9 @@ var hubFeature = {
                 
                 if($(this).hasClass("js-hub-filter-button-reset")){ // If this is the reset button then do the following
                     hubFeature.resetData(hubID);
-                    setTimeout(function(){
-                        hubFeature.applyDateSort(hubID);
-                    }, 250); 
+                    // setTimeout(function(){
+                    //     hubFeature.applyDateSort(hubID);
+                    // }, 250); 
                 } else  { // IF this is a regular filter button
                     var bValue = $(this).attr("data-query");
                     hubFeature.preFilterData(hubID, bValue);
@@ -204,15 +223,18 @@ var hubFeature = {
         var direction = $(hubID + " .js-hub-content").attr("data-date-direction");
         console.log("SORTING DATE");
 
-        items.each(function() {
+        if(!$(hubID).hasClass("date-initialized")){
+            items.each(function() {
             // Convert the string in 'data-event-date' attribute to a more
             // standardized date format
-            var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
-            BCDate = BCDate.split("/");
-            var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
-            standardDate = new Date(standardDate).getTime();
-            $(this).attr("data-hub-date-updated-sorting", standardDate);
-        });
+                var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
+                BCDate = BCDate.split("/");
+                var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
+                standardDate = new Date(standardDate).getTime();
+                $(this).attr("data-hub-date-updated-sorting", standardDate);  
+            });
+            $(hubID).addClass("date-initialized")  
+        }
     
         items.sort(function(a,b){
             a = parseFloat($(a).attr("data-hub-date-updated-sorting"));
@@ -267,17 +289,22 @@ var hubFeature = {
     
     },
     resetData: function(hubID){
-        var dateSorting = $(hubID + " .js-hub-content").attr("data-date-sort");
-        $(hubID + " .js-hub-item").attr('data-weight','0').removeClass("hidden-by-filter").addClass("showing-by-filter");
-        if(dateSorting === "1"){
+
+        // Remove load more classes
+        $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').attr('data-weight','0').addClass("showing-by-filter");
+        var dateSorting = +$(hubID + " .js-hub-content").attr("data-date-sort");
+        if(dateSorting == 1){
             // resets the data and then applies a sort based on the date
-            hubFeature.applyDateSort(hubID);
+            console.log("getting here");
+            setTimeout(function(){
+                hubFeature.applyDateSort(hubID);
+            }, 1250); 
         }
         
         // reset filters
-        $(hubID + " .hub-filter select").each(function(){
+        $(hubID + " .js-hub-filter select").each(function(){
             var gID = "#" + $(this).attr("id"); 
-            $(hubID + " .hub-filter div " + gID + " option" ).prop('selected', function() {
+            $(hubID + " .js-hub-filter div " + gID + " option" ).prop('selected', function() {
                 return this.defaultSelected;
             })
         })
@@ -308,7 +335,7 @@ var hubFeature = {
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         
         // filtered
-        $(hubID + " .hub-filter div select").each(function(){
+        $(hubID + " .js-hub-filter div select").each(function(){
             curField = $(this).attr("id");
             curValue = $(this).val();
             if(curValue != "none"){
@@ -386,6 +413,7 @@ var hubFeature = {
         
         if( setCount > 0 && overMax == 0 ) { // if default load is higher than 0 and we are not over max load
             thisHub.find('.js-hub-item.showing-by-filter').removeClass('hidden-by-load showing-by-load'); // Show all tiles to start fresh
+            console.log("fired if default load is higher than 0 and we are not over max load ")
             thisHub.find('.js-hub-item.showing-by-filter').addClass('hidden-by-load'); // Hide all tiles
             thisHub.find('.js-hub-item.showing-by-filter').slice(0, setCount).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the ammount of tiles to be visable on load
             thisHub.find('.js-hub-item').removeClass('focusHere'); // Remove any special focus classes
