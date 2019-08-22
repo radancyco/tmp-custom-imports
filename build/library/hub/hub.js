@@ -139,7 +139,8 @@ var hubFeature = {
     },
     setupPreFilters: function(hubID,setupFilters){
         var dFacet,
-        dFacetValue;
+        dFacetValue,
+        dKeepMapping = +$(hubID).attr("data-keepmappings");
         $(hubID + " .js-hub-prefilter").each(function(i){
             // dFacet = $(this).attr('data-facet');
             // dFacetValue = $(this).attr('data-facet-value');
@@ -151,10 +152,15 @@ var hubFeature = {
             })
             
         })
-        $(hubID + " .mappings li:not(.js-keep-data)").remove();
-        console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
-        $(hubID + " .js-hub-item:not(.pre-filtered)").remove();
-        
+
+        if( dKeepMapping == 0) { // Remove mappings so that it does not show other mappings in form when filtering
+            $(hubID + " .mappings li:not(.js-keep-data)").remove();
+            console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
+        }
+
+        $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
+
+
         if(setupFilters == 1){
             console.log("Hub ID: " + hubID + " Message: FINISHED");
             hubFeature.setupFilters(hubID);
