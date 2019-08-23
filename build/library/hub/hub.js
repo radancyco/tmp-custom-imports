@@ -296,9 +296,7 @@ var hubFeature = {
         if(dateSorting == 1){
             // resets the data and then applies a sort based on the date
             console.log("getting here");
-            setTimeout(function(){
-                hubFeature.applyDateSort(hubID);
-            }, 1250); 
+            hubFeature.applyDateSort(hubID);
         }
         
         // reset filters
