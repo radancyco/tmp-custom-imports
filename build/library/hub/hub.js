@@ -185,8 +185,8 @@ var hubFeature = {
             hubFeature.setupFilters(hubID);
         }
 
-        // Reset Classes so load more is not accidently hidding anything
-        hubFeature.loadMoreReset(hubID);
+        // Reset and sort
+        hubFeature.resetData(hubID);
     },
     setupFilters: function(hubID){
         var keyA = [];
