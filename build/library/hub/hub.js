@@ -215,57 +215,70 @@ var hubFeature = {
         var dateSorting = $(hubID + " .js-hub-content").attr("data-date-sort");
         hubFeature.resetData(hubID);
     },
-    applyDateSort: function(hubID){
-        // Arranges list items in DESC order by default  
-        // http://jsfiddle.net/greguarr/2fr0vmhu/
-        var container = $(hubID + " .js-hub-content");
-        var items = $(hubID + " .js-hub-item");
-        var direction = $(hubID + " .js-hub-content").attr("data-date-direction");
+    sortHub: function(hubID,criteria,order){
+        // Sort function for the whole hub list
+        var container = $(hubID + " .js-hub-content"); // The whole list of items
+        var items = $(hubID + " .js-hub-item"); // Each invidual item
+        var date = 0; // Default state of saying the data will be sorted alphabeitnly
+
+
+        $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load'); // Prevent load more from affecting sort
+
+
+        if ( (/date/i.test(criteria)) ) { // test to see if the word date is in the criteria target
+            date = 1;
+        }
+
         console.log("SORTING DATE");
+        console.log(criteria);
+        console.log(order);
 
-        // Drews Method
-        // if(!$(hubID).hasClass("date-initialized")){
-        //     items.each(function() {
-        //     // Convert the string in 'data-event-date' attribute to a more
-        //     // standardized date format
-        //         var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
-        //         BCDate = BCDate.split("/");
-        //         var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
-        //         standardDate = new Date(standardDate).getTime();
-        //         $(this).attr("data-hub-date-updated-sorting", standardDate);  
-        //     });
-        //     $(hubID).addClass("date-initialized")  
-        // }
+        var itemsOrdered = items.detach().get(); // Creates and array we can sort on
+
+
+        if ( order == 1 || order == 2  ) { // Make sure we aren't sorting by random
+
+            itemsOrdered.sort(function(a,b){
+                if (date) {
+                    a = new Date($(a).attr(criteria)).getTime();
+                    b = new Date($(b).attr(criteria)).getTime();
+                } else {
+                    // a = $(a).attr(criteria);
+                    // b = $(b).attr(criteria);
+                }
+
+                
+                if ( order == 1 ) {
+                    // Descending
+                    return a>b ? -1 : a<b ? 1 : 0;
+                } else {
+                    // Ascending
+                    return a<b ? -1 : a>b ? 1 : 0;
+                }
+                
+            }); 
     
-        // items.sort(function(a,b){
-        //     a = parseFloat($(a).attr("data-hub-date-updated-sorting"));
-        //     b = parseFloat($(b).attr("data-hub-date-updated-sorting"));
-        //     return a<b ? -1 : a>b ? 1 : 0;
-        // }).each(function(){
-        //     container.prepend(this);
-        // });
+        } else if ( order == 0 ) { // If random
+            function shuffle(a) {
+                var j, x, i;
+                for (i = a.length - 1; i > 0; i--) {
+                    j = Math.floor(Math.random() * (i + 1));
+                    x = a[i];
+                    a[i] = a[j];
+                    a[j] = x;
+                }
+                return a;
+            }
 
-        /// Brox Method
-        var itemsOrdered = items.detach().get();
-
-        itemsOrdered.sort(function(a,b){
-            a = new Date($(a).attr("data-hub-date-updated")).getTime();
-            b = new Date($(b).attr("data-hub-date-updated")).getTime();
-            return a>b ? -1 : a<b ? 1 : 0;
-        });
+            shuffle(itemsOrdered);
+        }
 
         container.append(itemsOrdered);
 
-    },
-    randomSort:function(hubID, selector){
-            $parents = $(hubID + " .js-hub-content");
-        $parents.each(function(){
-            $(this).children(selector).sort(function(){
-                return Math.round(Math.random()) - 0.5;
-            }).detach().appendTo(this);
-        });
-        
-        return this;
+                
+        // Rerun loadmore
+        hubFeature.loadMoreReset(hubID);
+
     },
     exactSort:function(hubID){
         var topPosts = $(hubID + " .js-hub-item.showing-by-filter");
@@ -305,11 +318,15 @@ var hubFeature = {
 
         // Remove load more classes
         $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').attr('data-weight','0').addClass("showing-by-filter");
-        var dateSorting = +$(hubID + " .js-hub-content").attr("data-date-sort");
+
+        var dateSorting = +$(hubID + " .js-hub-content").attr("data-sort");
+        var dateSortingOrder = +$(hubID + " .js-hub-content").attr("data-sort-direction");
+        var dateSortingCriteria = $(hubID + " .js-hub-content").attr("data-sort-criteria");
         if(dateSorting == 1){
             // resets the data and then applies a sort based on the date
+            // The load more will trigger again when sort happens
             console.log("getting here");
-            hubFeature.applyDateSort(hubID);
+            hubFeature.sortHub(hubID, dateSortingCriteria, dateSortingOrder);
         }
         
         // reset filters
@@ -321,8 +338,6 @@ var hubFeature = {
         })
         
 
-        // Reset Classes so load more is not accidently hidding anything
-        hubFeature.loadMoreReset(hubID);
 
         
     },  
@@ -461,3 +476,4 @@ $(function(){
         })
     }
 })
+
