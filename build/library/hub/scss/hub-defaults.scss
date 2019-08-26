@@ -4,6 +4,23 @@
 // Content Hub
 //
 
+
+.hub {
+    &__wrapper { // .hub__wrapper
+        -webkit-transition: all 350ms ease-in-out;
+        -moz-transition: all 350ms ease-in-out;
+        -ms-transition: all 350ms ease-in-out;
+        -o-transition: all 350ms ease-in-out;
+        transition: all 350ms ease-in-out;
+        opacity:0; // Hide the HUB on load
+        
+        &.initialized { // .hub__wrapper.initialized
+            opacity:1; // Show once the script runs
+        }
+    }
+}
+
+
 .hub-filter {
     display: -ms-flexbox;
     display: -webkit-flex;
