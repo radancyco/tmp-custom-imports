@@ -223,26 +223,39 @@ var hubFeature = {
         var direction = $(hubID + " .js-hub-content").attr("data-date-direction");
         console.log("SORTING DATE");
 
-        if(!$(hubID).hasClass("date-initialized")){
-            items.each(function() {
-            // Convert the string in 'data-event-date' attribute to a more
-            // standardized date format
-                var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
-                BCDate = BCDate.split("/");
-                var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
-                standardDate = new Date(standardDate).getTime();
-                $(this).attr("data-hub-date-updated-sorting", standardDate);  
-            });
-            $(hubID).addClass("date-initialized")  
-        }
+        // Drews Method
+        // if(!$(hubID).hasClass("date-initialized")){
+        //     items.each(function() {
+        //     // Convert the string in 'data-event-date' attribute to a more
+        //     // standardized date format
+        //         var BCDate = $(this).attr("data-hub-date-updated").split(" ")[0];
+        //         BCDate = BCDate.split("/");
+        //         var standardDate = BCDate[0]+"-"+BCDate[1]+"-"+BCDate[2];
+        //         standardDate = new Date(standardDate).getTime();
+        //         $(this).attr("data-hub-date-updated-sorting", standardDate);  
+        //     });
+        //     $(hubID).addClass("date-initialized")  
+        // }
     
-        items.sort(function(a,b){
-            a = parseFloat($(a).attr("data-hub-date-updated-sorting"));
-            b = parseFloat($(b).attr("data-hub-date-updated-sorting"));
-            return a<b ? -1 : a>b ? 1 : 0;
-        }).each(function(){
-            container.prepend(this);
+        // items.sort(function(a,b){
+        //     a = parseFloat($(a).attr("data-hub-date-updated-sorting"));
+        //     b = parseFloat($(b).attr("data-hub-date-updated-sorting"));
+        //     return a<b ? -1 : a>b ? 1 : 0;
+        // }).each(function(){
+        //     container.prepend(this);
+        // });
+
+        /// Brox Method
+        var itemsOrdered = items.detach().get();
+
+        itemsOrdered.sort(function(a,b){
+            a = new Date($(a).attr("data-hub-date-updated")).getTime();
+            b = new Date($(b).attr("data-hub-date-updated")).getTime();
+            return a>b ? -1 : a<b ? 1 : 0;
         });
+
+        container.append(itemsOrdered);
+
     },
     randomSort:function(hubID, selector){
             $parents = $(hubID + " .js-hub-content");
