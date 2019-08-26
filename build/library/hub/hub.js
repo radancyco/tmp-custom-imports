@@ -243,8 +243,8 @@ var hubFeature = {
                     a = new Date($(a).attr(criteria)).getTime();
                     b = new Date($(b).attr(criteria)).getTime();
                 } else {
-                    // a = $(a).attr(criteria);
-                    // b = $(b).attr(criteria);
+                    a = $(a).attr(criteria);
+                    b = $(b).attr(criteria);
                 }
 
                 
