@@ -32,7 +32,7 @@
     /* ======================= */
     /* ADD ANY CUSTOM FACETS YOU MAY NEED */
     /* ======================= */
-    customFacetFieldNames.Add("ContentType"); 
+    @* customFacetFieldNames.Add("ContentType"); *@
 
     /* ======================= */
     /* INCLUDE FILTER BY FORM */
@@ -67,7 +67,7 @@
     /* ======================= */
     /* DEFAULT SORT BY DATE ON LOAD (1 = Sort by date / 0 = False) */
     int dateSort = 1;
-    /* DATE SORT DIRECTION (1 = Descending / 0 = Ascending) */
+    /* DATE SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
     int dateSortDirection = 1;
     /* CUSTOMIZE : FILTER WEIGHTED (1 = True / 0 = False) */
     int filterWeighted = 0;
@@ -257,7 +257,9 @@
 
                                 
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link hub-item__link @ltype @lltype">
-                                    <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
+                                    <div class="hub-item__image-wrapper">
+                                        <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
+                                    </div>
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
                                         <span class="hub-item__description">
