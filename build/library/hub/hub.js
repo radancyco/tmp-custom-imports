@@ -161,13 +161,11 @@ var hubFeature = {
         dFacetValue,
         dKeepMapping = +$(hubID).attr("data-keepmappings");
         $(hubID + " .js-hub-prefilter").each(function(i){
-            // dFacet = $(this).attr('data-facet');
-            // dFacetValue = $(this).attr('data-facet-value');
             
             dValue = $(this).attr("data-query");
             $(hubID + " .mappings li" + dValue).each(function(i){
                 console.log(i);
-                $(this).addClass("js-keep-data").parent().parent().addClass("pre-filtered");
+                $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
             })
             
         })
@@ -225,7 +223,7 @@ var hubFeature = {
         $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load'); // Prevent load more from affecting sort
 
 
-        if ( (/date/i.test(criteria)) ) { // test to see if the word date is in the criteria target
+        if ( ( criteria.includes("date") ) ) { // test to see if the word date is in the criteria target
             date = 1;
         }
 
@@ -280,40 +278,6 @@ var hubFeature = {
         hubFeature.loadMoreReset(hubID);
 
     },
-    exactSort:function(hubID){
-        var topPosts = $(hubID + " .js-hub-item.showing-by-filter");
-        var bottomPosts = $(hubID + " .js-hub-item:not(.showing-by-filter)");
-        $(hubID + " .js-hub-content").empty()
-        
-        topPosts.each(function(i){
-            var newItem = $(this);
-            $(newItem).appendTo($(hubID + " .js-hub-content"));
-        })
-        bottomPosts.each(function(i){
-            var newItem = $(this);
-            $(newItem).appendTo($(hubID + " .js-hub-content"));
-        })
-
-
-        /* Exact Match */
-        /* console.log('running exact sort');
-        var topList = $(hubID + " .js-hub-item.showing-by-filter");
-        var bottomList = topList + $(hubID + " .js-hub-item:not(.showing-by-filter)");
-        $(hubID + " .js-hub-content").empty();
-        bottomList.appendTo($(hubID + " .js-hub-content"));
-        topList.appendTo($(hubID + " .js-hub-content"));
-        */
-    },
-    filterSort: function(hubID){
-    // sort done after filters applied and is done by weight  
-    $(hubID + " .js-hub-item").sort(sort_li).appendTo(hubID + " .js-hub-content");
-    
-    function sort_li(a, b) {
-        console.log("Hub ID: " + hubID + " Message: sort LI ran");
-        return ($(b).attr('data-weight')) > ($(a).attr('data-weight')) ? 1 : -1;
-    }
-    
-    },
     resetData: function(hubID){
 
         // Remove load more classes
@@ -337,8 +301,6 @@ var hubFeature = {
             })
         })
         
-
-
         
     },  
     preFilterData:function(hubID, dataAttrString){
@@ -346,7 +308,7 @@ var hubFeature = {
         console.log(getString); 
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
-            .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
+            .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
 
             // Reset Classes so load more is not accidently hidding anything
             hubFeature.loadMoreReset(hubID);
@@ -369,18 +331,16 @@ var hubFeature = {
                 if(isWeighted == "1"){
                     console.log("Hub ID: " + hubID + " Message: weighted running");
                     $(hubID + " ul.mappings > li[" + curField + "='" + curValue + "']")
-                        .parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
+                    .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
                     $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
-                    $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
+                    $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
                     })
                     a = a + 1;
                 } else{
                     console.log("Hub ID: " + hubID + " Message: not-weighted running");
+                    // Collecting select values in the loop
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
-                    $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
-                    $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
-                    })
                 }
             }
         });
@@ -388,13 +348,14 @@ var hubFeature = {
         // not weighted
         if(isWeighted != "1"){
             console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
+            // Using collected filter values to do an  exact match
             $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
-                $(this).parent().parent().addClass("showing-by-filter").removeClass("hidden-by-filter");  
+                $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");  
             });
-            hubFeature.exactSort(hubID);
             
         } else{
-            hubFeature.filterSort(hubID);
+            // Sort by relevancy
+            hubFeature.sortHub(hubID,"data-weight", 1);
         }
         
         // Reset Classes so load more is not accidently hidding anything
@@ -423,7 +384,7 @@ var hubFeature = {
         if ( setCount == 0 ) { // if set count is zero we need to make sure we know what maxload is
             setCount = maxLoad; // Set the current load ammount to maxload
             thisHub.attr('data-load-more-current', maxLoad); // Set the current load ammount to maxload
-            console.log("Hub ID: " + hubID + " Message: Set count Updated")
+            console.log("Hub ID: " + hubID + " Message: Set count Updated");
         }
         
         //Find out if we are over maxLoad

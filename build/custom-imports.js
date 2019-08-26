@@ -71,6 +71,14 @@ function UrlExists(url, cb){
     window.Event = CustomEvent;
 })();
 
+// PollyFill for Includes
+if (!String.prototype.includes) {
+    String.prototype.includes = function() {
+        'use strict';
+        return String.prototype.indexOf.apply(this, arguments) !== -1;
+    };
+}
+
 
 // Variable needed to see if QA script has been ran
 if (typeof qaMode === 'undefined') {
