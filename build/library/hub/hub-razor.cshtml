@@ -45,6 +45,13 @@
     /* ======================= */
     int showFilterButtons = 0;
 
+    /* ======================= */
+    /* Filter options */
+    /* ======================= */
+     /* FILTER WEIGHTED OR EXACT MATCH  (1 = True / 0 = False) */
+    int filterWeighted = 1;
+    /* NO RESULTS FOUND TEXT */
+    string noResults = "No results found, please try picking another combination of filters.";
     
     /* ======================= */
     /* QUERY FILTERS */
@@ -71,8 +78,7 @@
     string sortCriteria = "data-hub-date-updated";
     /* DATE SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
     int sortDirection = 1;
-    /* CUSTOMIZE : FILTER WEIGHTED (1 = True / 0 = False) */
-    int filterWeighted = 1;
+
     
     /* ======================= */
     /* HOW MANY TO SHOW ON LOAD AND HOW MANY TO SHOW PER CLICK */
@@ -218,7 +224,8 @@
             data-filter-weight="@filterWeighted" 
             data-sort-criteria="@sortCriteria"
             data-sort-direction="@sortDirection"
-            data-system-css-columns="@systemStyledColumns">
+            data-system-css-columns="@systemStyledColumns"
+            data-no-results-text="@noResults">
             @foreach (var contentPage in publishedContentPages){
                 if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
                     var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";

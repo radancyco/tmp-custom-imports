@@ -35,13 +35,10 @@ var hubFeature = {
                 }
             })
             
-            if(hubID != undefined){
-                if(valsExist != ""){
+            if(hubID != undefined && valsExist != "" ){
                     hubFeature.filterData(hubID);
                     $(hubID).addClass("filtered");
                     $(hubID + " .js-hub-reset-filters").prop('disabled', false);
-
-                }
             }
         });
 
@@ -51,11 +48,21 @@ var hubFeature = {
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
             if(hubID != undefined){
+
                 if( $(hubID).hasClass("filtered") ) {
-                    $(hubID).removeClass("filtered");
+                    hubFeature.resetData(hubID);
+                } else {
+
                     $(hubID + " .js-hub-reset-filters").prop('disabled', true);
                     $(hubID + " .js-hub-submit-filters").prop("disabled", true);
-                    hubFeature.resetData(hubID);
+                        
+                    // reset filters
+                    $(hubID + " .js-hub-filter-form select").each(function(){
+                        var gID = "#" + $(this).attr("id"); 
+                        $(hubID + " .js-hub-filter-form " + gID + " option" ).prop('selected', function() {
+                            return this.defaultSelected;
+                        })
+                    });
                 }
             }
         });
@@ -65,6 +72,7 @@ var hubFeature = {
         $(hubID + " .js-hub-filter-form select").change(function(){
             if($(this).val() != "none"){
                 $(hubID + " .js-hub-submit-filters").prop("disabled", false);
+                $(hubID + " .js-hub-reset-filters").prop('disabled', false);
             }
         });
 
@@ -280,8 +288,16 @@ var hubFeature = {
     },
     resetData: function(hubID){
 
+        $(hubID).removeClass("filtered");
+    
         // Remove load more classes
         $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').attr('data-weight','0').addClass("showing-by-filter");
+
+        // Remove any visable error messages
+        if ( $(hubID + " .js-hub-error").length ) {
+            $(hubID + " .js-hub-error").remove()
+        }
+    
 
         var dateSorting = +$(hubID + " .js-hub-content").attr("data-sort");
         var dateSortingOrder = +$(hubID + " .js-hub-content").attr("data-sort-direction");
@@ -292,14 +308,21 @@ var hubFeature = {
             console.log("getting here");
             hubFeature.sortHub(hubID, dateSortingCriteria, dateSortingOrder);
         }
+
         
+
+        $(hubID + " .js-hub-reset-filters").prop('disabled', true);
+        $(hubID + " .js-hub-submit-filters").prop("disabled", true);
+            
         // reset filters
         $(hubID + " .js-hub-filter-form select").each(function(){
             var gID = "#" + $(this).attr("id"); 
             $(hubID + " .js-hub-filter-form " + gID + " option" ).prop('selected', function() {
                 return this.defaultSelected;
             })
-        })
+        });
+        
+    
         
         
     },  
@@ -318,17 +341,24 @@ var hubFeature = {
             curValue,
             isWeighted ="",
             fieldsUsed ="",
-            a = 1;
-        isWeighted = $(hubID + " .js-hub-content").attr("data-filter-weight");
+            a = 1
+            noResultsText = '<p class="js-hub-error hub__error">' + $(hubID + " .js-hub-content").attr("data-no-results-text") + '</p>';
+
+        isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         
+        // Remove any visable error messages
+        if ( $(hubID + " .js-hub-error").length ) {
+            $(hubID + " .js-hub-error").remove()
+        }
+
         // filtered
         $(hubID + " .js-hub-filter-form select").each(function(){
             curField = $(this).attr("id");
             curValue = $(this).val();
             if(curValue != "none"){
                 // weighted search
-                if(isWeighted == "1"){
+                if(isWeighted){
                     console.log("Hub ID: " + hubID + " Message: weighted running");
                     $(hubID + " ul.mappings > li[" + curField + "='" + curValue + "']")
                     .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
@@ -345,17 +375,26 @@ var hubFeature = {
             }
         });
         
-        // not weighted
-        if(isWeighted != "1"){
+        // After filter values have been identified
+        if(isWeighted){
+            // Sort by relevancy
+            hubFeature.sortHub(hubID,"data-weight", 1);
+            
+        } else { // Not Weighted
+            
             console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
             // Using collected filter values to do an  exact match
             $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
                 $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");  
             });
-            
-        } else{
-            // Sort by relevancy
-            hubFeature.sortHub(hubID,"data-weight", 1);
+
+            console.log("Exact matches: " + $(hubID + " ul.mappings > li" + fieldsUsed).length )
+
+            // Added error message if no results found
+            if ( $(hubID + " ul.mappings > li" + fieldsUsed).length < 1 ) {
+                $(hubID + " .js-hub-content").before(noResultsText);
+            }
+
         }
         
         // Reset Classes so load more is not accidently hidding anything
