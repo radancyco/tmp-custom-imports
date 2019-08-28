@@ -36,9 +36,9 @@ var hubFeature = {
             })
             
             if(hubID != undefined && valsExist != "" ){
-                    hubFeature.filterData(hubID);
-                    $(hubID).addClass("filtered");
-                    $(hubID + " .js-hub-reset-filters").prop('disabled', false);
+                    $(hubID).addClass("filtered"); // This must come first so that addtional functions inside filterData knows how to react
+                    hubFeature.filterData(hubID); 
+                    $(hubID + " .js-hub-reset-filters").prop('disabled', false); // If reset isn't already enabled make sure to allow it
             }
         });
 
@@ -70,10 +70,19 @@ var hubFeature = {
         //===============================
         //Listening for filters to be selected
         $(hubID + " .js-hub-filter-form select").change(function(){
-            if($(this).val() != "none"){
+
+            // if( !$(hubID).hasClass("filtered") ) {
+
+            if($(this).val() == "none") {
+                //TODO: This is going to need to be more complex. Work on this after fixing the nth childe issue
+                // $(hubID + " .js-hub-submit-filters").prop("disabled", true);
+                // $(hubID + " .js-hub-reset-filters").prop('disabled', true);
+            } else {
                 $(hubID + " .js-hub-submit-filters").prop("disabled", false);
                 $(hubID + " .js-hub-reset-filters").prop('disabled', false);
             }
+
+
         });
 
 
@@ -224,9 +233,15 @@ var hubFeature = {
     sortHub: function(hubID,criteria,order){
         // Sort function for the whole hub list
         var container = $(hubID + " .js-hub-content"); // The whole list of items
-        var items = $(hubID + " .js-hub-item"); // Each invidual item
         var date = 0; // Default state of saying the data will be sorted alphabeitnly
 
+        if( $(hubID).hasClass("filtered") ) {
+            var itemsToSort = $(hubID + " .js-hub-item.showing-by-filter");
+            var itemsToIgnore = $(hubID + " .js-hub-item:not(.showing-by-filter)");
+            itemsToIgnore.detach().get();
+        } else {
+            var itemsToSort = $(hubID + " .js-hub-item"); // Each invidual item
+        }
 
         $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load'); // Prevent load more from affecting sort
 
@@ -239,7 +254,7 @@ var hubFeature = {
         console.log(criteria);
         console.log(order);
 
-        var itemsOrdered = items.detach().get(); // Creates and array we can sort on
+        var itemsOrdered = itemsToSort.detach().get(); // Creates and array we can sort on
 
 
         if ( order == 1 || order == 2  ) { // Make sure we aren't sorting by random
@@ -279,8 +294,12 @@ var hubFeature = {
             shuffle(itemsOrdered);
         }
 
+        // Add items that were sorted back to container
         container.append(itemsOrdered);
-
+        // Also if there were items that were filtered out add them to the end
+        if( $(hubID).hasClass("filtered") ) {
+            container.append(itemsToIgnore);
+        } 
                 
         // Rerun loadmore
         hubFeature.loadMoreReset(hubID);
@@ -299,14 +318,14 @@ var hubFeature = {
         }
     
 
-        var dateSorting = +$(hubID + " .js-hub-content").attr("data-sort");
-        var dateSortingOrder = +$(hubID + " .js-hub-content").attr("data-sort-direction");
-        var dateSortingCriteria = $(hubID + " .js-hub-content").attr("data-sort-criteria");
-        if(dateSorting == 1){
+        var sorting = +$(hubID + " .js-hub-content").attr("data-sort");
+        var sortingOrder = +$(hubID + " .js-hub-content").attr("data-sort-direction");
+        var sortingCriteria = $(hubID + " .js-hub-content").attr("data-sort-criteria");
+        if(sorting == 1){
             // resets the data and then applies a sort based on the date
             // The load more will trigger again when sort happens
             console.log("getting here");
-            hubFeature.sortHub(hubID, dateSortingCriteria, dateSortingOrder);
+            hubFeature.sortHub(hubID, sortingCriteria, sortingOrder);
         }
 
         
@@ -380,13 +399,25 @@ var hubFeature = {
             // Sort by relevancy
             hubFeature.sortHub(hubID,"data-weight", 1);
             
-        } else { // Not Weighted
+        } else { // Not Weighted also know as exact match
             
             console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
             // Using collected filter values to do an  exact match
             $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
                 $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");  
             });
+
+            // Sorting data after filter (Needed if using nth-child stlying)
+            var sorting = +$(hubID + " .js-hub-content").attr("data-sort");
+            var sortingOrder = +$(hubID + " .js-hub-content").attr("data-sort-direction");
+            var sortingCriteria = $(hubID + " .js-hub-content").attr("data-sort-criteria");
+            if(sorting == 1){
+                // resets the data and then applies a sort based on the date
+                // The load more will trigger again when sort happens
+                console.log("getting here");
+                hubFeature.sortHub(hubID, sortingCriteria, sortingOrder);
+            }
+    
 
             console.log("Exact matches: " + $(hubID + " ul.mappings > li" + fieldsUsed).length )
 
