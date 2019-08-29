@@ -113,6 +113,10 @@
             margin: 0;
             width: 110px;
         }
+
+        &:disabled { // .hub-filter__button:disabled
+            opacity: .6;
+        }
     }
     &__label { // .hub-filter__label
     }
