@@ -200,21 +200,21 @@
                 @* ======================= *@
                 @* Creating filters (Label, field, default value, Hide/Show, ID) *@
                 @* ======================= *@
-                @addFilter("Content Type","facet-contenttype","Type",1, thisHubID)
-                @addFilter("Category","category","Role",1, thisHubID)
-                @addFilter("Is-telecommute","facet-is-telecommute","Is telecommute",0, thisHubID)
-                @addFilter("Campaign","facet-campaign","Type",0, thisHubID)
-                @addFilter("Location","location","Select Location",0, thisHubID)
-                @addFilter("Company Name","facet-companyname","Hidden",0, thisHubID)
-                @addFilter("Industry","facet-industry","Hidden",0, thisHubID)
-                @addFilter("Is Manager","facet-is-manager","Hidden",0, thisHubID)
-                @addFilter("Division","facet-job-level","Select Division",0, thisHubID)
-                @addFilter("Job Status","facet-job-status","Hidden",0, thisHubID)
-                @addFilter("Cleared","facet-job-type","Select Level",0, thisHubID)
-                @addFilter("Travel","facet-travel","Hidden",0, thisHubID)
-                @addFilter("Hours Per Week","facet-hours-per-week","Hidden",0, thisHubID)
-                @addFilter("Salary Relocation","facet-salary-relocation","Hidden",0, thisHubID)
-                @addFilter("Salary Time","facet-salary-time","Hidden",0, thisHubID)
+                @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)
+                @addFilter("Category","category","Select Category",1, thisHubID)
+                @addFilter("Location","location","Select Location",1, thisHubID)
+                @addFilter("Is-telecommute","facet-is-telecommute","Select Is telecommute",1, thisHubID)
+                @addFilter("Campaign","facet-campaign","Select Campaign",1, thisHubID)
+                @addFilter("Company Name","facet-companyname","Select Company Name",1, thisHubID)
+                @addFilter("Industry","facet-industry","Select Industry",1, thisHubID)
+                @addFilter("Is Manager","facet-is-manager","Select Is Manager",1, thisHubID)
+                @addFilter("Division","facet-job-level","Select Division",1, thisHubID)
+                @addFilter("Job Status","facet-job-status","Select Job Status",1, thisHubID)
+                @addFilter("Job Type","facet-job-type","Select Job Type",1, thisHubID)
+                @addFilter("Travel","facet-travel","Select Travel",1, thisHubID)
+                @addFilter("Hours Per Week","facet-hours-per-week","Select Hours Per Week",1, thisHubID)
+                @addFilter("Salary Relocation","facet-salary-relocation","Select Salary Relocation",1, thisHubID)
+                @addFilter("Salary Time","facet-salary-time","Select Salary Time",1, thisHubID)
                 <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID">Filter</button>
                 <button class="js-hub-reset-filters hub-filter__button" data-hub-id="@thisHubID">Reset</button>
             </form>
@@ -229,74 +229,92 @@
             @foreach (var contentPage in publishedContentPages){
                 if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
                     var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";
-                    if(pageCreated == "PB created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1){
-                        if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
-                            int v = 0;
-                            var ltype = "";
-                            var lltype = "";
-                            <li class="js-hub-item hub-content__item showing-by-filter"
-                                data-hub-origin="@contentPage.IsCmsCreated"  
-                                data-hub-title="@contentPage.Title"  
-                                data-hub-meta="@contentPage.Description" 
-                                data-hub-url="@contentPage.PageUrl" 
-                                data-hub-link="@contentPage.LinkUrl" 
-                                data-hub-image="@contentPage.ThumbnailFilePath" 
-                                data-hub-created-by="@pageCreated" 
-                                data-hub-date-updated="@contentPage.DateUpdated" 
-                                data-hub-date-created="@contentPage.DateCreated">
-                                
-                                @* ========================== *@
-                                @* Content to return for each record *@
-                                @* ========================== *@
-                                @if(contentPage.LinkUrl.Contains("youtube")){
-                                    ltype = "video-link youtube";
-                                } else if(contentPage.LinkUrl.Contains("vimeo")){
-                                    ltype = "video-link vimeo";
-                                } else if(contentPage.LinkUrl.Contains(".mp4")){
-                                    ltype = "video-link mp4";
-                                }
-                                
-                                @*// Example of adding a class to the link based on custom facet *@
-                                @foreach (var mapping in contentPage.KeywordPageMappings){
-                                    if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
-                                        if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
-                                            lltype = "video-type";
+                    if(pageCreated == "PB created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1){                        @* ========================== *@
+                         @* Exclusions *@
+                         @* ========================== *@
+                        string compareExclude = contentPage.LinkUrl;
+                        int run;
+                        switch(compareExclude){
+                            case "/example-exclusion-url":
+                                run = 0;
+                                break;
+                            default:
+                                run = 1;
+                                break;
+                        }
+                        
+                        if(run == 1){
+                            if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
+                                int v = 0;
+                                var ltype = "";
+                                var lltype = "";
+                                <li class="js-hub-item hub-content__item showing-by-filter"
+                                    data-hub-origin="@contentPage.IsCmsCreated"  
+                                    data-hub-title="@contentPage.Title"  
+                                    data-hub-meta="@contentPage.Description" 
+                                    data-hub-url="@contentPage.PageUrl" 
+                                    data-hub-link="@contentPage.LinkUrl" 
+                                    data-hub-image="@contentPage.ThumbnailFilePath" 
+                                    data-hub-created-by="@pageCreated" 
+                                    data-hub-date-updated="@contentPage.DateUpdated" 
+                                    data-hub-date-created="@contentPage.DateCreated">
+                                    
+                                    @* ========================== *@
+                                    @* Content to return for each record *@
+                                    @* ========================== *@
+                                    @if(contentPage.LinkUrl.Contains("youtube")){
+                                        ltype = "video-link youtube";
+                                    } else if(contentPage.LinkUrl.Contains("vimeo")){
+                                        ltype = "video-link vimeo";
+                                    } else if(contentPage.LinkUrl.Contains(".mp4")){
+                                        ltype = "video-link mp4";
+                                    }
+                                    
+                                    @*// Example of adding a class to the link based on custom facet *@
+                                    @foreach (var mapping in contentPage.KeywordPageMappings){
+                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                            if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
+                                                lltype = "video-type";
+                                            }
                                         }
                                     }
-                                }
 
-                                
-                                <a href="@contentPage.LinkUrl" class="js-hub-item-link hub-item__link @ltype @lltype">
-                                    <div class="hub-item__image-wrapper">
-                                        <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
-                                    </div>
-                                    <div class="hub-item__text">
-                                        <span class="hub-item__title">@contentPage.Title</span>
-                                        <span class="hub-item__description">
-                                            @contentPage.Description
-                                            <span class="hub-item__fake-button">Learn More</span>
-                                        </span>
-                                        
-                                    </div>
-                                </a>
-                                
-                                @* ========================== *@
-                                @* Required for filtering *@
-                                @* ========================== *@
-                                <ul class="mappings hidden" aria-hidden="true">
-                                    @foreach (var mapping in contentPage.KeywordPageMappings){
-                                        var cat = mapping.CategoryDisplay;
-                                        var loc = mapping.LocationDisplay;
-                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
-                                            var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
-                                            var fValue = mapping.CustomFacetFieldValueDisplay;
-                                            @addMapping(cat, loc, fName , fValue, thisHubID);
-                                        } else{
-                                            @addMapping(cat, loc, "IGNORE", "", thisHubID);
-                                        }                                    
-                                    }
-                                </ul>
-                            </li>
+                                    @*
+                                        // You can rearange all of the items inside the a tag however since the link is targeted via 
+                                        // js it needs to remain around all the item content 
+                                    *@
+                                    <a href="@contentPage.LinkUrl" class="js-hub-item-link hub-item__link @ltype @lltype">
+                                        <div class="hub-item__image-wrapper">
+                                            <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
+                                        </div>
+                                        <div class="hub-item__text">
+                                            <span class="hub-item__title">@contentPage.Title</span>
+                                            <span class="hub-item__description">
+                                                @contentPage.Description
+                                                <span class="hub-item__fake-button">Learn More</span>
+                                            </span>
+                                            
+                                        </div>
+                                    </a>
+                                    
+                                    @* ========================== *@
+                                    @* Required for filtering *@
+                                    @* ========================== *@
+                                    <ul class="mappings hidden" aria-hidden="true">
+                                        @foreach (var mapping in contentPage.KeywordPageMappings){
+                                            var cat = mapping.CategoryDisplay;
+                                            var loc = mapping.LocationDisplay;
+                                            if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                                var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
+                                                var fValue = mapping.CustomFacetFieldValueDisplay;
+                                                @addMapping(cat, loc, fName , fValue, thisHubID);
+                                            } else{
+                                                @addMapping(cat, loc, "IGNORE", "", thisHubID);
+                                            }                                    
+                                        }
+                                    </ul>
+                                </li>
+                            }
                         }
                     }
                 }
