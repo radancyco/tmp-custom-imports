@@ -76,7 +76,7 @@
         }
     }
 
-    &__select-wrapper {
+    &__select-wrapper { // .hub-filter__select-wrapper
         @include breakpoint($end-small){
             margin: 0;
             max-width: calc(50% - 135px);
@@ -118,8 +118,29 @@
     }
 }
 
+@keyframes item-animation {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+.hub-content {
+    &__list { // .hub-content__list
+
+    }
+    &__item { // .hub-content__item
+        // This here only for animations DO NOT use display properties here as this could mess up 
+        &.showing-by-filter.showing-by-load {
+            animation: item-animation 1s forwards;
+        }
+
+    }
+}
+
+
+
 .hub-item {
     &__link { // .hub-item__link
+        // This link should stay around the whole item
         position: relative;
         display: block;
         overflow: hidden;
@@ -127,11 +148,20 @@
         width: 100%;
         height: 100%;
     }
+    &__image-wrapper { // .hub-item__image
+        // This wraps the image
+    }
 
     &__image { // .hub-item__image
         margin: 0;
         max-width: 100%;
         display: block;
+    }
+
+    &__text { // .hub-item__text
+        // by default this wraps the title and description
+        padding: 20px;
+
     }
 
     &__title { // .hub-item__title
@@ -143,11 +173,6 @@
 
     &__description { // .hub-item__description
         width: 100%;
-    }
-
-    &__text { // .hub-item__text
-        padding: 20px;
-
     }
 
     &__fake-button { // .hub-item__fake-button
