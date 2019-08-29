@@ -118,6 +118,14 @@
     }
 }
 
+.hub__error {
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    color: #b73e3e;
+    font-weight: bold;
+}
+
 @keyframes item-animation {
     0%   { opacity: 0; }
     100% { opacity: 1; }
