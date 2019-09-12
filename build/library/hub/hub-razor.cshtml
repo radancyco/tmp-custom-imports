@@ -226,7 +226,9 @@
             data-sort-criteria="@sortCriteria"
             data-sort-direction="@sortDirection"
             data-system-css-columns="@systemStyledColumns"
-            data-no-results-text="@noResults">
+            data-no-results-text="@noResults"
+            role="region"
+            aria-live="polite">
             @foreach (var contentPage in publishedContentPages){
                 if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
                     var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";
