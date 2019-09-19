@@ -156,7 +156,8 @@ var hubFeature = {
             } 
             
             // Focus Event
-            thisHub.find('.focusHere .js-hub-item-link')[0].focus() // Focuses user to the link to the newly reveals content title
+            // commented out to do testing with Spell
+            // thisHub.find('.focusHere .js-hub-item-link')[0].focus() // Focuses user to the link to the newly reveals content title
             
             
 
