@@ -104,7 +104,7 @@
     @helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
         if(selectShow == 1){
             <div class="hub-filter__select-wrapper">
-                <label class="hub-filter__label hub-visually-hidden">@selectLabel</label>
+                <label class="hub-filter__label hub-visually-hidden" for="@currentHub-@selectFieldName">@selectLabel</label>
                 <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
             </div>
         }
