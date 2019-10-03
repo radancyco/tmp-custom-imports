@@ -39,6 +39,11 @@ var hubFeature = {
                     $(hubID).addClass("filtered"); // This must come first so that addtional functions inside filterData knows how to react
                     hubFeature.filterData(hubID); 
                     $(hubID + " .js-hub-reset-filters").prop('disabled', false); // If reset isn't already enabled make sure to allow it
+            } else if ( hubID != undefined && valsExist == "" ) { // if there are no values
+                if ( $(hubID).hasClass("filtered") ) { // if the content has already been filtered
+                    hubFeature.resetData(hubID); // treat filter button like reset
+                } 
+
             }
         });
 
