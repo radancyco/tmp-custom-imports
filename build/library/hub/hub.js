@@ -76,17 +76,21 @@ var hubFeature = {
         //Listening for filters to be selected
         $(hubID + " .js-hub-filter-form select").change(function(){
 
-            // if( !$(hubID).hasClass("filtered") ) {
 
-            if($(this).val() == "none") {
-                //TODO: This is going to need to be more complex. Work on this after fixing the nth childe issue
-                // $(hubID + " .js-hub-submit-filters").prop("disabled", true);
-                // $(hubID + " .js-hub-reset-filters").prop('disabled', true);
-            } else {
+            if($(this).val() == "none") { // If there are no options selected
+
+                if ( $(hubID).hasClass("filtered") ) { // if the content has already been filtered then let the filter buttons be selected
+                    $(hubID + " .js-hub-submit-filters").prop("disabled", false);
+                    $(hubID + " .js-hub-reset-filters").prop('disabled', false);
+                } else { // if the user has not filtered the form yet then the buttons are disbaled
+                    $(hubID + " .js-hub-submit-filters").prop("disabled", true);
+                    $(hubID + " .js-hub-reset-filters").prop('disabled', true);
+                }
+
+            } else { // if there are options selected then the buttons should be able to be clicked
                 $(hubID + " .js-hub-submit-filters").prop("disabled", false);
                 $(hubID + " .js-hub-reset-filters").prop('disabled', false);
             }
-
 
         });
 

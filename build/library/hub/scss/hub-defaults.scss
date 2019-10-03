@@ -116,6 +116,7 @@
 
         &:disabled { // .hub-filter__button:disabled
             opacity: .6;
+            cursor: not-allowed;
         }
     }
     &__label { // .hub-filter__label
