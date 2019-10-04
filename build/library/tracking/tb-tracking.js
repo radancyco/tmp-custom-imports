@@ -1,7 +1,7 @@
 // Look for any [data-custom-event="true"]
 // Question for Drew and Daniel. Is there a big enough performance concern to limit this to .js-tb-click-tracking[data-custom-event="true"], button[data-custom-event="true"], a[data-custom-event="true"]
 $('[data-custom-event="true"]').each(function(){
-    $(this).removeAttr('data-custom-event');
+    $(this).removeAttr('data-custom-event'); // Removing attribute for TB Core does not fire it's script
     if( !$(this).hasClass('js-tb-click-tracking') ) {
         $(this).addClass('js-tb-click-tracking');
     }
