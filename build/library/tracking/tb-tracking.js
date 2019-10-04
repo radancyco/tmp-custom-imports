@@ -7,9 +7,10 @@ $('[data-custom-event="true"]').each(function(){
     }
 }).promise().done( function(){ // Promise will wait for the loop to complete 
 
-    if ( matches("?custom-debug", url) ) {
+    // Matches function is apart of the Custom Imports script removing during peer review
+    // if ( matches("?custom-debug", url) ) {
         console.log('CI Debug - Tracking: No more data-custom-event attributes');
-    }
+    // }
 
     $('.js-tb-click-tracking').click(function(){ // now on anything with class of js-tb-click-tracking we will list for a click
             var cat = $(this).attr('data-custom-category');
