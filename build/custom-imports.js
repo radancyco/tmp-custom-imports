@@ -310,6 +310,26 @@ function customImports() {
             } // End HUB script
 
 
+            // Tracking script
+            // should always be the LAST script in this list
+            // if tracking is present in the scripts param
+            if ( matches("tracking", scripts) ) {
+
+                if ( matches("?custom-debug", url) ) {
+                    console.log("CI Debug - TB Tracking Script: request detected")
+                }
+
+                // Run Script
+
+                $.getScript( scriptPath + "library/tracking/tb-tracking.js", function() {
+                    if ( matches("?custom-debug", url) ) {
+                        console.log("CI Debug - TB Tracking Script: Loaded")
+                    }
+                });
+
+            } // End HUB script
+
+
         }
 
         // If there are css parameters
