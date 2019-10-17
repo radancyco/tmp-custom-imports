@@ -21,11 +21,11 @@ $('[data-custom-event="true"]').each(function(){
 
         if ( matches("preview.", url) || matches("runmytests.com", url) ) { // If you are on a preview site 
             if ( matches("?tracking-debug", url) ) { // If the URL has ?tracking-debug create a popup when the tracked item is clicked
-                alert('CI Debug - TB Tracking: Category = ' + cat + ' Label = ' + label );
+                alert('CI Debug - TB Tracking: Event Category = "' + cat + '" Event Label = "'+ label + '"' );
             }
         } else { // If not on a preview site
             if ( matches("?tracking-debug", url) ) { // If the URL has ?tracking-debug create a popup when the tracked item is clicked
-                alert('CI Debug - TB Tracking: Category = ' + cat + ' Label = ' + label );
+                alert('CI Debug - TB Tracking: Event Category = "' + cat + '" Event Label = "' + label + '"' );
             }
             if( typeof gaCheck == 'function' ) { // Check to make sure GA is running
                 APP.MODELS.GoogleBot.sendCustomDimensions(cat,'Click',label,'event'); // Fire the TB GA tracking 
