@@ -164,7 +164,7 @@
             thisString = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
         }
         <li class="hub-filter-btn__item">
-            <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName" data-custom-label="Filter Button - @buttonLabel">@buttonLabel</button>
+            <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName-Filter" data-custom-label="@buttonLabel">@buttonLabel</button>
         </li>
     }
 
@@ -204,7 +204,20 @@
             </ul>
         }
 
-c
+        @if(showFilterButtons == 1){
+            @* ======================= *@
+            @* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) *@
+            @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
+            @* ======================= *@
+            <div class="js-hub-filter-button-wrapper hub-filter-btn__wrapper">
+                <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
+                <ul class="hub-filter-btn__list">
+                    <li class="hub-filter-btn__item"><button class="js-hub-filter-button-reset js-hub-filter-button js-tb-click-tracking hub-filter-btn__button current-active" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Show All">Show All</button></li>
+                @addfilterButton("Medical Services","New York, NY (City)","job-type","Full Time","Medical (NYC/Full-Time)",thisHubID,trackingHubName)
+                @addfilterButton("Account Services","ALL","ALL","ALL","Account Services (Global)",thisHubID,trackingHubName)
+                </ul>
+            </div>
+        }
 
         
         @if(showFilterForm == 1){
@@ -229,8 +242,8 @@ c
                 @addFilter("Hours Per Week","facet-hours-per-week","Select Hours Per Week",1, thisHubID)
                 @addFilter("Salary Relocation","facet-salary-relocation","Select Salary Relocation",1, thisHubID)
                 @addFilter("Salary Time","facet-salary-time","Select Salary Time",1, thisHubID)
-                <button class="js-hub-submit-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Filter Form - Submit">Filter</button>
-                <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Filter Form - Reset">Reset</button>
+                <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
+                <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
             </form>
         }
         <ul class="js-hub-content hub-content__list" 
@@ -300,7 +313,7 @@ c
                                         // You can rearange all of the items inside the a tag however since the link is targeted via 
                                         // js it needs to remain around all the item content 
                                     *@
-                                    <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype" data-custom-category="@trackingHubName" data-custom-label="Link - @contentPage.Title">
+                                    <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title">
                                         <div class="hub-item__image-wrapper">
                                             <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
                                         </div>
@@ -338,10 +351,10 @@ c
             }
         </ul>    
         @if(moreDefaultCount > 0){
-            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button" data-custom-category="@trackingHubName" data-custom-label="Load More" disabled="true">Load more stories</button>
+            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button"  data-custom-category="@trackingHubName" data-custom-label="Load More" disabled="true">Load more stories</button>
         }
         @if(showFilterForm == 1 || showFilterButtons == 1){
 
-            <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
+            <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
         }
 </section>
