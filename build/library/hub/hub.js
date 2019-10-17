@@ -513,8 +513,9 @@ $(function(){
         // in case we have multiple hubs on a page
         $(".js-hub").each(function(){
             var h = "#" + $(this).attr("id");
+            var l = $(".js-hub[id='" + $(this).attr("id") + "']").length;
             // Error checking to prevent the HUB from inititing if the developer adds more than one HUB with the same ID on the page.
-            if ( $(h).length > 1 ) {
+            if ( l > 1 ) {
                 console.error("CI Error - HUB: Did not initiate due to there being multiple HUBs with the same ID.");
             } else {
                 hubFeature.Init(h);
