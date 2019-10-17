@@ -119,6 +119,24 @@ var hubFeature = {
                 
             }
         })
+
+        //===============================
+        // Back to filter button
+
+        // js-hub-back-to-button
+
+        $(hubID + " .js-hub-back-to-button").on('click',function(){
+            var hubID = "#" + $(this).attr("data-hub-id");
+
+            if( $(hubID + " .js-hub-filter-form").length ) {
+                $(hubID + " .js-hub-filter-form ").attr('tabindex', -1).focus();
+            } else if ( $(hubID + " .js-hub-filter-button-wrapper" ).length ) {
+                $(hubID + " .js-hub-filter-button-wrapper ").attr('tabindex', -1).focus();
+            } else {
+                console.error("CI Error - HUB: No form to go back to");
+            }
+
+        });
         
         //===============================
         // The load more system 
@@ -167,7 +185,9 @@ var hubFeature = {
             // Focus Event
             // commented out to do testing with Spell
             // thisHub.find('.focusHere .js-hub-item-link')[0].focus() // Focuses user to the link to the newly reveals content title
-            
+
+            //
+            // $(this).blur().focus();
             
 
             thisHub.attr('data-load-more-current', currentLoad); // Set the new current load ammount
@@ -231,7 +251,7 @@ var hubFeature = {
             keyA = $.uniqueSort(keyA);
             // add options to the keyword field
             $.each( keyA, function( i, value ) {
-                $(hubID + " select#" + thisFilter).append("<option value='" + value + "'>" + value + "</option>");
+                $(hubID + " select#" + thisFilter).append("<option class='hub-filter__option' value='" + value + "'>" + value + "</option>");
             });
             keyA = [];
         });
