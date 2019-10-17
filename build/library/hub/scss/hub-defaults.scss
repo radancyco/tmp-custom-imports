@@ -18,6 +18,19 @@
             opacity:1; // Show once the script runs
         }
     }
+
+    &__back-to-button { // .hub__back-to-button
+        // Waiting for Feedback from field. By requets of Spell this will not be hidden but always visible.
+        // transition-property: opacity;
+        // transition-duration: .2s;
+        // transition-timing-function: linear;
+        // opacity: 0;
+        // &:focus,
+        // &:hover {
+        //     opacity: 1;
+        
+        // }
+    }
 }
 
 
@@ -218,5 +231,7 @@
         }
     }
 }
+
+
 
 // End Content Hub
