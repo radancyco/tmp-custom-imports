@@ -148,12 +148,15 @@ var hubFeature = {
             e.preventDefault();
 
             
-            var thisHub = $(this).closest('.js-hub'); // This gets the parent .js-content-load-more of the currently clicked .js-hub-load-more-button
-            defaultLoadCount = +thisHub.attr('data-load-more-default'); // Following variables affect how many are shown per click Adding "+" in front of the variable makes it an integer
+            var thisHub = $(this).closest('.js-hub'), // This gets the parent .js-content-load-more of the currently clicked .js-hub-load-more-button
+            defaultLoadCount = +thisHub.attr('data-load-more-default'), // Following variables affect how many are shown per click Adding "+" in front of the variable makes it an integer
             loadMore = +thisHub.attr('data-load-more-amount'),
-            currentLoad = +thisHub.attr('data-load-more-current');
-            maxLoad = +thisHub.attr('data-load-more-max');
-            var overMax = 0; // By default you are not over maxLoad
+            previousLoad = +thisHub.attr('data-load-more-current'),
+            currentLoad = +thisHub.attr('data-load-more-current'),
+            maxLoad = +thisHub.attr('data-load-more-max'),
+            overMax = 0, // By default you are not over maxLoad
+            loadedMsg = $(this).attr('data-items-loaded-msg'),
+            finishedMsg = $(this).attr('data-items-finished-msg');
             
             // Prep fopr focus event
             thisHub.find('.js-hub-item').removeClass('focusHere');
@@ -164,7 +167,7 @@ var hubFeature = {
                 currentLoad = maxLoad; // set current load to maxload so that
             } else {
                 thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').slice(0, loadMore).removeClass('hidden-by-load').addClass('showing-by-load'); // Revals X ammount of more tiles based on the data-content-load-more-ammount set
-                currentLoad = currentLoad + loadMore; // Get the new current load ammount by adding the previous current to how many were just shown
+                currentLoad = +thisHub.find('.js-hub-item.showing-by-filter.showing-by-load').length;  // Get the new current load ammount 
             }
             
             //Find out if we are over maxLoad
@@ -182,22 +185,34 @@ var hubFeature = {
                 thisHub.find('.js-hub-item.showing-by-filter').slice(0, maxLoad).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the max ammount of tiles
             } 
             
-            // Focus Event
-            // commented out to do testing with Spell
-            // thisHub.find('.focusHere .js-hub-item-link')[0].focus() // Focuses user to the link to the newly reveals content title
-
-            //
-            // $(this).blur().focus();
-            
 
             thisHub.attr('data-load-more-current', currentLoad); // Set the new current load ammount
 
+
+            var howManyLoaded = currentLoad - previousLoad;
+
             
-            // By default the load more button is disabled
             if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-                thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
+        
+                // By default the load more button is disabled
+                $(this).prop('disabled', true); // Then hide the load more button
+
+                if( howManyLoaded > 0 ) {
+                    // alert(howManyLoaded + " " + finishedMsg)
+                    $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
+
+                    // $('.js-aria-hub-msg').html("TEST TEST");
+                }
+
+
             } else {
-                thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
+                $(this).prop('disabled', false); // Then show the load more button
+
+                if( howManyLoaded > 0 ) {
+                    // alert(howManyLoaded  + " " + loadedMsg)
+                }
+
+
             }
             
         });
