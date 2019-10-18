@@ -97,7 +97,7 @@ if( $('.js-hub-submit-filters').length ) {
                 console.log('CI Debug - TB Tracking: On Live')
             }
             if( typeof gaCheck == 'function' ) { // Check to make sure GA is running
-                APP.MODELS.GoogleBot.sendCustomDimensions(cat,'Click',label,'event'); // Fire the TB GA tracking 
+                APP.MODELS.GoogleBot.sendCustomDimensions(eventCategory,'Click',eventLabel,'event'); // Fire the TB GA tracking 
                 if ( matches("?custom-debug", url) ) {
                     console.log('CI Debug - TB Tracking: ga fired');
                 }
