@@ -197,12 +197,14 @@ var hubFeature = {
                 // By default the load more button is disabled
                 // $(this).prop('disabled', true); // Then hide the load more button
 
+                $(this).hide();
+
                 if( howManyLoaded > 0 ) {
                     // alert(howManyLoaded + " " + finishedMsg)
 
                     // setTimeout(function(){
                     $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
-                    // }, 5000);
+                    // }, 500);
                     // $('.js-aria-hub-msg').html("TEST TEST");
                 }
 
