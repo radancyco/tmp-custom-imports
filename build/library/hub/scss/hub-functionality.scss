@@ -21,14 +21,13 @@ $end-large: 900px;
 }
 
 .hub-visually-hidden {
-    position: absolute !important;
-    display: block !important;
-    visibility: hidden;
-    overflow: hidden !important;
-    width: 1px !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
     height: 1px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
 }
 
 .hub-content {
