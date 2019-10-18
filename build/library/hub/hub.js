@@ -199,8 +199,10 @@ var hubFeature = {
 
                 if( howManyLoaded > 0 ) {
                     // alert(howManyLoaded + " " + finishedMsg)
-                    $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
 
+                    setTimeout(function(){
+                    $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
+                    }, 1000);
                     // $('.js-aria-hub-msg').html("TEST TEST");
                 }
 
