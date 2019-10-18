@@ -195,14 +195,14 @@ var hubFeature = {
             if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
         
                 // By default the load more button is disabled
-                $(this).prop('disabled', true); // Then hide the load more button
+                // $(this).prop('disabled', true); // Then hide the load more button
 
                 if( howManyLoaded > 0 ) {
                     // alert(howManyLoaded + " " + finishedMsg)
 
-                    setTimeout(function(){
+                    // setTimeout(function(){
                     $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
-                    }, 5000);
+                    // }, 5000);
                     // $('.js-aria-hub-msg').html("TEST TEST");
                 }
 
