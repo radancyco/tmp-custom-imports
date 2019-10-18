@@ -202,7 +202,7 @@ var hubFeature = {
 
                     setTimeout(function(){
                     $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
-                    }, 1000);
+                    }, 5000);
                     // $('.js-aria-hub-msg').html("TEST TEST");
                 }
 
