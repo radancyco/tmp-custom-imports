@@ -39,9 +39,11 @@ var hubFeature = {
                     $(hubID).addClass("filtered"); // This must come first so that addtional functions inside filterData knows how to react
                     hubFeature.filterData(hubID); 
                     $(hubID + " .js-hub-reset-filters").prop('disabled', false); // If reset isn't already enabled make sure to allow it
+                    // TODO: Add in Aria messaging
             } else if ( hubID != undefined && valsExist == "" ) { // if there are no values
                 if ( $(hubID).hasClass("filtered") ) { // if the content has already been filtered
                     hubFeature.resetData(hubID); // treat filter button like reset
+                    // TODO: Add om Aria messaging 
                 } 
 
             }
@@ -56,6 +58,7 @@ var hubFeature = {
 
                 if( $(hubID).hasClass("filtered") ) {
                     hubFeature.resetData(hubID);
+                    // TODO: Add in aria live messaging 
                 } else {
 
                     $(hubID + " .js-hub-reset-filters").prop('disabled', true);
@@ -109,12 +112,11 @@ var hubFeature = {
                 
                 if($(this).hasClass("js-hub-filter-button-reset")){ // If this is the reset button then do the following
                     hubFeature.resetData(hubID);
-                    // setTimeout(function(){
-                    //     hubFeature.applyDateSort(hubID);
-                    // }, 250); 
+                    // TODO: Determin if aria live messaging should be here
                 } else  { // IF this is a regular filter button
                     var bValue = $(this).attr("data-query");
-                    hubFeature.preFilterData(hubID, bValue);
+                    hubFeature.preFilterData(hubID, bValue); // TODO: Should this be renamed? I think it has to do with filter buttons and not prefilters
+
                 }
                 
             }
@@ -197,22 +199,22 @@ var hubFeature = {
                 // By default the load more button is disabled
                 // $(this).prop('disabled', true); // Then hide the load more button
 
+                //TODO: Instead of doing a display none here lets do a class
                 $(this).hide();
 
                 if( howManyLoaded > 0 ) {
                     // alert(howManyLoaded + " " + finishedMsg)
 
-                    // setTimeout(function(){
                     $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
-                    // }, 500);
-                    // $('.js-aria-hub-msg').html("TEST TEST");
                 }
 
 
             } else {
+                //TODO: Disabled needed to be changed
                 $(this).prop('disabled', false); // Then show the load more button
 
                 if( howManyLoaded > 0 ) {
+                    // TODO: Add in aria live
                     // alert(howManyLoaded  + " " + loadedMsg)
                 }
 
@@ -281,6 +283,7 @@ var hubFeature = {
     },
     sortHub: function(hubID,criteria,order){
         // Sort function for the whole hub list
+        // NOTE: Never add aria live into this function, it is triggered by too mmany other commands
         var container = $(hubID + " .js-hub-content"); // The whole list of items
         var date = 0; // Default state of saying the data will be sorted alphabeitnly
 
@@ -356,6 +359,8 @@ var hubFeature = {
     },
     resetData: function(hubID){
 
+        // NOTE: Do not add aira live here because thsi function runs for setting up prefilters.
+
         $(hubID).removeClass("filtered");
     
         // Remove load more classes
@@ -391,8 +396,6 @@ var hubFeature = {
         });
         
     
-        
-        
     },  
     preFilterData:function(hubID, dataAttrString){
         var getString = dataAttrString;
@@ -479,8 +482,12 @@ var hubFeature = {
         
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
+
+        // TODO: Add aria-live message here for both if there is an error and for success
     },
     loadMoreReset: function(hubID){
+        // NOTE: Never add aria live into this function, it is triggered by too mmany other commands
+
         // then reveal the number of tiles set by the developer to set by default
         // This will be called in an each function
         
