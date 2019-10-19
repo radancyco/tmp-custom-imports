@@ -101,7 +101,9 @@ var hubFeature = {
 
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
+        //TODO: Lookinto disabling buttons that retrun no results.
         $(".js-hub-filter-button").click(function(i){
+            //TODO: Add in an error message when the filter option returns zero results
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
             
