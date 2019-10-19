@@ -34,6 +34,24 @@
 }
 
 
+// Filter by button
+.hub-filter-btn {
+    &__button { // .hub-filter-btn__button
+        background: #aaa;
+        margin: 0 0 5px 0;
+        &:hover,
+        &:focus {
+            background: #eee;
+        }
+        
+        &.current-active { // ..hub-filter-btn__button.current-active
+            background: #b73e3e;
+        }
+    }   
+}
+
+
+// Filter by form
 .hub-filter {
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -101,8 +119,7 @@
         margin: 0;
         padding: 10px;
         font-size: 16px;
-        border: 0;
-        border-bottom: 2px solid #ccc;
+        border: 1px solid #ccc;
         &:hover,
         &:focus {
             font-size: 19px;
@@ -118,7 +135,6 @@
         display:inline-block;
         line-height:40px;
         border:none;
-        outline:none;
         padding:0 15px;
         background: #2c5d9b; 
 
