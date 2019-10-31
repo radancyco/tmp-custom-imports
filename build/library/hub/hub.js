@@ -101,9 +101,7 @@ var hubFeature = {
 
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
-        //TODO: Lookinto disabling buttons that retrun no results.
         $(".js-hub-filter-button").click(function(i){
-            //TODO: Add in an error message when the filter option returns zero results
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
             
@@ -198,26 +196,21 @@ var hubFeature = {
             
             if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
         
-                // By default the load more button is disabled
-                // $(this).prop('disabled', true); // Then hide the load more button
-
-                //TODO: Instead of doing a display none here lets do a class
-                $(this).hide();
+                $(this).addClass('disabled'); // Then hide the load more button
 
                 if( howManyLoaded > 0 ) {
-                    // alert(howManyLoaded + " " + finishedMsg)
-
+                    // Aria message
                     $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
                 }
 
 
-            } else {
-                //TODO: Disabled needed to be changed
-                $(this).prop('disabled', false); // Then show the load more button
+            } else { 
+                $(this).removeClass('disabled'); // Then show the load more button
 
                 if( howManyLoaded > 0 ) {
-                    // TODO: Add in aria live
-                    // alert(howManyLoaded  + " " + loadedMsg)
+                    // Aria Message
+                    $('.js-aria-hub-msg').html(howManyLoaded + " " + loadedMsg);
+
                 }
 
 
@@ -544,9 +537,9 @@ var hubFeature = {
         
         // By default the load more button is disabled
         if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-            thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
+            thisHub.find('.js-hub-load-more-button').addClass('disabled'); // Then hide the load more button
         } else {
-            thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
+            thisHub.find('.js-hub-load-more-button').removeClass('disabled'); // Then show the load more button
         }
         
     }
