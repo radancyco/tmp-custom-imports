@@ -193,13 +193,15 @@
      
     
 <section class="js-hub hub__wrapper" 
-         id="@thisHubID" 
-         data-show-form="@showFilterForm" 
-         data-prefilter="@usePreFilter"
-         data-keepmappings="@keepMappings"
-         data-load-more-default="@moreDefaultCount" 
-         data-load-more-amount="@moreButtonCount"
-         data-load-more-max="@moreMaxCount">
+        id="@thisHubID" 
+        data-show-form="@showFilterForm" 
+        data-prefilter="@usePreFilter"
+        data-keepmappings="@keepMappings"
+        data-load-more-default="@moreDefaultCount" 
+        data-load-more-amount="@moreButtonCount"
+        data-load-more-max="@moreMaxCount"
+        data-no-results-text="@noResults"
+        data-results-found-text="@resultsFound">
         @if(usePreFilter == 1){
             <ul class="hub-prefilter" aria-hidden="true">
                 @* ======================= *@
@@ -260,9 +262,7 @@
             data-filter-weight="@filterWeighted" 
             data-sort-criteria="@sortCriteria"
             data-sort-direction="@sortDirection"
-            data-system-css-columns="@systemStyledColumns"
-            data-no-results-text="@noResults"
-            data-results-found-text="@resultsFound">
+            data-system-css-columns="@systemStyledColumns">
             @foreach (var contentPage in publishedContentPages){
                 if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
                     var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";

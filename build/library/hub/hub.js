@@ -36,14 +36,12 @@ var hubFeature = {
             })
             
             if(hubID != undefined && valsExist != "" ){
-                    $(hubID).addClass("filtered"); // This must come first so that addtional functions inside filterData knows how to react
-                    hubFeature.filterData(hubID); 
+                    $(hubID).addClass("filtered"); // This must come first so that addtional functions inside filterByFormData knows how to react
+                    hubFeature.filterByFormData(hubID); 
                     $(hubID + " .js-hub-reset-filters").prop('disabled', false); // If reset isn't already enabled make sure to allow it
-                    // TODO: Add in Aria messaging
             } else if ( hubID != undefined && valsExist == "" ) { // if there are no values
                 if ( $(hubID).hasClass("filtered") ) { // if the content has already been filtered
                     hubFeature.resetData(hubID); // treat filter button like reset
-                    // TODO: Add om Aria messaging 
                 } 
 
             }
@@ -58,7 +56,6 @@ var hubFeature = {
 
                 if( $(hubID).hasClass("filtered") ) {
                     hubFeature.resetData(hubID);
-                    // TODO: Add in aria live messaging 
                 } else {
 
                     $(hubID + " .js-hub-reset-filters").prop('disabled', true);
@@ -101,7 +98,7 @@ var hubFeature = {
 
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
-        $(".js-hub-filter-button").click(function(i){
+        $(".js-hub-filter-button").on('click',function(i){
             i.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
             
@@ -112,11 +109,9 @@ var hubFeature = {
                 
                 if($(this).hasClass("js-hub-filter-button-reset")){ // If this is the reset button then do the following
                     hubFeature.resetData(hubID);
-                    // TODO: Determin if aria live messaging should be here
                 } else  { // IF this is a regular filter button
                     var bValue = $(this).attr("data-query");
-                    hubFeature.preFilterData(hubID, bValue); // TODO: Should this be renamed? I think it has to do with filter buttons and not prefilters
-
+                    hubFeature.filterByButtonData(hubID, bValue);
                 }
                 
             }
@@ -200,7 +195,7 @@ var hubFeature = {
 
                 if( howManyLoaded > 0 ) {
                     // Aria message
-                    $('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
+                    thisHub.find('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
                 }
 
 
@@ -209,7 +204,7 @@ var hubFeature = {
 
                 if( howManyLoaded > 0 ) {
                     // Aria Message
-                    $('.js-aria-hub-msg').html(howManyLoaded + " " + loadedMsg);
+                    thisHub.find( '.js-aria-hub-msg').html(howManyLoaded + " " + loadedMsg);
 
                 }
 
@@ -354,7 +349,15 @@ var hubFeature = {
     },
     resetData: function(hubID){
 
-        // NOTE: Do not add aira live here because thsi function runs for setting up prefilters.
+
+        if ( $(hubID).hasClass("filtered") ) {
+            // TODO: Determine if we want to force a message on reset
+            // setTimeout(function(){
+                hubFeature.ariaMessaging(hubID);
+        // }, 500);
+
+        } // NOTE: Do not add aira live in this function outside this if sttatement because this function runs on init for setting up prefilters and would confuse users.
+
 
         $(hubID).removeClass("filtered");
     
@@ -392,7 +395,7 @@ var hubFeature = {
         
     
     },  
-    preFilterData:function(hubID, dataAttrString){
+    filterByButtonData:function(hubID, dataAttrString){
         var getString = dataAttrString;
         console.log(getString); 
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
@@ -402,13 +405,13 @@ var hubFeature = {
             // Reset Classes so load more is not accidently hidding anything
             hubFeature.loadMoreReset(hubID);
     },
-    filterData: function(hubID){
+    filterByFormData: function(hubID){
         var curField, 
             curValue,
             isWeighted ="",
             fieldsUsed ="",
             a = 1
-            noResultsText = '<p class="js-hub-error hub__error">' + $(hubID + " .js-hub-content").attr("data-no-results-text") + '</p>';
+            noResultsText = '<p class="js-hub-error hub__error">' + $(hubID).attr("data-no-results-text") + '</p>';
 
         isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
@@ -478,7 +481,9 @@ var hubFeature = {
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
 
-        // TODO: Add aria-live message here for both if there is an error and for success
+        // Aria Live message gets updated
+        hubFeature.ariaMessaging(hubID);
+
     },
     loadMoreReset: function(hubID){
         // NOTE: Never add aria live into this function, it is triggered by too mmany other commands
@@ -542,6 +547,23 @@ var hubFeature = {
             thisHub.find('.js-hub-load-more-button').removeClass('disabled'); // Then show the load more button
         }
         
+    },
+    ariaMessaging(hubID) {
+        var thisHub = $(hubID),
+            resultsFoundText = thisHub.attr('data-results-found-text'),
+            noResultsFoundText = thisHub.attr('data-no-results-text'),
+            numberOfResults = +thisHub.find('.js-hub-item.showing-by-filter').length;
+
+
+
+        if( numberOfResults > 0 ) {
+            thisHub.find('.js-aria-hub-msg').html(numberOfResults + " " + resultsFoundText);
+
+        } else {
+            thisHub.find('.js-aria-hub-msg').html(noResultsFoundText);
+
+        }
+
     }
 }
 
