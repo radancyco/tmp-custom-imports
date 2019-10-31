@@ -70,18 +70,12 @@
     /* INCLUDE FILTER BY BUTTONS */
     /* ======================= */
     int showFilterButtons = 0;
-    // TODO: Add in differnt error message when it is the filter by buttons
-    // OR LOOK INTO DISABLING BUTTONS THAT RETURN NO RESULTS.
-
 
     /* ======================= */
     /* Filter options */
     /* ======================= */
      /* FILTER WEIGHTED OR EXACT MATCH  (1 = True / 0 = False) */
     int filterWeighted = 1;
-    /* NO RESULTS FOUND TEXT */
-    string noResults = "No results found, please try picking another combination of filters.";
-    // TODO: Add in aria messaging attributes so JS can call them. Maybe One for Filtered, One for Reset
 
     /* ======================= */
     /* QUERY FILTERS */
@@ -125,6 +119,18 @@
     /* ======================= */
     /* NUMBER OF COLUMNS USING THE DEFAULT STYLES (0 through 6 columns, 0 makes it not flexed and you can ignore default styles) */
     int systemStyledColumns = 3;
+
+    /* ======================= */
+    /* Error and Aria Messages */
+    /* ======================= */
+    /* NO RESULTS FOUND TEXT (Error and Aria) */
+    string noResults = "No results found, please try picking another combination of filters.";
+    /* RESULTS FOUND WHEN CLICK ON A FILTER OR REST (Aria - will have a number read infront of this string.) */
+    string resultsFound = "Results found.";
+    /* LOAD MORE BUTTON MESSAGE (Aria - will have a number read infront of this string.) */
+    string loadedMsg = "new items have been loaded.";
+    /* NO MORE TO LOAD MESSAGE (Aria - will have a number read infront of this string.) */
+    string finishedMsg = "new items have been loaded and all results are now showing.";
 
 }
 
@@ -186,7 +192,6 @@
     }
      
     
-// TODO: Add in aria messaging attributes so JS can call them. Maybe One for Filtered, One for Reset
 <section class="js-hub hub__wrapper" 
          id="@thisHubID" 
          data-show-form="@showFilterForm" 
@@ -257,8 +262,7 @@
             data-sort-direction="@sortDirection"
             data-system-css-columns="@systemStyledColumns"
             data-no-results-text="@noResults"
-            role="region"
-            aria-live="polite">
+            data-results-found-text="@resultsFound">
             @foreach (var contentPage in publishedContentPages){
                 if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
                     var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";
@@ -355,10 +359,11 @@
             }
         </ul>    
         @if(moreDefaultCount > 0){
-            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="new items have been loaded." data-items-finished-msg="new items have been loaded and all content is now showing." disabled="true">Load more stories</button>
+            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more stories</button>
         }
         @if(showFilterForm == 1 || showFilterButtons == 1){
 
             <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
         }
+        <div class="js-aria-hub-msg hub-visually-hidden" aria-live="polite"></div>
 </section>
