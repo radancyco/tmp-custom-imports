@@ -123,10 +123,10 @@
     /* ======================= */
     /* RECOMMENDED IMAGE SIZE */
     /* ======================= */
-    lazyWidth = 0;
-    lazyHeight = 0;
-
-
+    /* SIZE OF SPACER UNTIL IMAGE IS LOADED: Make sure to update the Theme settings with matching data. Theme > Image Settings > Related Content */
+    /* DO NOT add px after the number */
+    int lazyWidth = 600; 
+    int lazyHeight = 338;
 
     /* ======================= */
     /* Error and Aria Messages */
@@ -367,7 +367,7 @@
             }
         </ul>    
         @if(moreDefaultCount > 0){
-            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
+            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled" data-hub-id="@thisHubID"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
         }
         @if(showFilterForm == 1 || showFilterButtons == 1){
 

@@ -143,8 +143,14 @@ var hubFeature = {
         // is initialized by the setup filters function when resetData runs
     
         // Load more button functionality
-        // This will reveal more per click
-        $(hubID + ' .js-hub-load-more-button').on('click', function (e) {
+        // // This will reveal more per click
+        // TODO: Change this once al sites are updated
+        // $(hubID + ' .js-hub-load-more-button').on('click', function (e) {
+        //     e.preventDefault();
+
+        //     var hubID = "#" + $(this).attr("data-hub-id");
+        //     thisHub = $(hubID),
+        $('.js-hub-load-more-button').on('click', function (e) {
             e.preventDefault();
 
             var hubID = "#" + $(this).attr("data-hub-id");
@@ -182,16 +188,18 @@ var hubFeature = {
                 thisHub.find('.js-hub-item.showing-by-filter').slice(0, maxLoad).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the max ammount of tiles
             } 
 
+            // Once all the correct ammount of items are show then load images
+            // hubFeature.wakeUpLazy(hubID);
+
+            // TODO: Don't use this once all sites go live
+            thisHub.find('.js-hub-item.showing-by-filter.showing-by-load .js-hub-lazy[data-src]').each(function(){
+                var thisIMG = $(this).attr('data-src');
+                $(this).attr('src', thisIMG).removeAttr("data-src");
+            });
+
             // Updating data and status before next click
             
             thisHub.attr('data-load-more-current', currentLoad); // Set the new current load ammount
-
-            hubFeature.wakeUpLazy(hubID);
-
-            // thisHub.find('.js-hub-item.showing-by-filter.showing-by-load .js-hub-lazy[data-src]').each(function(){
-            //     var thisIMG = $(this).attr('data-src');
-            //     $(this).attr('src', thisIMG).removeAttr("data-src");
-            // });
 
             var howManyLoaded = currentLoad - previousLoad;
 
