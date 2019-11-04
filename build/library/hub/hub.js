@@ -153,8 +153,7 @@ var hubFeature = {
         $('.js-hub-load-more-button').on('click', function (e) {
             e.preventDefault();
 
-            var hubID = "#" + $(this).attr("data-hub-id");
-            thisHub = $(hubID),
+            var thisHub = $(this).closest('.js-hub'), // This gets the parent .js-content-load-more of the currently clicked .js-hub-load-more-button
             defaultLoadCount = +thisHub.attr('data-load-more-default'), // Following variables affect how many are shown per click Adding "+" in front of the variable makes it an integer
             loadMore = +thisHub.attr('data-load-more-amount'),
             previousLoad = +thisHub.attr('data-load-more-current'),
