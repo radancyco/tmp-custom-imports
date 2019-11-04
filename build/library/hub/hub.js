@@ -241,7 +241,7 @@ var hubFeature = {
                 } else {
                     thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
                 }
-                console.error("CI Error - HUB: Is using outdated load more button");
+                console.warn("CI Error - HUB: Is using outdated load more button");
             }
 
             
@@ -602,7 +602,7 @@ var hubFeature = {
             } else {
                 thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
             }
-            console.error("CI Error - HUB: Is using outdated load more button");
+            console.warn("CI Error - HUB: Is using outdated load more button");
         }
 
 
