@@ -86,6 +86,8 @@
     int contentPageType = 1;
     /* SHOW SELF-SERVICE PAGE TYPE PAGES (1 = True / 0 = False) */
     int selfServicePageType = 1;
+    /* SHOW ONLY EXTERNAL PAGES (1 = True / 0 = False) */
+    int externalPagesOnly = 0;
 
     /* ======================= */
     /* PRE-FILTERS */
@@ -129,7 +131,7 @@
     int lazyHeight = 338;
 
     /* ======================= */
-    /* Error and Aria Messages */
+    /* ERROR AND ARIA MESSAGES */
     /* ======================= */
     /* NO RESULTS FOUND TEXT (Error and Aria) */
     string noResults = "No results found, please try picking another combination of filters.";
@@ -139,6 +141,15 @@
     string loadedMsg = "new items have been loaded.";
     /* NO MORE TO LOAD MESSAGE (Aria - will have a number read infront of this string.) */
     string finishedMsg = "new items have been loaded and all results are now showing.";
+
+    /* ======================= */
+    /* EXTERNAL LINK CONTROLS */
+    /* ======================= */
+    /* DO EXTERNAL LINKS NEED TO OPEN IN A NEW WINODW? (1 = Yes / 0 = No) */
+    int opensNewWidnow = 0;
+    /* This text comes after the title */
+    string ariaWarning = "opens in new window";
+
 
 }
 
@@ -272,97 +283,110 @@
             data-sort-direction="@sortDirection"
             data-system-css-columns="@systemStyledColumns">
             @foreach (var contentPage in publishedContentPages){
-                if(imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1){
-                    var pageCreated = contentPage.IsCmsCreated ? "PB created" : "TMP created";
-                    if(pageCreated == "PB created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1){                        
-                        @* ========================== *@
-                        @* Exclusions *@
-                        @* ========================== *@
-                        string compareExclude = contentPage.LinkUrl;
-                        int run;
-                        switch(compareExclude){
-                            case "/example-exclusion-url":
-                                run = 0;
-                                break;
-                            default:
-                                run = 1;
-                                break;
-                        }
-                        
-                        if(run == 1){
-                            if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
-                                int v = 0;
-                                var ltype = "";
-                                var lltype = "";
-                                <li class="js-hub-item hub-content__item showing-by-filter"
-                                    data-hub-origin="@contentPage.IsCmsCreated"  
-                                    data-hub-title="@contentPage.Title"  
-                                    data-hub-meta="@contentPage.Description" 
-                                    data-hub-url="@contentPage.PageUrl" 
-                                    data-hub-link="@contentPage.LinkUrl" 
-                                    data-hub-image="@contentPage.ThumbnailFilePath" 
-                                    data-hub-created-by="@pageCreated" 
-                                    data-hub-date-updated="@contentPage.DateUpdated" 
-                                    data-hub-date-created="@contentPage.DateCreated">
-                                    
-                                    @* ========================== *@
-                                    @* Content to return for each record *@
-                                    @* ========================== *@
-                                    @if(contentPage.LinkUrl.Contains("youtube")){
-                                        ltype = "video-link youtube";
-                                    } else if(contentPage.LinkUrl.Contains("vimeo")){
-                                        ltype = "video-link vimeo";
-                                    } else if(contentPage.LinkUrl.Contains(".mp4")){
-                                        ltype = "video-link mp4";
-                                    }
-                                    
-                                    @*// Example of adding a class to the link based on custom facet *@
-                                    @foreach (var mapping in contentPage.KeywordPageMappings){
-                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
-                                            if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
-                                                lltype = "video-type";
-                                            }
-                                        }
-                                    }
+                var pageCreated = contentPage.IsCmsCreated ? "SS created" : "TMP created";
+                int externalPage = 1;
+                if ( contentPage.PageUrl.Split('/').Last().ToString().Length != 0 ) {
+                    externalPage = 0;
+                }
+                string ariaAttr = "";
+                if( externalPage == 1 && opensNewWidnow == 1) { 
+                    ariaAttr = "target=\"_blank\" rel=\"noopener\" aria-label=\"" + @contentPage.Title + " (" + ariaWarning + ")\"";
+                }
+                if( ( imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1 ) && 
+                    ( externalPagesOnly == 1 && externalPage == 1 || externalPagesOnly != 1 ) &&
+                    ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){     
 
-                                    @*
-                                        // You can rearange all of the items inside the a tag however since the link is targeted via 
-                                        // js it needs to remain around all the item content 
-                                    *@
-                                    <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title">
-                                        <div class="hub-item__image-wrapper">
-                                            <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
-                                        </div>
-                                        <div class="hub-item__text">
-                                            <span class="hub-item__title">@contentPage.Title</span>
-                                            <span class="hub-item__description">
-                                                @contentPage.Description
-                                                <span class="hub-item__fake-button">Learn More</span>
-                                            </span>
-                                            
-                                        </div>
-                                    </a>
-                                    
-                                    @* ========================== *@
-                                    @* Required for filtering *@
-                                    @* ========================== *@
-                                    <ul class="js-mappings hidden" aria-hidden="true">
-                                        @foreach (var mapping in contentPage.KeywordPageMappings){
-                                            var cat = mapping.CategoryDisplay;
-                                            var loc = mapping.LocationDisplay;
-                                            if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
-                                                var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
-                                                var fValue = mapping.CustomFacetFieldValueDisplay;
-                                                @addMapping(cat, loc, fName , fValue, thisHubID);
-                                            } else{
-                                                @addMapping(cat, loc, "IGNORE", "", thisHubID);
-                                            }                                    
+                    @* ========================== *@
+                    @* Exclusions *@
+                    @* ========================== *@
+                    string compareExclude = contentPage.LinkUrl;
+                    int run;
+                    switch(compareExclude){
+                        case "/example-exclusion-url":
+                            run = 0;
+                            break;
+                        default:
+                            run = 1;
+                            break;
+                    }
+                    
+                    if(run == 1){
+                        if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
+                            int v = 0;
+                            var ltype = "";
+                            var lltype = "";
+                            var eLinkClass = "";
+                            <li class="js-hub-item hub-content__item showing-by-filter"
+                                data-hub-origin="@contentPage.IsCmsCreated"  
+                                data-hub-title="@contentPage.Title"  
+                                data-hub-meta="@contentPage.Description" 
+                                data-hub-url="@contentPage.PageUrl" 
+                                data-hub-link="@contentPage.LinkUrl" 
+                                data-hub-image="@contentPage.ThumbnailFilePath" 
+                                data-hub-created-by="@pageCreated" 
+                                data-hub-date-updated="@contentPage.DateUpdated" 
+                                data-hub-date-created="@contentPage.DateCreated">
+                                
+                                @* ========================== *@
+                                @* Content to return for each record *@
+                                @* ========================== *@
+                                @if(contentPage.LinkUrl.Contains("youtube")){
+                                    ltype = "video-link youtube";
+                                } else if(contentPage.LinkUrl.Contains("vimeo")){
+                                    ltype = "video-link vimeo";
+                                } else if(contentPage.LinkUrl.Contains(".mp4")){
+                                    ltype = "video-link mp4";
+                                }
+                                @if( externalPage == 1 ) {
+                                    eLinkClass = "external-link"
+                                }
+                                
+                                @*// Example of adding a class to the link based on custom facet *@
+                                @foreach (var mapping in contentPage.KeywordPageMappings){
+                                    if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                        if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
+                                            lltype = "video-type";
                                         }
-                                    </ul>
-                                </li>
+                                    }
                             }
+                                @*
+                                    // You can rearange all of the items inside the a tag however since the link is targeted via 
+                                    // js it needs to remain around all the item content 
+                                *@
+                                <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
+                                    <div class="hub-item__image-wrapper">
+                                        <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                    </div>
+                                    <div class="hub-item__text">
+                                        <span class="hub-item__title">@contentPage.Title</span>
+                                        <span class="hub-item__description">
+                                            @contentPage.Description
+                                            <span class="hub-item__fake-button">Learn More</span>
+                                        </span>
+                                        
+                                    </div>
+                                </a>
+                                
+                                @* ========================== *@
+                                @* Required for filtering *@
+                                @* ========================== *@
+                                <ul class="js-mappings hidden" aria-hidden="true">
+                                    @foreach (var mapping in contentPage.KeywordPageMappings){
+                                        var cat = mapping.CategoryDisplay;
+                                        var loc = mapping.LocationDisplay;
+                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                            var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
+                                            var fValue = mapping.CustomFacetFieldValueDisplay;
+                                            @addMapping(cat, loc, fName , fValue, thisHubID);
+                                        } else{
+                                            @addMapping(cat, loc, "IGNORE", "", thisHubID);
+                                        }                                    
+                                    }
+                                </ul>
+                            </li>
                         }
                     }
+                    
                 }
             }
         </ul>    
