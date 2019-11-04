@@ -121,6 +121,14 @@
     int systemStyledColumns = 3;
 
     /* ======================= */
+    /* RECOMMENDED IMAGE SIZE */
+    /* ======================= */
+    lazyWidth = 0;
+    lazyHeight = 0;
+
+
+
+    /* ======================= */
     /* Error and Aria Messages */
     /* ======================= */
     /* NO RESULTS FOUND TEXT (Error and Aria) */
@@ -323,7 +331,7 @@
                                     *@
                                     <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title">
                                         <div class="hub-item__image-wrapper">
-                                            <img class="hub-item__image" src="@contentPage.ThumbnailFilePath" alt="">
+                                            <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
                                         </div>
                                         <div class="hub-item__text">
                                             <span class="hub-item__title">@contentPage.Title</span>
@@ -338,7 +346,7 @@
                                     @* ========================== *@
                                     @* Required for filtering *@
                                     @* ========================== *@
-                                    <ul class="mappings hidden" aria-hidden="true">
+                                    <ul class="js-mappings hidden" aria-hidden="true">
                                         @foreach (var mapping in contentPage.KeywordPageMappings){
                                             var cat = mapping.CategoryDisplay;
                                             var loc = mapping.LocationDisplay;
@@ -359,7 +367,7 @@
             }
         </ul>    
         @if(moreDefaultCount > 0){
-            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more stories</button>
+            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
         }
         @if(showFilterForm == 1 || showFilterButtons == 1){
 

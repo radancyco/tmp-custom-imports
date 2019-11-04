@@ -1,3 +1,5 @@
+// TODO: change all console logs into debug logs and try to make them readable
+// TODO: Once sites have gone like change over mappings to js-mappings
 var hubFeature = {
     Init: function(hubID){
         //===============================
@@ -122,7 +124,8 @@ var hubFeature = {
 
         // js-hub-back-to-button
 
-        $(hubID + " .js-hub-back-to-button").on('click',function(){
+        $(hubID + " .js-hub-back-to-button").on('click',function(e){
+            e.preventDefault();
             var hubID = "#" + $(this).attr("data-hub-id");
 
             if( $(hubID + " .js-hub-filter-form").length ) {
@@ -141,11 +144,11 @@ var hubFeature = {
     
         // Load more button functionality
         // This will reveal more per click
-        $('.js-hub-load-more-button').on('click', function (e) {
+        $(hubID + ' .js-hub-load-more-button').on('click', function (e) {
             e.preventDefault();
 
-            
-            var thisHub = $(this).closest('.js-hub'), // This gets the parent .js-content-load-more of the currently clicked .js-hub-load-more-button
+            var hubID = "#" + $(this).attr("data-hub-id");
+            thisHub = $(hubID),
             defaultLoadCount = +thisHub.attr('data-load-more-default'), // Following variables affect how many are shown per click Adding "+" in front of the variable makes it an integer
             loadMore = +thisHub.attr('data-load-more-amount'),
             previousLoad = +thisHub.attr('data-load-more-current'),
@@ -155,9 +158,6 @@ var hubFeature = {
             loadedMsg = $(this).attr('data-items-loaded-msg'),
             finishedMsg = $(this).attr('data-items-finished-msg');
             
-            // Prep fopr focus event
-            thisHub.find('.js-hub-item').removeClass('focusHere');
-            thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').slice(0, 1).addClass('focusHere'); // Adds a targetable class that we can focus to once the user has clicked load more
             
             if( loadMore == 0 ) { // if load more setting is set to zero then show all 
                 thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').removeClass('hidden-by-load').addClass('showing-by-load'); // show all tilest
@@ -181,35 +181,61 @@ var hubFeature = {
                 thisHub.find('.js-hub-item.showing-by-filter').addClass('hidden-by-load'); // Hide all tiles
                 thisHub.find('.js-hub-item.showing-by-filter').slice(0, maxLoad).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the max ammount of tiles
             } 
-            
 
+            // Updating data and status before next click
+            
             thisHub.attr('data-load-more-current', currentLoad); // Set the new current load ammount
 
+            hubFeature.wakeUpLazy(hubID);
+
+            // thisHub.find('.js-hub-item.showing-by-filter.showing-by-load .js-hub-lazy[data-src]').each(function(){
+            //     var thisIMG = $(this).attr('data-src');
+            //     $(this).attr('src', thisIMG).removeAttr("data-src");
+            // });
 
             var howManyLoaded = currentLoad - previousLoad;
 
-            
-            if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+    
         
-                $(this).addClass('disabled'); // Then hide the load more button
+            if( $(this).hasClass('enabled') || $(this).hasClass('disabled') ) {
+                
+                if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+        
+                    $(this).removeClass('enabled').addClass('disabled'); // Then hide the load more button
 
-                if( howManyLoaded > 0 ) {
-                    // Aria message
-                    thisHub.find('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
+                    if( howManyLoaded > 0 ) {
+                        // Aria message
+                        thisHub.find('.js-aria-hub-msg').html(howManyLoaded + " " + finishedMsg);
+                    } else {
+                        // Aria Message, incase the design does not have a disabled state
+                        thisHub.find( '.js-aria-hub-msg').html("0 " + loadedMsg);
+                    }
+
+
+                } else { 
+                    $(this).removeClass('disabled').addClass('enabled'); // Then show the load more button
+
+                    if( howManyLoaded > 0 ) {
+                        // Aria Message
+                        thisHub.find( '.js-aria-hub-msg').html(howManyLoaded + " " + loadedMsg);
+
+                    } else {
+                        // Aria Message, incase the design does not have a disabled state
+                        thisHub.find( '.js-aria-hub-msg').html("0 " + loadedMsg);
+                    }
+
+
                 }
-
-
-            } else { 
-                $(this).removeClass('disabled'); // Then show the load more button
-
-                if( howManyLoaded > 0 ) {
-                    // Aria Message
-                    thisHub.find( '.js-aria-hub-msg').html(howManyLoaded + " " + loadedMsg);
-
+            } else {
+                // TODO: Remove once all sites are live
+                if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+                    thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
+                } else {
+                    thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
                 }
-
-
+                console.error("CI Error - HUB: Is using outdated load more button");
             }
+
             
         });
         
@@ -267,8 +293,7 @@ var hubFeature = {
             keyA = [];
         });
         
-        // Check attributes to sort by date
-        var dateSorting = $(hubID + " .js-hub-content").attr("data-date-sort");
+        // Resetting the data will also sort the data
         hubFeature.resetData(hubID);
     },
     sortHub: function(hubID,criteria,order){
@@ -396,24 +421,38 @@ var hubFeature = {
     
     },  
     filterByButtonData:function(hubID, dataAttrString){
-        var getString = dataAttrString;
+        var getString = dataAttrString,
+        noResultsText = $(hubID).attr("data-no-results-text");
+
+        // Remove any visable error messages
+        if ( $(hubID + " .js-hub-error").length ) {
+            $(hubID + " .js-hub-error").remove()
+        }
+
         console.log(getString); 
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " ul.mappings > li" + getString)
             .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
 
-            // Reset Classes so load more is not accidently hidding anything
-            hubFeature.loadMoreReset(hubID);
+        // Reset Classes so load more is not accidently hidding anything
+        hubFeature.loadMoreReset(hubID);
+
+        // Added error message if no results found
+        if ( $(hubID + " ul.mappings > li" + getString).length < 1 && typeof noResultsText != "undefined") {
+            var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
+            $(hubID + " .js-hub-content").before(noResultsHtml);
+        }
     },
     filterByFormData: function(hubID){
         var curField, 
             curValue,
             isWeighted ="",
             fieldsUsed ="",
-            a = 1
-            noResultsText = '<p class="js-hub-error hub__error">' + $(hubID).attr("data-no-results-text") + '</p>';
+            a = 1,
+            noResultsText = $(hubID).attr("data-no-results-text"),
+            isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
 
-        isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
+        // Reset data
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         
         // Remove any visable error messages
@@ -472,8 +511,9 @@ var hubFeature = {
             console.log("Exact matches: " + $(hubID + " ul.mappings > li" + fieldsUsed).length )
 
             // Added error message if no results found
-            if ( $(hubID + " ul.mappings > li" + fieldsUsed).length < 1 ) {
-                $(hubID + " .js-hub-content").before(noResultsText);
+            if ( $(hubID + " ul.mappings > li" + fieldsUsed).length < 1 && typeof noResultsText != "undefined") {
+                var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
+                $(hubID + " .js-hub-content").before(noResultsHtml);
             }
 
         }
@@ -529,7 +569,6 @@ var hubFeature = {
             console.log("fired if default load is higher than 0 and we are not over max load ")
             thisHub.find('.js-hub-item.showing-by-filter').addClass('hidden-by-load'); // Hide all tiles
             thisHub.find('.js-hub-item.showing-by-filter').slice(0, setCount).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the ammount of tiles to be visable on load
-            thisHub.find('.js-hub-item').removeClass('focusHere'); // Remove any special focus classes
         } else {
             thisHub.find('.js-hub-item.showing-by-filter').removeClass('hidden-by-load showing-by-load'); // Show all tiles
         }
@@ -539,31 +578,56 @@ var hubFeature = {
             thisHub.find('.js-hub-item.showing-by-filter').addClass('hidden-by-load'); // Hide all tiles
             thisHub.find('.js-hub-item.showing-by-filter').slice(0, maxLoad).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the max ammount of tiles
         }
-        
+
         // By default the load more button is disabled
-        if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-            thisHub.find('.js-hub-load-more-button').addClass('disabled'); // Then hide the load more button
+        if( thisHub.find('.js-hub-load-more-button').hasClass('enabled') || thisHub.find('.js-hub-load-more-button').hasClass('disabled') ) {
+            if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+                thisHub.find('.js-hub-load-more-button').removeClass('enabled').addClass('disabled'); // Then hide the load more button
+            } else {
+                thisHub.find('.js-hub-load-more-button').removeClass('disabled').addClass('enabled'); // Then show the load more button
+            }
         } else {
-            thisHub.find('.js-hub-load-more-button').removeClass('disabled'); // Then show the load more button
+            // TODO: Delete this once all live sites are updated
+            // By default the load more button is disabled
+            if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+                thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
+            } else {
+                thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
+            }
+            console.error("CI Error - HUB: Is using outdated load more button");
         }
+
+
+
+
+        hubFeature.wakeUpLazy(hubID);
         
     },
-    ariaMessaging(hubID) {
+    ariaMessaging:  function(hubID) {
         var thisHub = $(hubID),
             resultsFoundText = thisHub.attr('data-results-found-text'),
             noResultsFoundText = thisHub.attr('data-no-results-text'),
             numberOfResults = +thisHub.find('.js-hub-item.showing-by-filter').length;
 
-
-
-        if( numberOfResults > 0 ) {
-            thisHub.find('.js-aria-hub-msg').html(numberOfResults + " " + resultsFoundText);
-
-        } else {
-            thisHub.find('.js-aria-hub-msg').html(noResultsFoundText);
-
+        // If HUB has Aria Live messaging setup
+        if( thisHub.find('.js-aria-hub-msg').length ) {
+            if( numberOfResults > 0 && typeof resultsFoundText !== "undefined") { // If there is results found
+                thisHub.find('.js-aria-hub-msg').html(numberOfResults + " " + resultsFoundText);
+            } else if( typeof noResultsFoundText !== "undefined") { // If there were no results found
+                thisHub.find('.js-aria-hub-msg').html(noResultsFoundText);
+            }
         }
 
+    },
+    wakeUpLazy: function(hubID) {
+        
+        // get recently processed
+        $(hubID + ' .js-hub-item.showing-by-filter.showing-by-load .js-hub-lazy[data-src]').each(function(){
+            var thisIMG = $(this).attr('data-src');
+            $(this).attr('src', thisIMG).removeAttr("data-src");
+        });
+
+        
     }
 }
 
