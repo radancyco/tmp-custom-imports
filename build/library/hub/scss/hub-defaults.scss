@@ -167,7 +167,7 @@
 
 .hub-content {
     &__list { // .hub-content__list
-
+        max-width: 1200px;
     }
     &__item { // .hub-content__item
         // This here only for animations DO NOT use display properties here as this could mess up 
