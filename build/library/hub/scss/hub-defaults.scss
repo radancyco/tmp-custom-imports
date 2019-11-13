@@ -53,28 +53,37 @@
 
 // Filter by form
 .hub-filter {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-justify-content: space-between;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-align-content: stretch;
-    -ms-flex-line-pack: stretch;
-    align-content: stretch;
-    -webkit-align-items: stretch;
-    -ms-flex-align: stretch;
-    align-items: stretch;
+    &__fieldset { // .hub-filter__fieldset
+        border: 0;
+        padding: 0.01em 0 0 0;
+        margin: 0;
+        min-width: 0;
+    }
 
-
+    &__controls { // .hub-filter__controls
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+        align-content: stretch;
+        -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+    }
 
     &__heading { // .hub-filter__heading 
+        padding: 0;
+        display: table;
         width:100%;
         text-align: center;
         color: #ccc;
@@ -122,10 +131,7 @@
         border: 1px solid #ccc;
         &:hover,
         &:focus {
-            font-size: 19px;
-            color: #2e5c98;
-            padding: 8px;
-            border-color: #2e5c98;
+            border-color: #000;
         }
     }
 

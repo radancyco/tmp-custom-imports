@@ -254,26 +254,28 @@
             <form class="js-hub-filter-form hub-filter">
                 <fieldset class="hub-filter__fieldset">
                     <legend class="hub-filter__heading">Filter stories</legend>
-                    @* ======================= *@
-                    @* Creating filters (Label, field, default value, Hide/Show, ID) *@
-                    @* ======================= *@
-                    @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)
-                    @addFilter("Category","category","Select Category",1, thisHubID)
-                    @addFilter("Location","location","Select Location",1, thisHubID)
-                    @addFilter("Is-telecommute","facet-is-telecommute","Select Is telecommute",1, thisHubID)
-                    @addFilter("Campaign","facet-campaign","Select Campaign",1, thisHubID)
-                    @addFilter("Company Name","facet-companyname","Select Company Name",1, thisHubID)
-                    @addFilter("Industry","facet-industry","Select Industry",1, thisHubID)
-                    @addFilter("Is Manager","facet-is-manager","Select Is Manager",1, thisHubID)
-                    @addFilter("Division","facet-job-level","Select Division",1, thisHubID)
-                    @addFilter("Job Status","facet-job-status","Select Job Status",1, thisHubID)
-                    @addFilter("Job Type","facet-job-type","Select Job Type",1, thisHubID)
-                    @addFilter("Travel","facet-travel","Select Travel",1, thisHubID)
-                    @addFilter("Hours Per Week","facet-hours-per-week","Select Hours Per Week",1, thisHubID)
-                    @addFilter("Salary Relocation","facet-salary-relocation","Select Salary Relocation",1, thisHubID)
-                    @addFilter("Salary Time","facet-salary-time","Select Salary Time",1, thisHubID)
-                    <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
-                    <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
+                    <div class="hub-filter__controls">
+                        @* ======================= *@
+                        @* Creating filters (Label, field, default value, Hide/Show, ID) *@
+                        @* ======================= *@
+                        @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)
+                        @addFilter("Category","category","Select Category",1, thisHubID)
+                        @addFilter("Location","location","Select Location",1, thisHubID)
+                        @addFilter("Is-telecommute","facet-is-telecommute","Select Is telecommute",1, thisHubID)
+                        @addFilter("Campaign","facet-campaign","Select Campaign",1, thisHubID)
+                        @addFilter("Company Name","facet-companyname","Select Company Name",1, thisHubID)
+                        @addFilter("Industry","facet-industry","Select Industry",1, thisHubID)
+                        @addFilter("Is Manager","facet-is-manager","Select Is Manager",1, thisHubID)
+                        @addFilter("Division","facet-job-level","Select Division",1, thisHubID)
+                        @addFilter("Job Status","facet-job-status","Select Job Status",1, thisHubID)
+                        @addFilter("Job Type","facet-job-type","Select Job Type",1, thisHubID)
+                        @addFilter("Travel","facet-travel","Select Travel",1, thisHubID)
+                        @addFilter("Hours Per Week","facet-hours-per-week","Select Hours Per Week",1, thisHubID)
+                        @addFilter("Salary Relocation","facet-salary-relocation","Select Salary Relocation",1, thisHubID)
+                        @addFilter("Salary Time","facet-salary-time","Select Salary Time",1, thisHubID)
+                        <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
+                        <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
+                    </div>
                 </fieldset>
             </form>
         }
