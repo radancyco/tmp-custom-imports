@@ -129,9 +129,9 @@ var hubFeature = {
             var hubID = "#" + $(this).attr("data-hub-id");
 
             if( $(hubID + " .js-hub-filter-form").length ) {
-                $(hubID + " .js-hub-filter-form ").attr('tabindex', -1).focus();
+                $(hubID + " .js-hub-filter-form select").first().focus();
             } else if ( $(hubID + " .js-hub-filter-button-wrapper" ).length ) {
-                $(hubID + " .js-hub-filter-button-wrapper ").attr('tabindex', -1).focus();
+                $(hubID + " .js-hub-filter-button-wrapper button").first().focus();
             } else {
                 console.error("CI Error - HUB: No form to go back to");
             }
