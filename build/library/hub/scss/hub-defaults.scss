@@ -48,7 +48,7 @@
         display:block;
         border:none;
 
-        &:disabled {
+        &.disabled {
             opacity: 0;
             visibility: hidden;
         }
