@@ -19,6 +19,10 @@
         }
     }
 
+    &__bottom-nav { // .hub__bottom-nav
+        // wrapper around the load more and back to filters buttons
+    }
+
     &__back-to-button { // .hub__back-to-button
         // Waiting for Feedback from field. By requets of Spell this will not be hidden but always visible.
         // transition-property: opacity;
@@ -31,6 +35,25 @@
         
         // }
     }
+
+    &__load-more-button { // .hub__load-more-button
+        transition-property: visibility, opacity;
+        transition-duration: .2s;
+        transition-timing-function: linear;
+        opacity: 1;
+        visibility: visible;
+        line-height:40px;
+        cursor:pointer;
+        margin:0 auto;
+        display:block;
+        border:none;
+
+        &:disabled {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+    
 }
 
 
@@ -229,27 +252,6 @@
         margin: 10px 0 0 0;
         &::after {
             content: '\20\203a'
-        }
-    }
-}
-
-
-.hub-load-more {
-    &__button { // .hub-load-more__button
-        transition-property: visibility, opacity;
-        transition-duration: .2s;
-        transition-timing-function: linear;
-        opacity: 1;
-        visibility: visible;
-        line-height:40px;
-        cursor:pointer;
-        margin:0 auto;
-        display:block;
-        border:none;
-
-        &:disabled {
-            opacity: 0;
-            visibility: hidden;
         }
     }
 }

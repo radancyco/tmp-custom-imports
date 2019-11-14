@@ -373,7 +373,7 @@
                                 @* ========================== *@
                                 @* Required for filtering *@
                                 @* ========================== *@
-                                <ul class="js-mappings hidden" aria-hidden="true">
+                                <ul class="js-hub-mappings hidden" aria-hidden="true">
                                     @foreach (var mapping in contentPage.KeywordPageMappings){
                                         var cat = mapping.CategoryDisplay;
                                         var loc = mapping.LocationDisplay;
@@ -393,12 +393,16 @@
                 }
             }
         </ul>    
-        @if(moreDefaultCount > 0){
-            <button class="js-hub-load-more-button js-tb-click-tracking hub-load-more__button disabled" data-hub-id="@thisHubID"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
-        }
-        @if(showFilterForm == 1 || showFilterButtons == 1){
-
-            <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
+        @if( moreDefaultCount > 0 || showFilterForm == 1 || showFilterButtons == 1 ) {
+            <div class="hub__bottom-nav">
+                @if(moreDefaultCount > 0){
+                    <button class="js-hub-load-more-button js-tb-click-tracking hub__load-more-button btn disabled" data-hub-id="@thisHubID"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
+                }
+                @if(showFilterForm == 1 || showFilterButtons == 1){
+        
+                    <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button btn" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
+                }
+            </div>
         }
         <div class="js-aria-hub-msg hub-visually-hidden" aria-live="polite"></div>
 </section>

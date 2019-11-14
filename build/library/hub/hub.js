@@ -254,7 +254,7 @@ var hubFeature = {
         $(hubID + " .js-hub-prefilter").each(function(i){
             
             dValue = $(this).attr("data-query");
-            $(hubID + " .mappings li" + dValue).each(function(i){
+            $(hubID + " .js-hub-mappings li" + dValue).each(function(i){
                 console.log(i);
                 $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
             })
@@ -262,7 +262,7 @@ var hubFeature = {
         })
 
         if( dKeepMapping == 0) { // Remove mappings so that it does not show other mappings in form when filtering
-            $(hubID + " .mappings li:not(.js-keep-data)").remove();
+            $(hubID + " .js-hub-mappings li:not(.js-keep-data)").remove();
             console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
         }
 
@@ -284,7 +284,7 @@ var hubFeature = {
         $(hubID + " select[id^='data-hub-']").each(function(){
             var thisFilter = $(this).attr("id");
             // cycle through the mapping entries to find matches and pass keyword to the array variable
-            $(hubID + " .js-hub-content .mappings li[" + thisFilter + "]").each(function(w){
+            $(hubID + " .js-hub-mappings li[" + thisFilter + "]").each(function(w){
                 var v = $(this).attr(thisFilter);
                 if(v != "ALL"){
                     keyA.push(v);
@@ -438,14 +438,14 @@ var hubFeature = {
 
         console.log(getString); 
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
-        $(hubID + " ul.mappings > li" + getString)
+        $(hubID + " .js-hub-mappings > li" + getString)
             .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
 
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
 
         // Added error message if no results found
-        if ( $(hubID + " ul.mappings > li" + getString).length < 1 && typeof noResultsText != "undefined") {
+        if ( $(hubID + " .js-hub-mappings > li" + getString).length < 1 && typeof noResultsText != "undefined") {
             var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
             $(hubID + " .js-hub-content").before(noResultsHtml);
         }
@@ -475,10 +475,10 @@ var hubFeature = {
                 // weighted search
                 if(isWeighted){
                     console.log("Hub ID: " + hubID + " Message: weighted running");
-                    $(hubID + " ul.mappings > li[" + curField + "='" + curValue + "']")
+                    $(hubID + " .js-hub-mappings > li[" + curField + "='" + curValue + "']")
                     .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
                     fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
-                    $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
+                    $(hubID + " .js-hub-mappings > li" + fieldsUsed).each(function(){
                     $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
                     })
                     a = a + 1;
@@ -499,7 +499,7 @@ var hubFeature = {
             
             console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
             // Using collected filter values to do an  exact match
-            $(hubID + " ul.mappings > li" + fieldsUsed).each(function(){
+            $(hubID + " .js-hub-mappings > li" + fieldsUsed).each(function(){
                 $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");  
             });
 
@@ -515,10 +515,10 @@ var hubFeature = {
             }
     
 
-            console.log("Exact matches: " + $(hubID + " ul.mappings > li" + fieldsUsed).length )
+            console.log("Exact matches: " + $(hubID + " .js-hub-mappings > li" + fieldsUsed).length )
 
             // Added error message if no results found
-            if ( $(hubID + " ul.mappings > li" + fieldsUsed).length < 1 && typeof noResultsText != "undefined") {
+            if ( $(hubID + " .js-hub-mappings > li" + fieldsUsed).length < 1 && typeof noResultsText != "undefined") {
                 var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
                 $(hubID + " .js-hub-content").before(noResultsHtml);
             }
