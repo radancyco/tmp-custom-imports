@@ -64,6 +64,8 @@ var hubFeature = {
                     $(hubID + " .js-hub-submit-filters").prop("disabled", true);
                         
                     // reset filters
+                    // TODO: Fix aria live reading. Spell said "As for Reset, let's leave it alone for now. i think it should be fine for time being, but would like to reach out to so some friends on the matter for further advice."
+                    // Brock's suggetsion is just change aira live to assertive
                     $(hubID + " .js-hub-filter-form select").each(function(){
                         var gID = "#" + $(this).attr("id"); 
                         $(hubID + " .js-hub-filter-form " + gID + " option" ).prop('selected', function() {
