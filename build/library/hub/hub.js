@@ -1,5 +1,5 @@
 // TODO: change all console logs into debug logs and try to make them readable
-// TODO: Once sites have gone like change over mappings to js-mappings
+// TODO: Minify JS (Probably need to make sure all for custom imports is minified)
 var hubFeature = {
     Init: function(hubID){
         //===============================
@@ -146,16 +146,11 @@ var hubFeature = {
     
         // Load more button functionality
         // // This will reveal more per click
-        // TODO: Change this once al sites are updated
-        // $(hubID + ' .js-hub-load-more-button').on('click', function (e) {
-        //     e.preventDefault();
-
-        //     var hubID = "#" + $(this).attr("data-hub-id");
-        //     thisHub = $(hubID),
-        $('.js-hub-load-more-button').on('click', function (e) {
+        $(hubID + ' .js-hub-load-more-button').on('click', function (e) {
             e.preventDefault();
 
-            var thisHub = $(this).closest('.js-hub'), // This gets the parent .js-content-load-more of the currently clicked .js-hub-load-more-button
+            var hubID = "#" + $(this).attr("data-hub-id");
+            thisHub = $(hubID),
             defaultLoadCount = +thisHub.attr('data-load-more-default'), // Following variables affect how many are shown per click Adding "+" in front of the variable makes it an integer
             loadMore = +thisHub.attr('data-load-more-amount'),
             previousLoad = +thisHub.attr('data-load-more-current'),
@@ -190,13 +185,7 @@ var hubFeature = {
             } 
 
             // Once all the correct ammount of items are show then load images
-            // hubFeature.wakeUpLazy(hubID);
-
-            // TODO: Don't use this once all sites go live
-            thisHub.find('.js-hub-item.showing-by-filter.showing-by-load .js-hub-lazy[data-src]').each(function(){
-                var thisIMG = $(this).attr('data-src');
-                $(this).attr('src', thisIMG).removeAttr("data-src");
-            });
+            hubFeature.wakeUpLazy(hubID);
 
             // Updating data and status before next click
             
@@ -236,11 +225,10 @@ var hubFeature = {
 
                 }
             } else {
-                // TODO: Remove once all sites are live
                 if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-                    thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
+                    thisHub.find('.js-hub-load-more-button').removeClass('enabled').addClass('disabled'); // Then hide the load more button
                 } else {
-                    thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
+                    thisHub.find('.js-hub-load-more-button').removeClass('disabled').addClass('enabled'); // Then show the load more button
                 }
                 console.warn("CI Error - HUB: Is using outdated load more button");
             }
@@ -386,6 +374,7 @@ var hubFeature = {
 
         if ( $(hubID).hasClass("filtered") ) {
             // TODO: Determine if we want to force a message on reset
+            // Brock's suggetsion is just change aira live to assertive
             // setTimeout(function(){
                 hubFeature.ariaMessaging(hubID);
         // }, 500);
@@ -589,26 +578,13 @@ var hubFeature = {
         }
 
         // By default the load more button is disabled
-        if( thisHub.find('.js-hub-load-more-button').hasClass('enabled') || thisHub.find('.js-hub-load-more-button').hasClass('disabled') ) {
-            if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-                thisHub.find('.js-hub-load-more-button').removeClass('enabled').addClass('disabled'); // Then hide the load more button
-            } else {
-                thisHub.find('.js-hub-load-more-button').removeClass('disabled').addClass('enabled'); // Then show the load more button
-            }
+        if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
+            thisHub.find('.js-hub-load-more-button').removeClass('enabled').addClass('disabled'); // Then hide the load more button
         } else {
-            // TODO: Delete this once all live sites are updated
-            // By default the load more button is disabled
-            if (thisHub.find('.js-hub-item.showing-by-filter.hidden-by-load').length == 0 || overMax == 1 ) { //    If the default ammount is so high there are no more hidden titles or if current load great than or equal to  maxload 
-                thisHub.find('.js-hub-load-more-button').prop('disabled', true); // Then hide the load more button
-            } else {
-                thisHub.find('.js-hub-load-more-button').prop('disabled', false); // Then show the load more button
-            }
-            console.warn("CI Error - HUB: Is using outdated load more button");
+            thisHub.find('.js-hub-load-more-button').removeClass('disabled').addClass('enabled'); // Then show the load more button
         }
 
-
-
-
+        // Make sure visable items have images
         hubFeature.wakeUpLazy(hubID);
         
     },
