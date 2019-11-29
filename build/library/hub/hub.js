@@ -240,23 +240,54 @@ var hubFeature = {
     setupPreFilters: function(hubID,setupFilters){
         var dFacet,
         dFacetValue,
-        dKeepMapping = +$(hubID).attr("data-keepmappings");
-        $(hubID + " .js-hub-prefilter").each(function(i){
-            
-            dValue = $(this).attr("data-query");
-            $(hubID + " .js-hub-mappings li" + dValue).each(function(i){
-                console.log(i);
-                $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
-            })
-            
-        })
+        dKeepMapping = +$(hubID).attr("data-keepmappings"),
+        dNarrowMappings = +$(hubID).attr("data-narrowmappings");
+        $(hubID + " .js-hub-prefilter").each(function(i){ // loop through each prefilter
+
+            dValue = $(this).attr("data-query"); // prefilter data
+
+            console.log("NARRPW: " + dNarrowMappings)
+
+            if( dNarrowMappings == 0 ) { // Each prefilter adds to the results NOTE: if data-narrowmappings is not setup it will aways add and not narrow
+                
+                $(hubID + " .js-hub-mappings li" + dValue).each(function(i){
+                    $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
+                }).promise().done(function(){
+
+                    $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
+
+                })
+
+            } else if ( dNarrowMappings == 1 ) { // Each prefilter Narrows the results
+                
+                $(hubID + " .js-hub-mappings").each(function(){ // Loop through each items mappings
+
+                    $(this).parents(".js-hub-item").removeClass("pre-filtered"); // reset from last prefilter loop
+
+                    $(this).children("li").each(function(){ // Loop through each mapping in this item
+
+                        if( $(this).filter(dValue).length > 0 ) {
+                            $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
+                        } 
+
+                    }) // end js-hub-mappings li loop
+
+                }).promise().done(function(){
+
+                    $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
+
+                }) // end js-hub-mappings loop
+
+            }
+
+        }) // end js-hub-prefilter loop
 
         if( dKeepMapping == 0) { // Remove mappings so that it does not show other mappings in form when filtering
             $(hubID + " .js-hub-mappings li:not(.js-keep-data)").remove();
             console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
         }
 
-        $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
+        // $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
 
 
         if(setupFilters == 1){
