@@ -248,7 +248,7 @@ var hubFeature = {
 
             console.log("NARRPW: " + dNarrowMappings)
 
-            if( dNarrowMappings == 0 ) { // Each prefilter adds to the results NOTE: if data-narrowmappings is not setup it will aways add and not narrow
+            if( dNarrowMappings == 0 || isNaN(dNarrowMappings) ) { // Each prefilter adds to the results NOTE: if data-narrowmappings is not setup it will aways add and not narrow
                 
                 $(hubID + " .js-hub-mappings li" + dValue).each(function(i){
                     $(this).addClass("js-keep-data").parents(".js-hub-item").addClass("pre-filtered");
@@ -286,9 +286,6 @@ var hubFeature = {
             $(hubID + " .js-hub-mappings li:not(.js-keep-data)").remove();
             console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
         }
-
-        // $(hubID + " .js-hub-item:not(.pre-filtered)").remove(); // Remove the tile from the page if it is not apart of the prefilter
-
 
         if(setupFilters == 1){
             console.log("Hub ID: " + hubID + " Message: FINISHED");
