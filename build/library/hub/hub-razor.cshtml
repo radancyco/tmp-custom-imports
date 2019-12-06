@@ -163,7 +163,7 @@
     @helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
         if(selectShow == 1){
             <div class="hub-filter__select-wrapper">
-                <label class="hub-filter__label hub-visually-hidden" for="@currentHub-@selectFieldName">@selectLabel</label>
+                <label class="hub-filter__label" for="@currentHub-@selectFieldName">@selectLabel</label>
                 <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
             </div>
         }
@@ -358,8 +358,8 @@
                                     }
                             }
                                 @*
-                                    // You can rearange all of the items inside the a tag however since the link is targeted via 
-                                    // js it needs to remain around all the item content 
+                                    // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so 
+                                    // ideally we wrap all content in the link.
                                 *@
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
