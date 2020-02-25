@@ -8,7 +8,7 @@
     var publishedContentPages = Html.GetPublishedContentPages();
 
     /* ======================= */
-    /* WILL THERE BE MORE THAN ONE HUB ON THE PAGE? 1 = Yes / 0 = no */ 
+    /* WILL THERE BE MORE THAN ONE HUB ON THIS SAME PAGE? 1 = Yes / 0 = no */ 
     /* ======================= */
 
     int moreThanOneHub = 0;
@@ -57,8 +57,10 @@
 
     /* ======================= */
     /* ADD ANY CUSTOM FACETS YOU MAY NEED */
+    /* In order to use custom facets to pre-filter, or filter by form or filter by button it has to be added here first */
+    /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
     /* ======================= */
-    @* customFacetFieldNames.Add("ContentType"); *@
+    @* customFacetFieldNames.Add("ContentType");  /* Example of custom facet (Uncomment it to use) */ *@
 
     /* ======================= */
     /* INCLUDE FILTER BY FORM */
@@ -75,13 +77,13 @@
     /* Filter options */
     /* ======================= */
      /* FILTER WEIGHTED OR EXACT MATCH  (1 = Weighted Match / 0 = Exact Match) */
-    int filterWeighted = 1;
+    int filterWeighted = 0;
 
     /* ======================= */
     /* QUERY FILTERS */
     /* ======================= */
     /* SHOW ONLY PAGES WITH IMAGES (1 = True / 0 = False) */
-    int imagesOnly = 1;
+    int imagesOnly = 0;
     /* SHOW CONTENT PAGE TYPE PAGES (1 = True / 0 = False) */
     int contentPageType = 1;
     /* SHOW SELF-SERVICE PAGE TYPE PAGES (1 = True / 0 = False) */
@@ -154,66 +156,72 @@
     /* This text comes after the title */
     string ariaWarning = "opens in new window";
 
-
+    /* ======================= */
+    /* DIAGNOSTICS */
+    /* ======================= */
+    /* Show pages with no mapping  (1 = Yes / 0 = No) */
+    int noMapping = 0; /* ONLY CHANGE THIS IF YOU ARE NOT GETTING PAGES TO APPEAR WITH DEFAULT SETTINGS*/
 }
 
-    @* ======================= *@
-    @* HELPER: BUILD FILTERS ON PAGE *@
-    @* ======================= *@
-    @helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
-        if(selectShow == 1){
-            <div class="hub-filter__select-wrapper">
-                <label class="hub-filter__label" for="@currentHub-@selectFieldName">@selectLabel</label>
-                <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
-            </div>
-        }
+@* DO NOT EDIT OR DELETE HELPERS *@
+
+@* ======================= *@
+@* HELPER: BUILD FILTERS ON PAGE *@
+@* ======================= *@
+@helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
+    if(selectShow == 1){
+        <div class="hub-filter__select-wrapper">
+            <label class="hub-filter__label" for="@currentHub-@selectFieldName">@selectLabel</label>
+            <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
+        </div>
     }
+}
+
+@* ======================= *@
+@* HELPER: PREFILTER ITEMS ON PAGE *@
+@* ======================= *@
+@helper addPreFilters(string cat, string loc, string fName, string fValue, string currentHub) {
+var thisFacet = "";
+var thisLoc = "";
+var thisCat = "";
+    if(fName != "ALL"){
+        thisFacet = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
+    }
+    if(loc != "ALL"){
+        thisLoc = "[" + @currentHub + "-location='" + @loc + "']";
+    }
+    if(cat != "ALL"){
+        thisCat = "[" + @currentHub + "-category='" + @cat + "']";
+    }
+    <li class="js-hub-prefilter" data-query="@thisCat@thisLoc@thisFacet"></li>
+}
     
-    @* ======================= *@
-    @* HELPER: PREFILTER ITEMS ON PAGE *@
-    @* ======================= *@
-    @helper addPreFilters(string cat, string loc, string fName, string fValue, string currentHub) {
-    var thisFacet = "";
-    var thisLoc = "";
-    var thisCat = "";
-        if(fName != "ALL"){
-            thisFacet = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
-        }
-        if(loc != "ALL"){
-            thisLoc = "[" + @currentHub + "-location='" + @loc + "']";
-        }
-        if(cat != "ALL"){
-            thisCat = "[" + @currentHub + "-category='" + @cat + "']";
-        }
-        <li class="js-hub-prefilter" data-query="@thisCat@thisLoc@thisFacet"></li>
+@* ======================= *@
+@* HELPER: YOUR FILTER BY BUTTONS *@
+@* ======================= *@
+@helper addfilterButton(string cat, string loc, string fName, string fValue, string buttonLabel, string currentHub, string trackingHubName) {
+    var thisString = "";
+    if(fName != "ALL"){
+        thisString = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
     }
-     
-    @* ======================= *@
-    @* HELPER: YOUR FILTER BY BUTTONS *@
-    @* ======================= *@
-    @helper addfilterButton(string cat, string loc, string fName, string fValue, string buttonLabel, string currentHub, string trackingHubName) {
-        var thisString = "";
-        if(fName != "ALL"){
-            thisString = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
-        }
-        <li class="hub-filter-btn__item">
-            <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName-Filter" data-custom-label="@buttonLabel">@buttonLabel</button>
-        </li>
-    }
+    <li class="hub-filter-btn__item">
+        <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName-Filter" data-custom-label="@buttonLabel">@buttonLabel</button>
+    </li>
+}
 
 
-     
-    @* ======================= *@
-    @* HELPER: MAPPINGS FOR ARTICLES *@
-    @* ======================= *@
-    @helper addMapping(string categoryValue, string locationValue , string facetName, string facetValue, string currentHub) {
-        if(facetName == ""){
-            <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue"></li>
-        }else{
-            <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue" @currentHub-facet-@facetName="@facetValue"></li>
-        }
+    
+@* ======================= *@
+@* HELPER: MAPPINGS FOR ARTICLES *@
+@* ======================= *@
+@helper addMapping(string categoryValue, string locationValue , string facetName, string facetValue, string currentHub) {
+    if(facetName == ""){
+        <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue"></li>
+    }else{
+        <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue" @currentHub-facet-@facetName="@facetValue"></li>
     }
-     
+}
+    
     
 <section class="js-hub hub__wrapper" 
         id="@thisHubID" 
@@ -231,7 +239,6 @@
                 @* ======================= *@
                 @* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) *@
                 @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
-                @* CORRECTION asof 8/29 you must put in a facet value *@
                 @* ======================= *@
                 
                 @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID)
@@ -261,9 +268,11 @@
                     <legend class="hub-filter__heading">Filter stories</legend>
                     <div class="hub-filter__controls">
                         @* ======================= *@
-                        @* Creating filters (Label, field, default value, Hide/Show, ID) *@
+                        @* ADDING AND REMOVING FILTERS *@
+                        @* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE *@ 
+                        @* Filters parameters (Label, field, default value, Hide/Show, ID) *@
                         @* ======================= *@
-                        @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)
+                        @* @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)  /* Example of custom facet (Uncomment it to use) */ *@
                         @addFilter("Category","category","Select Category",1, thisHubID)
                         @addFilter("Location","location","Select Location",1, thisHubID)
                         @addFilter("Is-telecommute","facet-is-telecommute","Select Is telecommute",1, thisHubID)
@@ -292,9 +301,9 @@
             data-system-css-columns="@systemStyledColumns">
             @foreach (var contentPage in publishedContentPages){
                 var pageCreated = contentPage.IsCmsCreated ? "SS created" : "TMP created";
-                int externalPage = 1;
-                if ( contentPage.PageUrl.Split('/').Last().ToString().Length != 0 ) {
-                    externalPage = 0;
+                int externalPage = 0;
+                if ( contentPage.LinkUrl.StartsWith("/") == false ) {
+                    externalPage = 1;
                 }
                 string ariaAttr = "";
                 if( externalPage == 1 && opensNewWidnow == 1) { 
@@ -319,10 +328,10 @@
                     }
                     
                     if(run == 1){
-                        if (contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any()){
+                        if ( ( contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any() ) || noMapping == 1 ) {
                             int v = 0;
-                            var ltype = "";
-                            var lltype = "";
+                            var videoType = "";
+                            var customFacetClass = "";
                             var eLinkClass = "";
                             <li class="js-hub-item hub-content__item showing-by-filter"
                                 data-hub-origin="@contentPage.IsCmsCreated"  
@@ -337,36 +346,47 @@
                                 
                                 @* ========================== *@
                                 @* Content to return for each record *@
+                                @* This where most Front end changes happen *@
                                 @* ========================== *@
                                 @if(contentPage.LinkUrl.Contains("youtube")){
-                                    ltype = "video-link youtube";
+                                    videoType = "video-link youtube";
                                 } else if(contentPage.LinkUrl.Contains("vimeo")){
-                                    ltype = "video-link vimeo";
+                                    videoType = "video-link vimeo";
                                 } else if(contentPage.LinkUrl.Contains(".mp4")){
-                                    ltype = "video-link mp4";
+                                    videoType = "video-link mp4";
                                 }
                                 @if( externalPage == 1 ) {
                                     eLinkClass = "external-link";
                                 }
                                 
-                                @*// Example of adding a class to the link based on custom facet *@
+                                @*/* Example of adding a class to the link based on custom facet */*@
                                 @foreach (var mapping in contentPage.KeywordPageMappings){
                                     if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
                                         if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
-                                            lltype = "video-type";
+                                            customFacetClass = "video-type";
                                         }
                                     }
-                            }
-                                @*
+                                }
+                                @*  
                                     // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so 
                                     // ideally we wrap all content in the link.
                                 *@
-                                <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @ltype @lltype @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
+                                <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @customFacetClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
                                         <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
                                     </div>
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
+
+                                        @*// Example of displaying a value from a custom facet in this case called ContentType *@
+                                        @foreach (var mapping in contentPage.KeywordPageMappings){
+                                            if( mapping.CustomFacetFieldNameDisplay == "ContentType" && mapping.CustomFacetFieldValueDisplay != "" ){
+                                                <span class="hub-item__contenttype">
+                                                    @mapping.CustomFacetFieldValueDisplay
+                                                </span>
+                                            }
+                                        }
+
                                         <span class="hub-item__description">
                                             @contentPage.Description
                                             <span class="hub-item__fake-button">Learn More</span>
@@ -377,6 +397,7 @@
                                 
                                 @* ========================== *@
                                 @* Required for filtering *@
+                                @* DO NOT EDIT DO NOT DELETE *@
                                 @* ========================== *@
                                 <ul class="js-hub-mappings hidden" aria-hidden="true">
                                     @foreach (var mapping in contentPage.KeywordPageMappings){
@@ -411,3 +432,13 @@
         }
         <div class="js-aria-hub-msg hub-visually-hidden" aria-live="polite"></div>
 </section>
+
+@* Only inject the script on the first instance of the HUB on the page*@
+@if( thisHubID == "data-hub-1" ) {
+    using (var context = Html.BeginScriptContext()) {
+        @* Hub Functionality Script *@
+        Html.AddScriptBlock(
+            @<script id="js-custom-imports" src="https://services1.tmpwebeng.com/custom-imports/custom-imports.js?scripts=hub,tracking"></script>
+        );
+    }
+}

@@ -199,6 +199,7 @@
         max-width: 1200px;
     }
     &__item { // .hub-content__item
+        // Do not add display anything to this selector
         // This here only for animations DO NOT use display properties here as this could mess up 
         &.showing-by-filter.showing-by-load {
             animation: item-animation 1s forwards;
@@ -208,7 +209,7 @@
 }
 
 
-
+// These are the elements inside each list item
 .hub-item {
     &__link { // .hub-item__link
         // This link should stay around the whole item
@@ -254,6 +255,22 @@
             content: '\20\203a'
         }
     }
+
+    // Example of customizing a HUB from other HUBs on the site
+    // Example use case: There is a HUB on the hompage
+    .home-hub & { // This is example of a class you could add to .hub__wrapper to style it differntly
+
+        // Only add the selectors you need to be differnt, so you don't have duplicated code
+
+        &__title { // .home-hub .hub-item__title
+            font-size: 18px;
+            width: 100%;
+            display: block;
+        }
+
+    }
+
+    
 }
 
 
