@@ -22,7 +22,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
    * use the naming convention of "HUB - [Function of this particular HUB]" and if you have multiple HUBs on several pages then add "- [Placement]" to the end
      * ie. SITE1, "HUB - Intern Stories"
      * ie. SITE2, "HUB - Events - Events Page", "HUB - Events - Home Page" and "HUB - Blog - Blog Page"
-   * Copy and paste all the code from https://github.com/tmpworldwide/tmp-custom-imports/blob/gh-pages/build/library/hub/hub-razor.cshtml
+   * Replace all of the code in the CustomHTML module with the code from https://github.com/tmpworldwide/tmp-custom-imports/blob/gh-pages/build/library/hub/hub-razor.cshtml
 
 3. Place the Custom HTML module onto the page
 
