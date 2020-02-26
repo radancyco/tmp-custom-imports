@@ -163,12 +163,14 @@
     int noMapping = 0; /* ONLY CHANGE THIS IF YOU ARE NOT GETTING PAGES TO APPEAR WITH DEFAULT SETTINGS*/
 }
 
+@* ======================= *@
 @* DO NOT EDIT OR DELETE HELPERS *@
+@* ======================= *@
 
 @* ======================= *@
 @* HELPER: BUILD FILTERS ON PAGE *@
 @* ======================= *@
-@helper addFilter(string selectLabel, string selectFieldName, string selectDefaultText, int selectShow, string currentHub) {
+@helper addFilter(int selectShow, string selectLabel, string selectFieldName, string selectDefaultText, string currentHub) {
     if(selectShow == 1){
         <div class="hub-filter__select-wrapper">
             <label class="hub-filter__label" for="@currentHub-@selectFieldName">@selectLabel</label>
@@ -248,8 +250,8 @@ var thisCat = "";
 
         @if(showFilterButtons == 1){
             @* ======================= *@
-            @* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) *@
-            @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
+            @* /* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) */ *@
+            @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
             @* ======================= *@
             <div class="js-hub-filter-button-wrapper hub-filter-btn__wrapper">
                 <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
@@ -268,25 +270,26 @@ var thisCat = "";
                     <legend class="hub-filter__heading">Filter stories</legend>
                     <div class="hub-filter__controls">
                         @* ======================= *@
-                        @* ADDING AND REMOVING FILTERS *@
-                        @* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE *@ 
-                        @* Filters parameters (Label, field, default value, Hide/Show, ID) *@
+                        @* /* ADDING AND REMOVING FILTERS */ *@
+                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@ 
+                        @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
+                        @* /* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes */ *@
                         @* ======================= *@
-                        @* @addFilter("Content Type","facet-contenttype","Select Content Type",1, thisHubID)  /* Example of custom facet (Uncomment it to use) */ *@
-                        @addFilter("Category","category","Select Category",1, thisHubID)
-                        @addFilter("Location","location","Select Location",1, thisHubID)
-                        @addFilter("Is-telecommute","facet-is-telecommute","Select Is telecommute",1, thisHubID)
-                        @addFilter("Campaign","facet-campaign","Select Campaign",1, thisHubID)
-                        @addFilter("Company Name","facet-companyname","Select Company Name",1, thisHubID)
-                        @addFilter("Industry","facet-industry","Select Industry",1, thisHubID)
-                        @addFilter("Is Manager","facet-is-manager","Select Is Manager",1, thisHubID)
-                        @addFilter("Division","facet-job-level","Select Division",1, thisHubID)
-                        @addFilter("Job Status","facet-job-status","Select Job Status",1, thisHubID)
-                        @addFilter("Job Type","facet-job-type","Select Job Type",1, thisHubID)
-                        @addFilter("Travel","facet-travel","Select Travel",1, thisHubID)
-                        @addFilter("Hours Per Week","facet-hours-per-week","Select Hours Per Week",1, thisHubID)
-                        @addFilter("Salary Relocation","facet-salary-relocation","Select Salary Relocation",1, thisHubID)
-                        @addFilter("Salary Time","facet-salary-time","Select Salary Time",1, thisHubID)
+                        @* @addFilter( 1 ,"Content Type","facet-contenttype","Select Content Type", thisHubID)  /* Example of custom facet (Uncomment it to use) */ *@
+                        @addFilter( 1 ,"Category","category","Select Category", thisHubID)
+                        @addFilter( 1 ,"Location","location","Select Location", thisHubID)
+                        @addFilter( 1 ,"Is-telecommute","facet-is-telecommute","Select Is telecommute", thisHubID)
+                        @addFilter( 1 ,"Campaign","facet-campaign","Select Campaign", thisHubID)
+                        @addFilter( 1 ,"Company Name","facet-companyname","Select Company Name", thisHubID)
+                        @addFilter( 1 ,"Industry","facet-industry","Select Industry", thisHubID)
+                        @addFilter( 1 ,"Is Manager","facet-is-manager","Select Is Manager", thisHubID)
+                        @addFilter( 1 ,"Division","facet-job-level","Select Division", thisHubID)
+                        @addFilter( 1 ,"Job Status","facet-job-status","Select Job Status", thisHubID)
+                        @addFilter( 1 ,"Job Type","facet-job-type","Select Job Type", thisHubID)
+                        @addFilter( 1 ,"Travel","facet-travel","Select Travel", thisHubID)
+                        @addFilter( 1 ,"Hours Per Week","facet-hours-per-week","Select Hours Per Week", thisHubID)
+                        @addFilter( 1 ,"Salary Relocation","facet-salary-relocation","Select Salary Relocation", thisHubID)
+                        @addFilter( 1 ,"Salary Time","facet-salary-time","Select Salary Time", thisHubID)
                         <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
                         <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
                     </div>
@@ -314,7 +317,7 @@ var thisCat = "";
                     ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){     
 
                     @* ========================== *@
-                    @* Exclusions *@
+                    @* /* Exclusions */ *@
                     @* ========================== *@
                     string compareExclude = contentPage.LinkUrl;
                     int run;
@@ -345,8 +348,8 @@ var thisCat = "";
                                 data-hub-date-created="@contentPage.DateCreated">
                                 
                                 @* ========================== *@
-                                @* Content to return for each record *@
-                                @* This where most Front end changes happen *@
+                                @* /* Content to return for each record */ *@
+                                @* /* This where most Front end changes happen */ *@
                                 @* ========================== *@
                                 @if(contentPage.LinkUrl.Contains("youtube")){
                                     videoType = "video-link youtube";
@@ -358,8 +361,9 @@ var thisCat = "";
                                 @if( externalPage == 1 ) {
                                     eLinkClass = "external-link";
                                 }
-                                
+                                @* ======================= *@
                                 @*/* Example of adding a class to the link based on custom facet */*@
+                                @* ======================= *@
                                 @foreach (var mapping in contentPage.KeywordPageMappings){
                                     if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
                                         if( mapping.CustomFacetFieldValueDisplay == "video" || mapping.CustomFacetFieldValueDisplay == "Video" ){
@@ -367,10 +371,12 @@ var thisCat = "";
                                         }
                                     }
                                 }
+                                @* ======================= *@
                                 @*  
                                     // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so 
                                     // ideally we wrap all content in the link.
                                 *@
+                                @* ======================= *@
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @customFacetClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
                                         <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
@@ -378,7 +384,7 @@ var thisCat = "";
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
 
-                                        @*// Example of displaying a value from a custom facet in this case called ContentType *@
+                                        @* /* Example of displaying a value from a custom facet in this case called ContentType */ *@
                                         @foreach (var mapping in contentPage.KeywordPageMappings){
                                             if( mapping.CustomFacetFieldNameDisplay == "ContentType" && mapping.CustomFacetFieldValueDisplay != "" ){
                                                 <span class="hub-item__contenttype">
@@ -399,19 +405,21 @@ var thisCat = "";
                                 @* Required for filtering *@
                                 @* DO NOT EDIT DO NOT DELETE *@
                                 @* ========================== *@
-                                <ul class="js-hub-mappings hidden" aria-hidden="true">
-                                    @foreach (var mapping in contentPage.KeywordPageMappings){
-                                        var cat = mapping.CategoryDisplay;
-                                        var loc = mapping.LocationDisplay;
-                                        if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
-                                            var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
-                                            var fValue = mapping.CustomFacetFieldValueDisplay;
-                                            @addMapping(cat, loc, fName , fValue, thisHubID);
-                                        } else{
-                                            @addMapping(cat, loc, "IGNORE", "", thisHubID);
-                                        }                                    
-                                    }
-                                </ul>
+                                @if( noMapping == 0 ) {
+                                    <ul class="js-hub-mappings hidden" aria-hidden="true">
+                                        @foreach (var mapping in contentPage.KeywordPageMappings){
+                                            var cat = mapping.CategoryDisplay;
+                                            var loc = mapping.LocationDisplay;
+                                            if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
+                                                var fName = mapping.CustomFacetFieldNameDisplay.Replace(" ", "-");
+                                                var fValue = mapping.CustomFacetFieldValueDisplay;
+                                                @addMapping(cat, loc, fName , fValue, thisHubID);
+                                            } else{
+                                                @addMapping(cat, loc, "IGNORE", "", thisHubID);
+                                            }                                    
+                                        }
+                                    </ul>
+                                }
                             </li>
                         }
                     }
@@ -433,7 +441,10 @@ var thisCat = "";
         <div class="js-aria-hub-msg hub-visually-hidden" aria-live="polite"></div>
 </section>
 
+@* ======================= *@
 @* Only inject the script on the first instance of the HUB on the page*@
+@* ======================= *@
+
 @if( thisHubID == "data-hub-1" ) {
     using (var context = Html.BeginScriptContext()) {
         @* Hub Functionality Script *@

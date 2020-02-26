@@ -17,6 +17,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 
 # UID Setup:
 1. If the HUB will live on a content page, then setup a content page called HUB or has HUB in the name.
+   * Note: if the Hub design does not call for the HUB to be on it’s own page then skip to step 2. 
 
 2. Create a CustomHTML module
    * use the naming convention of "HUB - [Function of this particular HUB]" and if you have multiple HUBs on several pages then add "- [Placement]" to the end
@@ -24,15 +25,17 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
      * ie. SITE2, "HUB - Events - Events Page", "HUB - Events - Home Page" and "HUB - Blog - Blog Page"
    * Replace all of the code in the CustomHTML module with the code from https://github.com/tmpworldwide/tmp-custom-imports/blob/gh-pages/build/library/hub/hub-razor.cshtml
 
-3. Place the Custom HTML module onto the page
+3. Assign the CustomHTML Module to the page that it will be displayed on. 
+  * i.e Home Page or Content Page
 
 4. Edit the SASS file for the TB and copy and paste all of the code from https://github.com/tmpworldwide/tmp-custom-imports/blob/gh-pages/build/library/hub/scss/hub-defaults.scss
 
 5. Without making any changes to the configurations push your changes to your preview site and test to make sure it is working. (If no pages load in, then use the DIAGNOSTICS feature of allowing content pages with no mapping to appear. Often the step of mapping content pages is missed ad the HUB can not work without mappings.)
+   * You should be able to click on each filter dropdown and see what is currently mapped to all content pages in the system.
 
 6. Now go through the configuration questions https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#hub-questions and update the options in the module razor
    * Make sure to read all comments in the razor, as that will help you know what to change and give you examples of how to customize
-   * Filter by Forms, by default all options are visible, Do NOT delete the @addfilter, instead if you want to now have the filter visible change the 1 to a 0 for that filter.
+   * Filter by Forms, by default all options are visible, Do NOT delete the @addfilter, instead if you want to not have the filter visible change the 1 to a 0 for that filter.
 
 7. SASS Edits
    * Try to keep the same naming convention
