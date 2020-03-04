@@ -107,7 +107,7 @@
     /* DEFAULT SORT ON LOAD (1 = Sort by date / 0 = False) */
     int sort = 1;
     /* SORT CRITERIA (Must be name of data attriubute found on the item to sort by) */
-    /* Example: If you wanted to sort by a custom facet of EventDate you would add it to the item level attributes and the sortCriteria  would be "data-hub-event-date"  */
+    /* Example: If you wanted to sort by a custom facet of EventDate you would add the facet it to the "ADD ANY CUSTOM FACETS YOU MAY NEED" section and then to the "Item level attributes" section and the sortCriteria  would be "data-hub-event-date"  */
     string sortCriteria = "data-hub-date-updated";
     /* DATE SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
     int sortDirection = 1;
@@ -342,7 +342,7 @@ var thisCat = "";
                             var eventDate = "";
                             @foreach (var mapping in contentPage.KeywordPageMappings){
                                 if( mapping.CustomFacetFieldNameDisplay == "EventDate" && mapping.CustomFacetFieldValueDisplay != "" ){
-                                    eventDate = @mapping.CustomFacetFieldValueDisplay;
+                                    eventDate = mapping.CustomFacetFieldValueDisplay;
                                 }
                             }
 
