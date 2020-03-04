@@ -104,12 +104,15 @@
     /* ======================= */
     /* SORTING */
     /* ======================= */
-    /* DEFAULT SORT ON LOAD (1 = Sort by date / 0 = False) */
+    /* DEFAULT SORT ON LOAD (1 = Sorting On / 0 = Sorting Off) */
     int sort = 1;
     /* SORT CRITERIA (Must be name of data attriubute found on the item to sort by) */
-    /* Example: If you wanted to sort by a custom facet of EventDate you would add the facet it to the "ADD ANY CUSTOM FACETS YOU MAY NEED" section and then to the "Item level attributes" section and the sortCriteria  would be "data-hub-event-date"  */
+    /* Example: If you wanted to sort by a custom facet of EventDate you would add the facet it to the "ADD ANY CUSTOM FACETS YOU MAY NEED" section and then to the "Item level attributes" section and the sortCriteria would be "data-hub-event-date" */
     string sortCriteria = "data-hub-date-updated";
-    /* DATE SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
+    /* SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
+    /* By default sorting is done alphabetically however if the word date is found in the sortCriteria the JS will convert the data into a universal date format so it does not matter if one content page is formated as YYYY-MM-DD and another content page is MM-DD-YYYY. */
+    /* When dealing with Dates, think of them as a whole number descending is largest number first so for example 03-05-2021 would come before 01-15-2020 */
+    /* When dealding with Alphabets, descending is Z to A */
     int sortDirection = 1;
 
     
