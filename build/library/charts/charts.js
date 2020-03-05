@@ -224,11 +224,13 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             }
             // Tooltip
             var toolTipText = $(d.data).data('label'); // Get the tooltip label
-            d3.select("#js-ci-chart__tooltip") // Select tooltip
-            .style('visibility','visible') // Set to visible
-            .style('left', d3.event.pageX + "px") // set left
-            .style('top',d3.event.pageY - 25 + "px") // set top
-            .html(toolTipText) // set tooltip text
+            if( toolTipText != null && toolTipText != ""  ) {
+                d3.select("#js-ci-chart__tooltip") // Select tooltip
+                .style('visibility','visible') // Set to visible
+                .style('left', d3.event.pageX + "px") // set left
+                .style('top',d3.event.pageY - 25 + "px") // set top
+                .html(toolTipText) // set tooltip text
+            }
         
             //Hover effect
             if(hoverEffect) {
