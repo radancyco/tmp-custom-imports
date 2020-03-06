@@ -230,6 +230,9 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     }).promise().done( function(){ // Promise will wait for the loop to complete  // end loop for each legend
 
         $(document).trigger('ciChartInitialized');
+        if ( matches("?custom-debug", url) ) {
+            console.log('CI Debug - All charts have been initialized');
+        }
 
     });
 
@@ -315,10 +318,4 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         console.error("CI Debug - Charts: Chart script is loading but Missing js-ci-pie-chart__legend or js-ci-pie-chart__graph class on the page");
     }
 }
-
-
-// $().on('ciChartInitialized', function (e) {
-//     console.log("ciChartInitialized")
-//  });
-
 
