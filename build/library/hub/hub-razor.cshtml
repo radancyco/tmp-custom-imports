@@ -343,7 +343,7 @@ var thisCat = "";
 
                             @* /* Example of adding a value from a custom facet to the item level attributes to make the HUB sortable on that data in this case we are using the facet called EventDate */ *@
                             var eventDate = "";
-                            @foreach (var mapping in contentPage.KeywordPageMappings){
+                            foreach (var mapping in contentPage.KeywordPageMappings){
                                 if( mapping.CustomFacetFieldNameDisplay == "EventDate" && mapping.CustomFacetFieldValueDisplay != "" ){
                                     eventDate = mapping.CustomFacetFieldValueDisplay;
                                 }
