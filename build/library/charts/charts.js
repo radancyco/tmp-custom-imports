@@ -13,15 +13,28 @@
 * Hover Effect: data-hover-effect(true)
 *****************/
 
+// Global Function
 function ratioForPadding(width, height) {
     var ratio = Math.round((height / width) * 100);
     var precent = ratio + '%';
     return precent;
 }
 
+
+// Custom events
+
+// Script has been Initialized
+// Once the graph is built then it will trigger this event, which will allow 3rd party scripts like sliders to wait
+// until this event is fired. To use this you would wrap the 3rd party script in $(document).on('ciChartInitialized', function () { });
+var ciChartInitialized = new Event('ciChartInitialized');
+
+// Animation event when you dispatch this event it will run the animation on the chart
+// To run the event: elem.dispatchEvent('ciAnimateGraph');
 var ciAnimateGraph = new Event('ciAnimateGraph');
 
 
+
+//
 if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
 
     $('.js-ci-pie-chart__legend').each(function() {
@@ -214,7 +227,13 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             donutChartTooltip(paths, hoverEffect) 
         }
 
-    }) // end loop for each legend
+    }).promise().done( function(){ // Promise will wait for the loop to complete  // end loop for each legend
+
+        $(document).trigger('ciChartInitialized');
+
+    });
+
+    
 
     function donutChartTooltip(paths, hoverEffect) {
 
@@ -296,3 +315,10 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         console.error("CI Debug - Charts: Chart script is loading but Missing js-ci-pie-chart__legend or js-ci-pie-chart__graph class on the page");
     }
 }
+
+
+// $().on('ciChartInitialized', function (e) {
+//     console.log("ciChartInitialized")
+//  });
+
+
