@@ -63,20 +63,17 @@
     @* customFacetFieldNames.Add("ContentType");  /* Example of custom facet (Uncomment it to use) */ *@
 
     /* ======================= */
-    /* INCLUDE FILTER BY FORM */
+    /* INCLUDE FILTER BY FORM or INCLUDE FILTER BY BUTTONS (Both can not be used on the same HUB simultaneously) */
     /* ======================= */
     /* 1 = True / 0 = False */
     int showFilterForm = 1;
-    
-    /* ======================= */
-    /* INCLUDE FILTER BY BUTTONS */
-    /* ======================= */
     int showFilterButtons = 0;
 
     /* ======================= */
-    /* Filter options */
+    /* FILTER FORM OPTIONS */
     /* ======================= */
-     /* FILTER WEIGHTED OR EXACT MATCH  (1 = Weighted Match / 0 = Exact Match) */
+    /* FILTER WEIGHTED OR EXACT MATCH  (1 = Weighted Match / 0 = Exact Match) */
+    /* Weighted match will always return a restult, with the most relevant matches first */
     int filterWeighted = 0;
 
     /* ======================= */
@@ -133,9 +130,9 @@
     int systemStyledColumns = 3;
 
     /* ======================= */
-    /* RECOMMENDED IMAGE SIZE */
+    /* THUMBNAIL IMAGE SETTINGS */
     /* ======================= */
-    /* SIZE OF SPACER UNTIL IMAGE IS LOADED: Make sure to update the Theme settings with matching data. Theme > Image Settings > Related Content */
+    /* RECOMMENDED THUMBNAIL IMAGE SIZE & SIZE OF SPACER UNTIL IMAGE IS LOADED: Make sure to update the Self Service Theme settings with matching data. SS > Theme > Image Settings > Related Content */
     /* DO NOT add px after the number */
     int lazyWidth = 600; 
     int lazyHeight = 338;
