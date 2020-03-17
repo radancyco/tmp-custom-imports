@@ -139,6 +139,10 @@
     /* DO NOT add px after the number */
     int lazyWidth = 600; 
     int lazyHeight = 338;
+    /* Default Thumbnail (1 = On / 0 = Off) */
+    int defaultThumbnail = 0;
+    /* Default Thumbnail Source Should be to an image file Hosted on TBCDN */
+    string defaultThumbnailSrc = "https://via.placeholder.com/600x388?text=CP+Tumbnail+Missing";
 
     /* ======================= */
     /* ERROR AND ARIA MESSAGES */
@@ -252,7 +256,7 @@ var thisCat = "";
             </ul>
         }
 
-        @if(showFilterButtons == 1){
+        @if(showFilterButtons == 1 && showFilterForm == 0){
             @* ======================= *@
             @* /* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) */ *@
             @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
@@ -267,8 +271,11 @@ var thisCat = "";
             </div>
         }
 
-        
-        @if(showFilterForm == 1){
+
+        @* ======================= *@
+        @* /* FILTER BY FORM  */*@
+        @* ======================= *@
+        @if(showFilterForm == 1 && showFilterButtons == 0 ){
             <form class="js-hub-filter-form hub-filter">
                 <fieldset class="hub-filter__fieldset">
                     <legend class="hub-filter__heading">Filter stories</legend>
@@ -300,6 +307,14 @@ var thisCat = "";
                 </fieldset>
             </form>
         }
+
+        @* ======================= *@
+        @* /* Error Message If both Filter form and Filter buttons are enabled */ *@
+        @* ======================= *@
+        @if( showFilterButtons == 1 && showFilterForm == 1 ) {
+            <span styles="font-weight:bold; font-size:24px">Filter Buttons and Filter Form can not bot be used at the same time on the same HUB.</span>
+        }
+
         <ul class="js-hub-content hub-content__list" 
             data-sort="@sort" 
             data-filter-weight="@filterWeighted" 
@@ -396,7 +411,12 @@ var thisCat = "";
                                 @* ======================= *@
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @customFacetClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
-                                        <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                        @* /* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on */ *@
+                                        @if( string.IsNullOrWhiteSpace(contentPage.ThumbnailFilePath) && defaultThumbnail == 1 ) {
+                                            <img class="js-hub-lazy hub-item__image" data-src="@defaultThumbnailSrc" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                        } else {
+                                            <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                        }
                                     </div>
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
