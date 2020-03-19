@@ -294,6 +294,13 @@ var hubFeature = {
 
         // Reset and sort
         hubFeature.resetData(hubID);
+
+        // Added error message if no results found
+        var noResultsText = $(hubID).attr("data-no-results-text");
+        if ( $(hubID + " .pre-filtered.showing-by-filter").length < 1 && typeof noResultsText != "undefined") {
+            var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
+            $(hubID + " .js-hub-content").before(noResultsHtml);
+        }
     },
     setupFilters: function(hubID){
         var keyA = [];
@@ -442,8 +449,7 @@ var hubFeature = {
             $(hubID + " .js-hub-filter-form " + gID + " option" ).prop('selected', function() {
                 return this.defaultSelected;
             })
-        });
-        
+        });        
     
     },  
     filterByButtonData:function(hubID, dataAttrString){
