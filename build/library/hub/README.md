@@ -45,3 +45,13 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
    * Go to each Self Service Theme > Image Settings > Related Content
    * Recommended min-width is 700px (keep the same aspect ratio as the images provided in the PSD)
    * This same size should be used in your lazy loading configurations in the module razor
+
+# Advanced topics
+## Commands in console that can be used to test sorting
+( hub ID, Sort Criteria, sort direction ) Note: 0 = random / 1 = Descending / 2 = Ascending 
+
+* hubFeature.sortHub("#data-hub-1","data-hub-date-updated", 1);
+* hubFeature.sortHub("#data-hub-1","data-hub-date-created", 2);
+* hubFeature.sortHub("#data-hub-1","data-hub-title", 2);
+* hubFeature.sortHub("#data-hub-1","data-weight", 1);
+* hubFeature.sortHub("#data-hub-1","data-hub-event-date", 1);
