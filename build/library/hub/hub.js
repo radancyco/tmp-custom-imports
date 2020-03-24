@@ -295,8 +295,8 @@ var hubFeature = {
         // Reset and sort
         hubFeature.resetData(hubID);
 
-        // Added error message if no results found
-        var noResultsText = $(hubID).attr("data-no-results-text");
+        // Added error message if no results found for the prefilters
+        var noResultsText = $(hubID).attr("data-no-prefiltered-results-text");
         if ( $(hubID + " .pre-filtered.showing-by-filter").length < 1 && typeof noResultsText != "undefined") {
             var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
             $(hubID + " .js-hub-content").before(noResultsHtml);
