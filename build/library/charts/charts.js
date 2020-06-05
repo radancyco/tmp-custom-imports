@@ -172,16 +172,19 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         }
 
 
-        // Fade-In is set in legend
-        if(animateGraph) {
-
-
+        // Animate the Graph or Legend
+        if(animateGraph || animateLegend) {
             $(pieChartHolder).on('ciAnimateGraph', function (e) {
                 
                 
                 if ( matches("?custom-debug", url) ) {
                     console.log("CI Debug - Donut/Pie Chart: Event Fired")
                 }
+
+                // Animation on the Graph
+                if ( animateGraph ) {
+
+                // FadeIn Animation on the graph
                 
                 if ( matches("fadein", animateGraphType) ) {
 
@@ -203,10 +206,26 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     .delay( animateDelay * items ) // delay every path by animateSpeed
                     .style('opacity',1); // set opacity to 1 animated
                 
-                }
+                }  // END FadeIn Anaimation on the graph
                 
+                // Pie Filling Anaimtion on the graph
+
+                if ( matches("pie-filling", animateGraphType) ) {
+                    
+                    
+
+                }// END Pie Filling Anaimtion on the graph
+
+                
+
+                } // END Animation on the Graph
+                
+                // Animation on the Legend
+
                 if ( animateLegend ) {
 
+                    // FadeIn Anaimation on the Legend
+                    
                     if ( matches("fadein", animateLegendType) ) {
 
                         var legendItems = 0;
@@ -223,10 +242,10 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
                     }
 
-                }
-            });
-            // TODO: Add more animations
-        }
+                } // END Animation on the Legend
+
+            }); // ENd Animation Event
+        } // END ALL ANIMATIONS
 
         // Tooltip is set in legend
         if(tooltip) {
