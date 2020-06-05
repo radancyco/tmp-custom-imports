@@ -277,7 +277,8 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     .style("z-index", "100000") // Add crazy z-index
     .style('pointer-events','none') // get rid of pointer events on tooltip
     .style('visibility','hidden') // Set to invisible
-    .text(""); // Set text to blank
+    .style('left', "-10000px") // set left
+    .style('top', "0px") // set top
 
     // Lighten or Darken Color
     function LightenDarkenColor(col, amt) {
@@ -299,80 +300,84 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     
         return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
     }
-} else {
+
+    // Tool tip variable needed for function
+    var chartToolTip = d3.select("#js-ci-chart__tooltip");
+
+    // Function for resetting the tooltip to be hidden
+    function resetChartTooltip() {
+        chartToolTip // Select tooltip
+        .style('visibility','hidden') // Set to invisible
+        .style('left', "-10000px") // set left
+        .style('top', "0px") // set top
+        .text(""); // Set text to blank
+
+    }
+
+    // Function for placing the tooltip on the donut chart
+    function donutChartTooltip(paths, hoverEffect) {
+
+        paths.on('mousemove',function(d,i){ // On mousemove over the paths
+            if ( matches("?custom-debug", url) ) {
+                console.log('Mouse move')
+            }
+            // Tooltip
+            var toolTipText = $(d.data).attr('data-label'); // Get the tooltip label
+            if( toolTipText != null && toolTipText != ""  ) {
+
+                chartToolTip.html(toolTipText); // set tooltip text
+                
+                //
+                var tooltipX = d3.event.pageX;
+                var toolTipWidth = d3.select("#js-ci-chart__tooltip").node().getBoundingClientRect().width;
+                var tooltipCenterPoint = parseInt(toolTipWidth / 2);
+
+
+                if ( tooltipX < tooltipCenterPoint ) { // If the mouse x axis is left than the half of the tool tip, do not let go off screen
+                    tooltipX = tooltipCenterPoint;
+                } else if ( parseInt(tooltipX + tooltipCenterPoint) > windowWidth ) {
+
+                    tooltipX = parseInt(windowWidth - tooltipCenterPoint);
+                }
+
+
+                // make tool tip visable and position it
+                chartToolTip // Select tooltip
+                .style('visibility','visible') // Set to visible
+                .style('left', tooltipX + "px") // set left
+                .style('top',d3.event.pageY - 25 + "px") // set top
+            }
+        
+            //Hover effect
+            if(hoverEffect) {
+                var originalColor = $(d.data).attr('data-color');
+                var hoverColor = $(d.data).attr('data-hover-color');
+                var darkenedColor = LightenDarkenColor(originalColor,50);
+                if (hoverColor) {
+                    $(this).attr('fill',hoverColor);
+                } else {
+                    $(this).attr('fill',darkenedColor);
+                    if ( matches("?custom-debug", url) ) {
+                        console.log('CI Debug - Charts Hover Status: Missing hoverColor')
+                    }
+                }
+            }
+        
+        });
+
+        paths.on('mouseout', function(d,i){ // on mouseout
+            d3.select("#js-ci-chart__tooltip").style('visibility','hidden'); // hide tooltip
+        
+            // reset hover effect color
+            if(hoverEffect) {
+                var originalColor = $(d.data).attr('data-color');
+                $(this).attr('fill',originalColor);
+            }
+        })
+    }
+
+} else { // End of if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() )
     if ( matches("?custom-debug", url) ) {
         console.error("CI Debug - Charts: Chart script is loading but Missing js-ci-pie-chart__legend or js-ci-pie-chart__graph class on the page");
     }
-}
-// Tool tip variable needed for function
-var chartToolTip = d3.select("#js-ci-chart__tooltip");
-
-// Function for resetting the tooltip to be hidden
-function resetChartTooltip () {
-    chartToolTip // Select tooltip
-    .style('visibility','hidden') // Set to invisible
-    .style('left', "0px") // set left
-    .style('top', "0px") // set top
-}
-
-// Function for placing the tooltip on the donut chart
-function donutChartTooltip(paths, hoverEffect) {
-
-    paths.on('mousemove',function(d,i){ // On mousemove over the paths
-        if ( matches("?custom-debug", url) ) {
-            console.log('Mouse move')
-        }
-        // Tooltip
-        var toolTipText = $(d.data).attr('data-label'); // Get the tooltip label
-        if( toolTipText != null && toolTipText != ""  ) {
-
-            chartToolTip.html(toolTipText); // set tooltip text
-            
-            //
-            var tooltipX = d3.event.pageX;
-            var toolTipWidth = d3.select("#js-ci-chart__tooltip").node().getBoundingClientRect().width;
-            var tooltipCenterPoint = parseInt(toolTipWidth / 2);
-
-
-            if ( tooltipX < tooltipCenterPoint ) { // If the mouse x axis is left than the half of the tool tip, do not let go off screen
-                tooltipX = tooltipCenterPoint;
-            } else if ( parseInt(tooltipX + tooltipCenterPoint) > windowWidth ) {
-
-                tooltipX = parseInt(windowWidth - tooltipCenterPoint);
-            }
-
-
-            // make tool tip visable and position it
-            chartToolTip // Select tooltip
-            .style('visibility','visible') // Set to visible
-            .style('left', tooltipX + "px") // set left
-            .style('top',d3.event.pageY - 25 + "px") // set top
-        }
-    
-        //Hover effect
-        if(hoverEffect) {
-            var originalColor = $(d.data).attr('data-color');
-            var hoverColor = $(d.data).attr('data-hover-color');
-            var darkenedColor = LightenDarkenColor(originalColor,50);
-            if (hoverColor) {
-                $(this).attr('fill',hoverColor);
-            } else {
-                $(this).attr('fill',darkenedColor);
-                if ( matches("?custom-debug", url) ) {
-                    console.log('CI Debug - Charts Hover Status: Missing hoverColor')
-                }
-            }
-        }
-    
-    });
-
-    paths.on('mouseout', function(d,i){ // on mouseout
-        d3.select("#js-ci-chart__tooltip").style('visibility','hidden'); // hide tooltip
-    
-        // reset hover effect color
-        if(hoverEffect) {
-            var originalColor = $(d.data).attr('data-color');
-            $(this).attr('fill',originalColor);
-        }
-    })
 }
