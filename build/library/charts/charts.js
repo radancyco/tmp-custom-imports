@@ -33,8 +33,6 @@ var ciChartInitialized = new Event('ciChartInitialized');
 var ciAnimateGraph = new Event('ciAnimateGraph');
 
 
-
-//
 if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
 
     $('.js-ci-pie-chart__legend').each(function() {
@@ -132,7 +130,8 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         .outerRadius(outerRadius) // set outer radius
         .innerRadius(innerRadius); //set inner radius
 
-        var pie = d3.pie()
+        //  Convert Legend Attributes to useable Pie Data
+        var legendToPie = d3.pie()
         .value(function(d){ return $(d).attr('data-value') }) // Get values for each span we created and return it
         .sort(null) // Sort
 
@@ -158,12 +157,17 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .attr('transform', 'scale(' + imageScale + ')')
         }
 
+        // Variable needed to store data for comparison such as for tweening animations
+        var previousData = d3.local();
+
+        // Inital Chart creation
         var paths = svg.selectAll('path') // Create virtual path element
-        .data(pie(pieChartData))
+        .data(legendToPie(pieChartData))
         .enter()
         .append('path') // Adds path
         .attr('d', arc) // Adds path points of arc created earlier
-        .attr('fill', function(d,i){ return $(d.data).attr('data-color'); }); // Get the color attribute from each span
+        .each(function(d) { previousData.set(this, d) }) // Setting current data in local variable
+        .attr('fill', function(d,i){ return $(d.data).attr('data-color'); }) // Get the color attribute from each span and applying themn to the paths
 
         // Stroke  set in legend
         if(stroke){
@@ -171,18 +175,52 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             .attr('stroke-width',strokeWidth);
         }
 
-
         // Animate the Graph or Legend
         if(animateGraph || animateLegend) {
             $(pieChartHolder).on('ciAnimateGraph', function (e) {
-                
-                
+
                 if ( matches("?custom-debug", url) ) {
                     console.log("CI Debug - Donut/Pie Chart: Event Fired")
                 }
 
+
+                // Getting updated variables incanse they have changed
+                animateGraph = pieChartLegend.attr('data-animate') == 'true' ? true : false;
+                animateGraphType = pieChartLegend.attr('data-animate-type');
+                animateDuration = pieChartLegend.attr('data-animate-duration') != undefined ? pieChartLegend.attr('data-animate-duration') : 400;
+                animateDelay= pieChartLegend.attr('data-animate-delay') != undefined ? pieChartLegend.attr('data-animate-delay') : 400;
+                animateLegend = pieChartLegend.attr('data-animate-legend') == 'true' ? true : false;
+                animateLegendType = pieChartLegend.attr('data-animate-type-legend') != undefined ? pieChartLegend.attr('data-animate-type-legend') : 'fadein';
+
+                // Function for updating chart data
+                function updatingData(chartNumber) {
+                    
+                    // Resetting Data Variable so that it actually updates
+                    data = "";
+                    data = $('.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"] .js-ci-pie-chart__data');
+                    numberOfslices = data.length - 1;
+
+
+                    // Assigning new data to paths and creating new paths
+                    svg.selectAll("path")
+                    .data(legendToPie(data))
+                    .enter()
+                    .append("path")
+                    
+                    
+                    // Deleting any extra paths that are not needed for the current ammount of data
+                    svg.selectAll("path").each(function(d,i){
+                        if ( i > numberOfslices ) {
+                            return this.remove();
+                        }
+                    })
+                }
+                
                 // Animation on the Graph
                 if ( animateGraph ) {
+
+                // only trigger the data updat if the chart is animated
+                updatingData(chartNumber);
 
                 // FadeIn Animation on the graph
                 
@@ -190,11 +228,13 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
                     var items = 0;
 
-                    paths.interrupt()
-                    .style('opacity',0) // set opacity to 0, to animate
+                    svg.selectAll("path") // Select all paths after updating data
+                    .attr('fill', function(d,i){ return $(d.data).attr('data-color'); }) // Associating the correct path colors incase they have changed
+                    .attr("d", arc) // Updating arcs in case they have changed
+                    .style('opacity',0) // set opacity to 0, getting ready to animate
                     .transition() // enable transition
                     .duration(animateDuration) // set animateSpeed duration
-                    .delay(function(d,i){return animateDelay * i }) // delay every path by 400
+                    .delay(function(d,i){return animateDelay * i }) // delay every path by animateDelay times how ever many items are before it
                     .style('opacity',1) // set opacity to 1 animated
                     .each(function(d,i){ return items += 1 });
                     
@@ -203,16 +243,50 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     .style('opacity',0) // set opacity to 0, to animate
                     .transition() // enable transition
                     .duration(animateDuration) // set animateSpeed duration
-                    .delay( animateDelay * items ) // delay every path by animateSpeed
+                    .delay( animateDelay * items ) // delay every path by animateDelay times how ever many items are before it
                     .style('opacity',1); // set opacity to 1 animated
                 
                 }  // END FadeIn Anaimation on the graph
                 
                 // Pie Filling Anaimtion on the graph
 
-                if ( matches("pie-filling", animateGraphType) ) {
+                else if ( matches("pie-filling", animateGraphType) ) {
                     
+
+                    // checking variable on legend to see if we should tween between excisting arcs or not
+                    tweeningBetweenData = $('.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"]').attr('data-tweening') == 'true' ? true : false;
                     
+                    // Animating between the angles that were there to the new angles
+                    svg.selectAll("path").attr('fill', function(d,i){ return $(d.data).attr('data-color'); }).attr("d", arc).transition().duration(animateDuration).attrTween("d", function (d) { 
+                        // Default startinging and end is 0
+                        var thisStart = 0; 
+                        var thisEnd = 0; 
+
+                        // We are replacing existing data we will use previous datat variable to get starting angles 
+                        if ( tweeningBetweenData ) {
+                            if ( previousData.get(this) != undefined ) {
+                                thisStart = previousData.get(this).startAngle; 
+                                thisEnd = previousData.get(this).endAngle; 
+                            } else {
+                                thisStart =  d.startAngle; 
+                                thisEnd =  d.startAngle; 
+                            }
+                        }
+
+
+                        var start = {startAngle: thisStart, endAngle: thisEnd};
+                        var interpolate = d3.interpolate(start, d);
+                        
+                        // Sonce the math has been done for the tweening we can overwrite the previous data with the new data
+                        previousData.set(this, d);
+                        return function (t) {
+                            return arc(interpolate(t));
+                        }               
+
+                    })
+
+                    
+
 
                 }// END Pie Filling Anaimtion on the graph
 
@@ -274,14 +348,18 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     $('body').on('resizeend', function () {
         // Update Window Size once done resizing
         windowWidth = $('body').innerWidth();
-        console.log('width ' + windowWidth);
+        if ( matches("?custom-debug", url) ) {
+            console.log('CI Debug - Screen width Update based Resize ' + windowWidth);
+        }
     });
 
     $(window).on('orientationchange', function () {
         setTimeout(function(){ 
             // Update Window Size if device orintation changes
             windowWidth = $('body').innerWidth();
-            console.log('width orientationchange ' + windowWidth);
+            if ( matches("?custom-debug", url) ) {
+                console.log('CI Debug - Screen Width Update based on orientationchange ' + windowWidth);
+            }
             // Reset ToolTip
             resetChartTooltip
         }, 300);
