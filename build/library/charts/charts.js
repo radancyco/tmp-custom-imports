@@ -58,7 +58,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         var animateDuration = pieChartLegend.attr('data-animate-duration') != undefined ? pieChartLegend.attr('data-animate-duration') : 400;
         var animateDelay= pieChartLegend.attr('data-animate-delay') != undefined ? pieChartLegend.attr('data-animate-delay') : 400;
         var animateLegend = pieChartLegend.attr('data-animate-legend') == 'true' ? true : false;
-        var animateLegendType = pieChartLegend.attr('data-animate-type-legend') != undefined ? pieChartLegend.attr('data-animate-type-legend') : 'fadein';
+        var animateLegendType = pieChartLegend.attr('data-animate-legend-type') != undefined ? pieChartLegend.attr('data-animate-legend-type') : 'fadein';
 
         var hoverEffect = pieChartLegend.attr('data-hover-effect') == 'true' ? true : false;
 
@@ -190,7 +190,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                 animateDuration = pieChartLegend.attr('data-animate-duration') != undefined ? pieChartLegend.attr('data-animate-duration') : 400;
                 animateDelay= pieChartLegend.attr('data-animate-delay') != undefined ? pieChartLegend.attr('data-animate-delay') : 400;
                 animateLegend = pieChartLegend.attr('data-animate-legend') == 'true' ? true : false;
-                animateLegendType = pieChartLegend.attr('data-animate-type-legend') != undefined ? pieChartLegend.attr('data-animate-type-legend') : 'fadein';
+                animateLegendType = pieChartLegend.attr('data-animate-legend-type') != undefined ? pieChartLegend.attr('data-animate-legend-type') : 'fadein';
 
                 // Function for updating chart data
                 function updatingData(chartNumber) {
@@ -340,30 +340,18 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
     // Global Variables needed for the tool tip
     var windowWidth = $('body').innerWidth();
 
-    $('body').on('resizestart', function () {
-        // Reset ToolTip
-        resetChartTooltip
-    });
-
-    $('body').on('resizeend', function () {
-        // Update Window Size once done resizing
+    var tooltipWindowWidthUpdate = ciDebounce(function() {
+        // Update Window Size if device resizes
         windowWidth = $('body').innerWidth();
         if ( matches("?custom-debug", url) ) {
-            console.log('CI Debug - Screen width Update based Resize ' + windowWidth);
+            console.log('CI Debug - Screen Width Update based on resize ' + windowWidth);
         }
-    });
+        // Reset ToolTip
+        resetChartTooltip();
 
-    $(window).on('orientationchange', function () {
-        setTimeout(function(){ 
-            // Update Window Size if device orintation changes
-            windowWidth = $('body').innerWidth();
-            if ( matches("?custom-debug", url) ) {
-                console.log('CI Debug - Screen Width Update based on orientationchange ' + windowWidth);
-            }
-            // Reset ToolTip
-            resetChartTooltip
-        }, 300);
-    });
+    }, 250, 'immediate');
+    
+    $(window).on('resize', tooltipWindowWidthUpdate);
 
     // Create our tooltip
     // This is not apart of the donut chart tooltip as we may want to reuse this tooltip for other things

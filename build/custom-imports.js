@@ -79,41 +79,33 @@ if (!String.prototype.includes) {
     };
 }
 
-// Function for detecting the start and end of resizing a window
-// Example of how to use it
-// $('body').on('resizestart', function () {
-//     console.log('resize start');
-// });
-// $('body').on('resizeend', function () {
-//     console.log('resize end');
-// });
-var resizeEventsTrigger = (function () {
-    function triggerResizeStart($el) {
-        $el.trigger('resizestart');
-        isStart = !isStart;
-    }
-
-    function triggerResizeEnd($el) {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(function () {
-            $el.trigger('resizeend');
-            isStart = !isStart;
-        }, delay);
-    }
-
-    var isStart = true;
-    var delay = 200;
-    var timeoutId;
-
-    return function ($el) {
-        isStart ? triggerResizeStart($el) : triggerResizeEnd($el);
-    };
-
-})();
-$( window ).on("resize", function() {
-    resizeEventsTrigger( $('body') );
-});
-
+// Debounce Fundtion
+// Use case:
+// var myEfficientFn = debounce(function() {
+// 	// All the taxing stuff you do
+// }, 250);
+// $(window).on('resize', myEfficientFn);
+// By default this triggers at the end of the event tiggering however 
+// If 'immediate' is passed, it will trigger the function on the
+// leading edge, instead of the trailing. As seen here
+// var rightAwayFn = debounce(function() {
+// 	// All the taxing stuff you do
+// }, 250, 'immediate');
+// $(window).on('resize', rightAwayFn);
+function ciDebounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
 // Variable needed to see if QA script has been ran
 if (typeof qaMode === 'undefined') {
