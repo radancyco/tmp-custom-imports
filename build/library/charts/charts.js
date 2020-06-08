@@ -349,7 +349,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         // Reset ToolTip
         resetChartTooltip();
 
-    }, 250, 'immediate');
+    }, 250);
     
     $(window).on('resize', tooltipWindowWidthUpdate);
 
