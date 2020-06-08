@@ -108,11 +108,13 @@ function ciDebounce(func, wait, immediate) {
 };
 
 // Variable needed to see if QA script has been ran
+// This only setups these varibales if they are already empty
 if (typeof qaMode === 'undefined') {
     var qaMode = "";
 }
 
-// Variable needed to see if Local script has been 
+// Variable needed to see if Local script has ran 
+// This only setups these varibales if they are already empty
 if (typeof localMode === 'undefined') {
     var localMode = "";
     var localModePath = "";
@@ -121,15 +123,15 @@ if (typeof localMode === 'undefined') {
 // Set global vairable for url
 var url = window.location.href;
 
-// The following document ready code will determine what version of the script will run
+// The following function will determine what version of the script will run
 // if there are no additional parameters in the url of thr browser it will load the production version of the script
 // if it contains ?custom-local-mode it will load the local version of the script
 // if it contains ?custom-qa-mode it will load the qa version of the script
 // if it contains ?custom-debug, it will not change what version of the script is running but it will so all the console logs
+// if it contains ?custom-local-mode&override-path=http://localhost:61651/tmp-custom-imports/build/ it will load the script from the build path you indicate
 
 
-(function() { // On Document ready
-
+function determiningCiMode() { // This function determines which mode the Custom Imports Script loads
 
     // Check URL and see if it wants qa version or prod
 
@@ -156,16 +158,25 @@ var url = window.location.href;
             // Load the local version of the custom script located on github
 
 
-            $.getScript("http://localhost/sites/tmp-custom-imports/build/custom-imports.js", function() {
+            localModePath  = "http://localhost/sites/tmp-custom-imports/build/";
+            // Use Case:
+            // ?custom-local-mode&override-path=http://localhost:61651/tmp-custom-imports/build/
+            if ( matches("&override-path", url) ) {
+                localModePath = getParameter("override-path", url)[0];
+            }
+
+
+            $.getScript(localModePath + "custom-imports.js", function() {
                 alert("Custom Imports Local Script now loaded");
-                localModePath = "http://localhost/sites/tmp-custom-imports/build/";
+                // localModePath = "http://localhost/sites/tmp-custom-imports/build/";
                 customImports();
             }).fail(function(){
-                $.getScript("http://localhost:61651/tmp-custom-imports/build/custom-imports.js", function() {
-                    alert("Drew's custom path  for Custom Imports Local Script now loaded");
-                    localModePath = "http://localhost:61651/tmp-custom-imports/build/";
-                    customImports();
-                })
+                // $.getScript(localModePath + "custom-imports.js", function() {
+                //     alert("Drew's custom path  for Custom Imports Local Script now loaded");
+                //     localModePath = "http://localhost:61651/tmp-custom-imports/build/";
+                //     customImports();
+                // })
+                alert("Custom Imports FAILED TO LOAD");
             });
         }
 
@@ -177,7 +188,7 @@ var url = window.location.href;
         customImports();
     }
 
-})();  // end on doc ready
+} // END ciMode
 
 //
 // The function that will call all other functions
@@ -373,3 +384,6 @@ function customImports() {
     } // end of $('#js-custom-imports').exists()
 
 } // End of customImports function
+
+// Start the show on the road
+determiningCiMode()
