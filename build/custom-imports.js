@@ -56,7 +56,16 @@ function UrlExists(url, cb){
     });
 }
 
-// PollyFill for Event
+// PollyFill for CustomEvent so that IE11 runs exactly like the other browsers
+// Use Case:
+// You setup the event
+// var yourFancyEvent = new CustomEvent('yourFancyEvent');
+// To run the event on speffici elements
+// elem.dispatchEvent('yourFancyEvent');
+// or run it on the whole document 
+// $(document).trigger('yourFancyEvent');
+// You then can listen where it is expected to run
+// $(document).on('yourFancyEvent', function (e) { });
 (function () {
     if ( typeof window.CustomEvent === "function" ) return false; // Check to make sure CustomEvent is not a function
 
