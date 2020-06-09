@@ -68,7 +68,7 @@ function UrlExists(url, cb){
     }
 
     CustomEvent.prototype = window.Event.prototype;
-    window.Event = CustomEvent;
+    window.CustomEvent = CustomEvent;
 })();
 
 // PollyFill for Includes

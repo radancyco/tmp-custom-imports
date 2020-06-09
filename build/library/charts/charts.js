@@ -26,11 +26,11 @@ function ratioForPadding(width, height) {
 // Script has been Initialized
 // Once the graph is built then it will trigger this event, which will allow 3rd party scripts like sliders to wait
 // until this event is fired. To use this you would wrap the 3rd party script in $(document).on('ciChartInitialized', function () { });
-var ciChartInitialized = new Event('ciChartInitialized');
+var ciChartInitialized = new CustomEvent('ciChartInitialized');
 
 // Animation event when you dispatch this event it will run the animation on the chart
 // To run the event: elem.dispatchEvent('ciAnimateGraph');
-var ciAnimateGraph = new Event('ciAnimateGraph');
+var ciAnimateGraph = new CustomEvent('ciAnimateGraph');
 
 
 if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
