@@ -1,4 +1,3 @@
-// TODO: change all console logs into debug logs and try to make them readable
 // TODO: Minify JS (Probably need to make sure all for custom imports is minified)
 var hubFeature = {
     Init: function(hubID){
@@ -98,8 +97,6 @@ var hubFeature = {
 
         });
 
-
-
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
         $(".js-hub-filter-button").on('click',function(i){
@@ -172,10 +169,14 @@ var hubFeature = {
             //Find out if we are over maxLoad
             if ( ( maxLoad != 0 && currentLoad >= maxLoad ) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load or if maxload is not set to zero but loadMore is set to show all 
                 overMax = 1;
-                console.log("Hub ID: " + thisHub.attr('id') + " Message: Over Max")
+                if ( matches("?custom-debug", url) ) {
+                    console.log("Hub ID: " + thisHub.attr('id') + " Message: Over Max")
+                }
             } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
                 overMax = 0;
-                console.log("Hub ID: " + thisHub.attr('id') + " Message: Not Over Max")
+                if ( matches("?custom-debug", url) ) {
+                    console.log("Hub ID: " + thisHub.attr('id') + " Message: Not Over Max")
+                }
             }
             
             if( overMax == 1 ) { // If we have hit our max show
@@ -246,7 +247,9 @@ var hubFeature = {
 
             dValue = $(this).attr("data-query"); // prefilter data
 
-            console.log("NARRPW: " + dNarrowMappings)
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Narrow Prefilters: " + dNarrowMappings)
+            }
 
             if( dNarrowMappings == 0 || isNaN(dNarrowMappings) ) { // Each prefilter adds to the results NOTE: if data-narrowmappings is not setup it will aways add and not narrow
                 
@@ -284,11 +287,15 @@ var hubFeature = {
 
         if( dKeepMapping == 0) { // Remove mappings so that it does not show other mappings in form when filtering
             $(hubID + " .js-hub-mappings li:not(.js-keep-data)").remove();
-            console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Mappings Deleted");
+            }
         }
 
         if(setupFilters == 1){
-            console.log("Hub ID: " + hubID + " Message: FINISHED");
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: FINISHED");
+            }
             hubFeature.setupFilters(hubID);
         }
 
@@ -347,14 +354,23 @@ var hubFeature = {
 
         if ( ( criteria.includes("date") ) ) { // test to see if the word date is in the criteria target
             date = 1;
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Sorting using Date based caluations");
+            }
         }
 
-        console.log("SORTING DATE");
-        console.log(criteria);
-        console.log(order);
+        if ( matches("?custom-debug", url) ) {
+            console.log("Hub ID: " + hubID + " Message: Sort criteria - " + criteria);
+            if ( order == 1 || order == 2  ) {
+                console.log("Hub ID: " + hubID + " Message: Sort Order - 1 Descending");
+            } else if ( order == 1 || order == 2  ) {
+                console.log("Hub ID: " + hubID + " Message: Sort Order - 2 Ascending");
+            } else if ( order == 1 || order == 2  ) {
+                console.log("Hub ID: " + hubID + " Message: Sort Order - 0 Random");
+            }
+        }
 
         var itemsOrdered = itemsToSort.detach().get(); // Creates and array we can sort on
-
 
         if ( order == 1 || order == 2  ) { // Make sure we aren't sorting by random
 
@@ -366,7 +382,6 @@ var hubFeature = {
                     a = $(a).attr(criteria);
                     b = $(b).attr(criteria);
                 }
-
                 
                 if ( order == 1 ) {
                     // Descending
@@ -434,7 +449,6 @@ var hubFeature = {
         if(sorting == 1){
             // resets the data and then applies a sort based on the date
             // The load more will trigger again when sort happens
-            console.log("getting here");
             hubFeature.sortHub(hubID, sortingCriteria, sortingOrder);
         }
 
@@ -461,7 +475,9 @@ var hubFeature = {
             $(hubID + " .js-hub-error").remove()
         }
 
-        console.log(getString); 
+        if ( matches("?custom-debug", url) ) {
+            console.log('Hub ID: ' + hubID + '  Message: Button Data - ' + getString); 
+        }
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
         $(hubID + " .js-hub-mappings > li" + getString)
             .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
@@ -479,10 +495,11 @@ var hubFeature = {
         var curField, 
             curValue,
             isWeighted ="",
-            fieldsUsed ="",
+            fieldsUsed = [],
             a = 1,
             noResultsText = $(hubID).attr("data-no-results-text"),
-            isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
+            isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight"),
+            numberOfResults;
 
         // Reset data
         $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
@@ -497,36 +514,93 @@ var hubFeature = {
             curField = $(this).attr("id");
             curValue = $(this).val();
             if(curValue != "none"){
+                // Collecting select values in the loop
+                fieldsUsed.push("[" + curField + "='" + curValue + "']");
+            }
+        }).promise().done(function(){
+            if ( matches("?custom-debug", url) ) {
                 // weighted search
                 if(isWeighted){
+                    
                     console.log("Hub ID: " + hubID + " Message: weighted running");
-                    $(hubID + " .js-hub-mappings > li[" + curField + "='" + curValue + "']")
-                    .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');                        
-                    fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
-                    $(hubID + " .js-hub-mappings > li" + fieldsUsed).each(function(){
-                    $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', a);  
-                    })
-                    a = a + 1;
-                } else{
-                    console.log("Hub ID: " + hubID + " Message: not-weighted running");
-                    // Collecting select values in the loop
-                    fieldsUsed = fieldsUsed + "[" + curField + "='" + curValue + "']";
+                } else { // Each Match
+                    console.log("Hub ID: " + hubID + " Message: eact match running");
                 }
+
+                console.log("Hub ID: " + hubID + " Message: fields to match on " + fieldsUsed);
             }
-        });
-        
-        // After filter values have been identified
+
+            // Reset the number of results at the start of each new appying of filters
+            numberOfResults = 0;
+
+            $(hubID + " .js-hub-mappings").each(function(){ // Loop through each items mappings
+
+                var thisMapping = $(this),
+                numberOfMatchesPerCard = 0,
+                weight = 0;
+
+                $.each(fieldsUsed, function(i, val){
+
+                    // For this Field we only want one match but need to reset pre fieldsUsed
+                    singleMatch = false;
+
+                    // Loop through each mapping in this item
+                    thisMapping.children("li").each(function(){ 
+
+                        if( singleMatch == false ) {
+
+                            if( $(this).filter(val).length > 0 ) {
+                                numberOfMatchesPerCard++
+                                singleMatch = true;
+                                if(isWeighted){
+                                    // First we evaluate what the value should be added to weighted match if there this value matches
+                                    // Each addtional value is worth less
+                                    calulatedValue = parseFloat( 1 / (i+1) );
+                                    // Adding the calulated weight to any previous weight
+                                    weight = weight + calulatedValue;
+                                }
+                            }
+
+                            if ( matches("?custom-debug", url) ) {
+                                // Added class on each mapping to show what was checked
+                                $(this).addClass("checked-" + i + "-" + val)
+                            }
+                        }
+                        
+
+                    })// end LI loop inside each item mapping
+
+                })// end of fieldsUsed loop
+
+                if(isWeighted){ // What makes weighted match work
+                    if(numberOfMatchesPerCard > 0) {
+                        thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', weight.toFixed(2) );
+                    } 
+                } else { // What makes exact match work
+                    if(numberOfMatchesPerCard == fieldsUsed.length) {
+                        thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter"); 
+                    } 
+                }
+
+                numberOfResults++
+
+            }) // end js-hub-mapping loop and end of new exact match
+
         if(isWeighted){
-            // Sort by relevancy
+
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Weighted matches - " + numberOfResults )
+            }
+
+            // If weight match then sort based on weight
             hubFeature.sortHub(hubID,"data-weight", 1);
-            
-        } else { // Not Weighted also know as exact match
-            
-            console.log("Hub ID: " + hubID + " Message: fields matched " + fieldsUsed);
-            // Using collected filter values to do an  exact match
-            $(hubID + " .js-hub-mappings > li" + fieldsUsed).each(function(){
-                $(this).parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");  
-            });
+
+        } else {
+
+            // if exacth match sort based on set critira 
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Exact matches - " + numberOfResults )
+            }
 
             // Sorting data after filter (Needed if using nth-child stlying)
             var sorting = +$(hubID + " .js-hub-content").attr("data-sort");
@@ -535,26 +609,26 @@ var hubFeature = {
             if(sorting == 1){
                 // resets the data and then applies a sort based on the date
                 // The load more will trigger again when sort happens
-                console.log("getting here");
                 hubFeature.sortHub(hubID, sortingCriteria, sortingOrder);
             }
-    
-
-            console.log("Exact matches: " + $(hubID + " .js-hub-mappings > li" + fieldsUsed).length )
-
-            // Added error message if no results found
-            if ( $(hubID + " .js-hub-mappings > li" + fieldsUsed).length < 1 && typeof noResultsText != "undefined") {
-                var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
-                $(hubID + " .js-hub-content").before(noResultsHtml);
-            }
-
         }
+
+
+        // Added error message if no results found
+        if ( numberOfResults < 1 && typeof noResultsText != "undefined") {
+            var noResultsHtml = '<p class="js-hub-error hub__error">' + noResultsText + '</p>';
+            $(hubID + " .js-hub-content").before(noResultsHtml);
+        }
+
+
         
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
 
         // Aria Live message gets updated
         hubFeature.ariaMessaging(hubID);
+
+    })
 
     },
     loadMoreReset: function(hubID){
@@ -572,33 +646,45 @@ var hubFeature = {
         // get the ammount of tiles to be visable on load or reset
         if ( thisHub.attr('data-load-more-current') != null ) { // if it is not null then that means it has run before and we should ue current count instead of default
             setCount = +thisHub.attr('data-load-more-current');
-            console.log("Hub ID: " + hubID + " Message: Current Already Exists")
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Current Already Exists")
+            }
         } else {
             setCount = +thisHub.attr('data-load-more-default'); // get the ammount of tiles to be visable on load
             thisHub.attr('data-load-more-current', setCount); // Set the current load ammount back to ammount of tiles to be visable on load
-            console.log("Hub ID: " + hubID + " Message: Current  Does not Exist but is now set")
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Current  Does not Exist but is now set")
+            }
         }
 
         if ( setCount == 0 ) { // if set count is zero we need to make sure we know what maxload is
             setCount = maxLoad; // Set the current load ammount to maxload
             thisHub.attr('data-load-more-current', maxLoad); // Set the current load ammount to maxload
-            console.log("Hub ID: " + hubID + " Message: Set count Updated");
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Set count Updated");
+            }
         }
         
         //Find out if we are over maxLoad
         
         if ( (maxLoad != 0 && setCount >= maxLoad) ) { // Make sure maxLoad is not set to 0 and then check if current count is higher than max load
             overMax = 1;
-            console.log("Hub ID: " + hubID + " Message: Over Max")
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Over Max")
+            }
         } else if ( maxLoad == 0 ) { // If maxLoad is set to zero then we will never hit maxload
             overMax = 0;
-            console.log("Hub ID: " + hubID + " Message: Not Over Max")
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Not Over Max")
+            }
         }
 
         
         if( setCount > 0 && overMax == 0 ) { // if default load is higher than 0 and we are not over max load
             thisHub.find('.js-hub-item.showing-by-filter').removeClass('hidden-by-load showing-by-load'); // Show all tiles to start fresh
-            console.log("fired if default load is higher than 0 and we are not over max load ")
+            if ( matches("?custom-debug", url) ) {
+                console.log("Hub ID: " + hubID + " Message: Fired if default load is higher than 0 and we are not over max load ")
+            }
             thisHub.find('.js-hub-item.showing-by-filter').addClass('hidden-by-load'); // Hide all tiles
             thisHub.find('.js-hub-item.showing-by-filter').slice(0, setCount).removeClass('hidden-by-load').addClass('showing-by-load');  // Show only the ammount of tiles to be visable on load
         } else {
@@ -654,7 +740,9 @@ var hubFeature = {
 // JQUERY READY FUNCTION  
 $(function(){  
   // initiates hub
-    console.log("Message: HUB JS INIT FOUND")
+    if ( matches("?custom-debug", url) ) {
+        console.log("Message: HUB JS INIT FOUND")
+    }
     if($(".js-hub").length){
         // in case we have multiple hubs on a page
         $(".js-hub").each(function(){
