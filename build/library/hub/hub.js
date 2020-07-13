@@ -531,7 +531,7 @@ var hubFeature = {
             }
 
             // Reset the number of results at the start of each new appying of filters
-            numberOfResults = 0;
+             = 0;
 
             $(hubID + " .js-hub-mappings").each(function(){ // Loop through each items mappings
 
@@ -575,14 +575,14 @@ var hubFeature = {
                 if(isWeighted){ // What makes weighted match work
                     if(numberOfMatchesPerCard > 0) {
                         thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', weight.toFixed(2) );
+                        numberOfResults++
                     } 
                 } else { // What makes exact match work
                     if(numberOfMatchesPerCard == fieldsUsed.length) {
                         thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter"); 
+                        numberOfResults++
                     } 
                 }
-
-                numberOfResults++
 
             }) // end js-hub-mapping loop and end of new exact match
 
