@@ -531,7 +531,7 @@ var hubFeature = {
             }
 
             // Reset the number of results at the start of each new appying of filters
-             = 0;
+            numberOfResults = 0;
 
             $(hubID + " .js-hub-mappings").each(function(){ // Loop through each items mappings
 
