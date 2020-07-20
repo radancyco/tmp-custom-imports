@@ -379,8 +379,8 @@ var thisCat = "";
                                 data-hub-link="@contentPage.LinkUrl" 
                                 data-hub-image="@contentPage.ThumbnailFilePath" 
                                 data-hub-created-by="@pageCreated" 
-                                data-hub-date-updated="@contentPage.DateUpdated" 
-                                data-hub-date-created="@contentPage.DateCreated"
+                                data-hub-date-updated="@contentPage.DateUpdated.ToString("MM/dd/yyyy HH:mm:ss")" 
+                                data-hub-date-created="@contentPage.DateCreated.ToString("MM/dd/yyyy HH:mm:ss")"
                                 data-hub-event-date="@eventDate">
                                 
                                 @* ========================== *@
