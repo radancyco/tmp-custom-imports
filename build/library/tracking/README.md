@@ -4,8 +4,8 @@ This is script that can be called onto a site via the custom importer `<script i
 
 # Features
 
-Does the tracking for the TB HUB
-Makes it so that if there are TB data attributes for tracking and another JS on an element that it still triggers tracking.
+* Does the tracking for the TB HUB
+* Makes it so that if there are TB data attributes for tracking and another JS on an element that it still triggers tracking.
 
 # Use case
 
