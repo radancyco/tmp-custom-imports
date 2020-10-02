@@ -55,3 +55,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 * hubFeature.sortHub("#data-hub-1","data-hub-title", 2);
 * hubFeature.sortHub("#data-hub-1","data-weight", 1);
 * hubFeature.sortHub("#data-hub-1","data-hub-event-date", 1);
+
+# Troubleshooting
+## Firefox is not sorting by date correctly
+Make sure your sort criteria is using the mm/dd/yyyy format if it is using mm-dd-yyyy then you can change it in razor wiht .Replace("-","/); 
