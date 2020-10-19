@@ -319,12 +319,13 @@ var hubFeature = {
             $(hubID + " .js-hub-mappings li[" + thisFilter + "]").each(function(w){
                 var v = $(this).attr(thisFilter);
                 if(v != "ALL"){
-                    keyA.push(v);
+                    // Check to make sure the value is unique before adding it to the array
+                    if ($.inArray(v, keyA) == -1) keyA.push(v);
+
                 }
             })
             
             keyA.sort();
-            keyA = $.uniqueSort(keyA);
             // add options to the keyword field
             $.each( keyA, function( i, value ) {
                 $(hubID + " select#" + thisFilter).append("<option class='hub-filter__option' value='" + value + "'>" + value + "</option>");
