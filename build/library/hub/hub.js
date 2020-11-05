@@ -485,9 +485,9 @@ var hubFeature = {
         if ( matches("?custom-debug", url) ) {
             console.log('Hub ID: ' + hubID + '  Message: Button Data - ' + getString); 
         }
-        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
+        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter");
         $(hubID + " .js-hub-mappings > li" + getString)
-            .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight','1');
+            .parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter");
 
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
