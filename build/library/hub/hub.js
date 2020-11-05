@@ -422,6 +422,8 @@ var hubFeature = {
     },
     resetData: function(hubID){
 
+        var isWeighted = +$(hubID + " .js-hub-content").attr("data-filter-weight");
+
 
         if ( $(hubID).hasClass("filtered") ) {
             // TODO: Determine if we want to force a message on reset
@@ -436,7 +438,11 @@ var hubFeature = {
         $(hubID).removeClass("filtered");
     
         // Remove load more classes
-        $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').attr('data-weight','0').addClass("showing-by-filter");
+        if(isWeighted) {
+            $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').attr('data-weight','0').attr('data-weighted-filters-matched', '0').addClass("showing-by-filter");
+        } else {
+            $(hubID + " .js-hub-item").removeClass('hidden-by-load showing-by-load hidden-by-filter').addClass("showing-by-filter");
+        }
 
         // Remove any visable error messages
         if ( $(hubID + " .js-hub-error").length ) {
@@ -503,7 +509,7 @@ var hubFeature = {
             numberOfResults;
 
         // Reset data
-        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0");
+        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0").attr('data-weighted-filters-matched', "0");
         
         // Remove any visable error messages
         if ( $(hubID + " .js-hub-error").length ) {
@@ -553,9 +559,9 @@ var hubFeature = {
                             if( $(this).filter(val).length > 0 ) {
                                 numberOfMatchesPerCard++
                                 singleMatch = true;
-                                if(isWeighted){
-                                    // First we evaluate what the value should be added to weighted match if there this value matches
-                                    // Each addtional value is worth less
+                                if(isWeighted){                                    
+                                    // Each filter is worth less from left to right with the first filter being worth 1 point
+                                    // the second filter would be worth .5 points the 3rd would be worth .33 and so on (You could have 100 dropdown filters due to the weight being fixed to 2 decimals)
                                     calulatedValue = parseFloat( 1 / (i+1) );
                                     // Adding the calulated weight to any previous weight
                                     weight = weight + calulatedValue;
@@ -573,9 +579,15 @@ var hubFeature = {
 
                 })// end of fieldsUsed loop
 
+                // The weight produced from thefieldsUsed loop is the value that is based on which filters were matched
+                // We add that total to how many matches per card to get tha actual weight
+                // For example if the first filter is a match and the only match the card will have a weight of 2.00 points.
+                // a second example is if a card has match with the first filter and the third filter you would have a weight of 3.33 (filter value of 1.33 plus number of matces 2)
+                weight = weight + numberOfMatchesPerCard;
+
                 if(isWeighted){ // What makes weighted match work
                     if(numberOfMatchesPerCard > 0) {
-                        thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', weight.toFixed(2) );
+                        thisMapping.parents(".js-hub-item").addClass("showing-by-filter").removeClass("hidden-by-filter").attr('data-weight', weight.toFixed(2)).attr('data-weighted-filters-matched', numberOfMatchesPerCard);
                         numberOfResults++
                     } 
                 } else { // What makes exact match work
