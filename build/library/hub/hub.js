@@ -509,7 +509,11 @@ var hubFeature = {
             numberOfResults;
 
         // Reset data
-        $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0").attr('data-weighted-filters-matched', "0");
+        if(isWeighted){
+            $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter").attr("data-weight","0").attr('data-weighted-filters-matched', "0");
+        } else {
+            $(hubID + " .js-hub-item").removeClass("showing-by-filter").addClass("hidden-by-filter");
+        }
         
         // Remove any visable error messages
         if ( $(hubID + " .js-hub-error").length ) {
