@@ -75,6 +75,12 @@
     /* FILTER WEIGHTED OR EXACT MATCH  (1 = Weighted Match / 0 = Exact Match) */
     /* Weighted match will always return a restult, with the most relevant matches first */
     int filterWeighted = 0;
+    /* Auto submit is only an option when there is only one dropdown so that way Aria live isn't trying to keep updating
+    the user until they are ready  (1 = True / 0 = False) */
+    int autoSubmit = 0;
+    /* Hiding the reset button is only an option when there is only on dropdown, by default that button is there to make it
+    easy for you users with multiple fields  (1 = True / 0 = False) */
+    int hideReset = 0;
 
     /* ======================= */
     /* QUERY FILTERS */
@@ -239,6 +245,7 @@ var thisCat = "";
 <section class="js-hub hub__wrapper" 
         id="@thisHubID" 
         data-show-form="@showFilterForm" 
+        data-auto-submit="@autoSubmit" 
         data-prefilter="@usePreFilter"
         data-keepmappings="@keepMappings"
         data-narrowmappings="@narrowMappings"
@@ -305,8 +312,12 @@ var thisCat = "";
                         @addFilter( 1 ,"Hours Per Week","facet-hours-per-week","Select Hours Per Week", thisHubID)
                         @addFilter( 1 ,"Salary Relocation","facet-salary-relocation","Select Salary Relocation", thisHubID)
                         @addFilter( 1 ,"Salary Time","facet-salary-time","Select Salary Time", thisHubID)
-                        <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
-                        <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
+                        @if (autoSubmit != 1) {
+                            <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
+                        }
+                        @if (hideReset != 1) {
+                            <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
+                        }
                     </div>
                 </fieldset>
             </form>

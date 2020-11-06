@@ -7,6 +7,7 @@ var hubFeature = {
         $(hubID).addClass('initializing');
         var isPrefiltered = $(hubID).attr('data-prefilter');
         var showFiltersForm = $(hubID).attr('data-show-form');
+        var autoSubmit = $(hubID).attr('data-auto-submit');
         // disable form filter and reset on load
         $(hubID + ' .js-hub-reset-filters').prop('disabled', true);
         $(hubID + ' .js-hub-submit-filters').prop('disabled', true);
@@ -23,15 +24,37 @@ var hubFeature = {
         }
         $(hubID).addClass('initialized').removeClass('initializing');
 
-
-
-
         //===============================
         //filter button on form
-        $('.js-hub-submit-filters').on('click',function(i){
-            i.preventDefault();
+
+        // By default the form requires a submit button and the filters do not activate on change
+        var formSubmitySelector = '.js-hub-submit-filters';
+        var formEvent = 'click';
+        // We will check for autosubmmit feature beiong used
+        if(autoSubmit == 1){
+            formSubmitySelector = '.js-hub-filter-form select';
+            formEvent = 'change';
+        }
+
+        // Depending on the above settings our listener is either added to the submit button click or change event  on the filter select
+        $(hubID + ' ' + formSubmitySelector).on(formEvent,function(i){
+            // Since there can be multiple HUBs on a page, getting these variables again will ensure this filter is only interacting with the correct HUB.
             var hubID = '#' + $(this).attr('data-hub-id'),
-                valsExist = '';
+            valsExist = '';
+            var autoSubmit = $(hubID).attr('data-auto-submit');
+
+            if(autoSubmit != 1){
+                // Since by default the selector is a button we want to prevent default so it doesn't try to submit the form.
+                i.preventDefault();
+            } else {
+                // if auto submit is being used we have to check to verify that only ONE filter dropdown is being used.
+                // This was a product decision along with accesibilty and UX as it was determined that when there are more than one dropdowns a user would want a submit button
+                if( $(hubID + ' ' + formSubmitySelector).length > 1) {
+                    console.error('CI Error - HUB: Auto submit is only allowed when there is one filter dropdown.')
+                    return
+                }
+            }
+
             $(hubID + ' .js-hub-filter-form select').each(function(w){
                 var getVals = '#' + $(this).attr('id'),
                     hasVals = $(hubID + ' ' + getVals).val();
