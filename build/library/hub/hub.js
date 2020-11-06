@@ -1,6 +1,6 @@
 // TODO: Minify JS (Probably need to make sure all for custom imports is minified)
 var hubFeature = {
-    Init: function(hubID){
+    Init: function(hubID, count, final){
         //===============================
         // runs on load
         //===============================
@@ -23,6 +23,11 @@ var hubFeature = {
             }
         }
         $(hubID).addClass('initialized').removeClass('initializing');
+        // Trigger an event that a developer could listen for
+        // A developer could locally use $(document).on('hubInitialized', function (e) {})
+        var hubInitialized = new CustomEvent('hubInitialized', { detail: { 'hubID': hubID, 'count': count, 'final': final} } );
+        document.dispatchEvent(hubInitialized);
+
 
         //===============================
         //filter button on form
@@ -77,13 +82,17 @@ var hubFeature = {
 
         //===============================
         //reset button on filter form
-        $('.js-hub-reset-filters').on('click',function(i){
+        $(hubID + ' .js-hub-reset-filters').on('click',function(i){
             i.preventDefault();
             var hubID = '#' + $(this).attr('data-hub-id');
             if(hubID != undefined){
 
                 if( $(hubID).hasClass('filtered') ) {
                     hubFeature.resetData(hubID);
+                    // Trigger an event that a developer could listen for
+                    // A developer could locally use $(document).on('hubInteraction', function (e) {})
+                    var hubInteraction = new CustomEvent('hubInteraction', { detail: { 'hubID': hubID, 'interactionType': 'resetFilters' } } );
+                    document.dispatchEvent(hubInteraction);
                 } else {
 
                     $(hubID + ' .js-hub-reset-filters').prop('disabled', true);
@@ -126,7 +135,7 @@ var hubFeature = {
 
         //===============================
         //filter by buttons click event  including what to do if it is the reset button
-        $('.js-hub-filter-button').on('click',function(i){
+        $(hubID + ' .js-hub-filter-button').on('click',function(i){
             i.preventDefault();
             var hubID = '#' + $(this).attr('data-hub-id');
             
@@ -137,6 +146,10 @@ var hubFeature = {
                 
                 if($(this).hasClass('js-hub-filter-button-reset')){ // If this is the reset button then do the following
                     hubFeature.resetData(hubID);
+                    // Trigger an event that a developer could listen for
+                    // A developer could locally use $(document).on('hubInteraction', function (e) {})
+                    var hubInteraction = new CustomEvent('hubInteraction', { detail: { 'hubID': hubID, 'interactionType': 'resetFilters' } } );
+                    document.dispatchEvent(hubInteraction);
                 } else  { // IF this is a regular filter button
                     var bValue = $(this).attr('data-query');
                     hubFeature.filterByButtonData(hubID, bValue);
@@ -516,6 +529,11 @@ var hubFeature = {
         $(hubID + ' .js-hub-mappings > li' + getString)
             .parents('.js-hub-item').addClass('showing-by-filter').removeClass('hidden-by-filter');
 
+        // Trigger an event that a developer could listen for
+        // A developer could locally use $(document).on('hubInteraction', function (e) {})
+        var hubInteraction = new CustomEvent('hubInteraction', { detail: { 'hubID': hubID, 'interactionType': 'filterByButtonData' , 'numberOfResults':  $(hubID + ' .js-hub-mappings > li' + getString).length  } } );
+        document.dispatchEvent(hubInteraction);
+
         // Reset Classes so load more is not accidently hidding anything
         hubFeature.loadMoreReset(hubID);
 
@@ -672,6 +690,11 @@ var hubFeature = {
         // Aria Live message gets updated
         hubFeature.ariaMessaging(hubID);
 
+        // Trigger an event that a developer could listen for
+        // A developer could locally use $(document).on('hubInteraction', function (e) {})
+        var hubInteraction = new CustomEvent('hubInteraction', { detail: { 'hubID': hubID, 'interactionType': 'filterByFormData' , 'numberOfResults': numberOfResults } } );
+        document.dispatchEvent(hubInteraction);
+
     })
 
     },
@@ -787,17 +810,26 @@ $(function(){
     if ( matches('?custom-debug', url) ) {
         console.log('Message: HUB JS INIT FOUND')
     }
-    if($('.js-hub').length){
+    var numberOfHubs = $('.js-hub').length;
+    if(numberOfHubs){
         // in case we have multiple hubs on a page
-        $('.js-hub').each(function(){
+        $('.js-hub').each(function(index){
             var h = '#' + $(this).attr('id');
             var l = $('.js-hub[id="' + $(this).attr('id') + '"]').length;
             // Error checking to prevent the HUB from inititing if the developer adds more than one HUB with the same ID on the page.
             if ( l > 1 ) {
                 console.error('CI Error - HUB: Did not initiate due to there being multiple HUBs with the same ID.');
             } else {
-                hubFeature.Init(h);
+                // Check index and offset the fact it starts at 0
+                var count = index + 1;
+                // Check to see if it is the final HUB to run on the page and pass that data to the event
+                if(count == numberOfHubs) {
+                    hubFeature.Init(h, count, "yes");
+                } else {
+                    hubFeature.Init(h, count, "no");
+                }
             }
+
         })
     }
 })

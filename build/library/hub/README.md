@@ -35,7 +35,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 
 6. Now go through the configuration questions https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#hub-questions and update the options in the module razor
    * Make sure to read all comments in the razor, as that will help you know what to change and give you examples of how to customize
-   * Filter by Forms, by default all options are visible, Do NOT delete the @addfilter, instead if you want to not have the filter visible change the 1 to a 0 for that filter.
+   * Filter by Forms, by default all options are visible, Do NOT delete the `@addfilter`, instead if you want to not have the filter visible change the 1 to a 0 for that filter.
 
 7. SASS Edits
    * Try to keep the same naming convention
@@ -55,6 +55,23 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 * hubFeature.sortHub("#data-hub-1","data-hub-title", 2);
 * hubFeature.sortHub("#data-hub-1","data-weight", 1);
 * hubFeature.sortHub("#data-hub-1","data-hub-event-date", 1);
+
+## Listening for HUB events
+* Hub Initialized means that the prefilters and form filters have been setup
+   You can listen for this event via the following function and even determine when all HUBs on the page have initialized.
+``` javascript
+$(document).on('hubInitialized', function (e) {
+    console.log("Initialized for HubID: " + e.detail.hubID+ " Number of HUBs to initialize: " + e.detail.index + " All HUBs initialized: " + e.detail.final)
+})
+```
+
+* There are some HUB interactions you can listen for as well, not all of them will provide a number of results data.
+   Interaction Types: resetFilters, filterByButtonData, filterByFormData
+``` javascript
+$(document).on('hubInteraction', function (e) {
+    console.log("HUB Event for HubID: " + e.detail.hubID + " Interaction Type: " + e.detail.interactionType + " Number of Results: " + e.detail.numberOfResults )
+})
+```
 
 # Troubleshooting
 ## Firefox is not sorting by date correctly
