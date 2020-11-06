@@ -74,7 +74,7 @@ $(document).on('hubInteraction', function (e) {
 ```
 
 ## Triggering the form to filter outside of the normal filter
-   * Important: It is highly recommended to never hide any of the filters because when the user uses the reset filter button then the hidden filter would also be removed unknowingly to the user.
+   * **IMPORTANT:** It is highly recommended to never hide any of the filters because when the user uses the reset filter button then the hidden filter would also be removed unknowingly to the user.
 ``` javascript
 function triggerHubFilter (hubID, filter, value){
   $(hubID + '-' + filter).val(value).change();
@@ -84,7 +84,7 @@ function triggerHubFilter (hubID, filter, value){
 
 * Also remember to wait for the HUB to initialize 
 
-```
+``` javascript
 var numberOfHubs = $('.js-hub').length;
 var numberOfInitialized = $('.js-hub.initialized').length;
 // First check if it already initialized before your script has ran
