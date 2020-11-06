@@ -824,13 +824,12 @@ $(function(){
                 var count = index + 1;
                 // Check to see if it is the final HUB to run on the page and pass that data to the event
                 if(count == numberOfHubs) {
-                    hubFeature.Init(h, count, "yes");
+                    hubFeature.Init(h, count, true);
                 } else {
-                    hubFeature.Init(h, count, "no");
+                    hubFeature.Init(h, count, false);
                 }
             }
 
         })
     }
 })
-

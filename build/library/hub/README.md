@@ -61,7 +61,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
    You can listen for this event via the following function and even determine when all HUBs on the page have initialized.
 ``` javascript
 $(document).on('hubInitialized', function (e) {
-    console.log("Initialized for HubID: " + e.detail.hubID+ " Number of HUBs to initialize: " + e.detail.index + " All HUBs initialized: " + e.detail.final)
+    console.log('Initialized for HubID: ' + e.detail.hubID + ' Number of HUBs to initialize: ' + e.detail.index + ' All HUBs initialized: ' + e.detail.final)
 })
 ```
 
@@ -69,8 +69,36 @@ $(document).on('hubInitialized', function (e) {
    Interaction Types: resetFilters, filterByButtonData, filterByFormData
 ``` javascript
 $(document).on('hubInteraction', function (e) {
-    console.log("HUB Event for HubID: " + e.detail.hubID + " Interaction Type: " + e.detail.interactionType + " Number of Results: " + e.detail.numberOfResults )
+    console.log('HUB Event for HubID: ' + e.detail.hubID + ' Interaction Type: ' + e.detail.interactionType + ' Number of Results: ' + e.detail.numberOfResults )
 })
+```
+
+## Triggering the form to filter outside of the normal filter
+   * Important: It is highly recommended to never hide any of the filters because when the user uses the reset filter button then the hidden filter would also be removed unknowingly to the user.
+``` javascript
+function triggerHubFilter (hubID, filter, value){
+  $(hubID + '-' + filter).val(value).change();
+  $(hubID + ' .js-hub-submit-filters').trigger('click');
+}
+```
+
+* Also remember to wait for the HUB to initialize 
+
+```
+var numberOfHubs = $('.js-hub').length;
+var numberOfInitialized = $('.js-hub.initialized').length;
+// First check if it already initialized before your script has ran
+if (numberOfHubs == numberOfInitialized) {
+      triggerHubFilter('#data-hub-1', 'category', 'Sales' )
+} else {
+   // If not then listen for the event that all HUBs have initialized
+  $(document).on('hubInitialized', function (e) {
+    if(e.detail.final) {
+      triggerHubFilter('#data-hub-1', 'category', 'Sales' )
+    }
+  })
+}
+
 ```
 
 # Troubleshooting
