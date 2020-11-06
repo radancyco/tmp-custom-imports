@@ -50,11 +50,11 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 ## Commands in console that can be used to test sorting
 ( hub ID, Sort Criteria, sort direction ) Note: 0 = random / 1 = Descending / 2 = Ascending 
 
-* hubFeature.sortHub("#data-hub-1","data-hub-date-updated", 1);
-* hubFeature.sortHub("#data-hub-1","data-hub-date-created", 2);
-* hubFeature.sortHub("#data-hub-1","data-hub-title", 2);
-* hubFeature.sortHub("#data-hub-1","data-weight", 1);
-* hubFeature.sortHub("#data-hub-1","data-hub-event-date", 1);
+* `hubFeature.sortHub("#data-hub-1","data-hub-date-updated", 1);`
+* `hubFeature.sortHub("#data-hub-1","data-hub-date-created", 2);`
+* `hubFeature.sortHub("#data-hub-1","data-hub-title", 2);`
+* `hubFeature.sortHub("#data-hub-1","data-weight", 1);`
+* `hubFeature.sortHub("#data-hub-1","data-hub-event-date", 1);`
 
 ## Listening for HUB events
 * Hub Initialized means that the prefilters and form filters have been setup
