@@ -365,18 +365,20 @@ function determiningCiMode() { // This function determines which mode the Custom
 determiningCiMode()
 
 
+var isCiInitialized = false;
 var scriptsLoadedByOrDetectedByCustomImports = [];
 
 
 var ciCustomImports = {
     Init: function(){
 
+    //    var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
        var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
-
 
 
             if ( matches("ci-override-path", url) ) {
                 ciLibraryPath = getParameter("ci-override-path", url)[0];
+                console.log("CI - Path Override " + ciLibraryPath)
             }
             // Use Case:
             // &ci-override-path=http://localhost/sites/tmp-custom-imports/build/library/
@@ -411,10 +413,16 @@ var ciCustomImports = {
             });
         }
 
-        // ciCustomImports.loadACustomScript('inview', ciLibraryPath + 'inview/inview.js' )
+        ciCustomImports.loadACustomScript('inview', ciLibraryPath + 'inview/inview.js' )
 
-
-
+        // Fire event that says Custom Imports has initalized. 
+        // A developer could locally
+        // $(document).on('ciInitialized', function (e) { });
+        if( isCiInitialized === false ) {
+            var ciInitialized = new CustomEvent('ciInitialized');
+            document.dispatchEvent(ciInitialized);
+            isCiInitialized = true;
+        }
 
 
     },
