@@ -1,75 +1,3 @@
-
-function ciIsElementPartiallyInViewport(el, TopViewPortOffset, BottomViewPortOffset)
-{
-
-    if( TopViewPortOffset == undefined || TopViewPortOffset == 'null') {
-        TopViewPortOffset = 0;
-    }
-    if( BottomViewPortOffset == undefined || BottomViewPortOffset  == 'null' ) {
-        BottomViewPortOffset = 0;
-    }
-
-    var rect = el.getBoundingClientRect();
-    var windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-    var windowWidth = (window.innerWidth || document.documentElement.clientWidth);
-
-    var vertInView = (rect.top <= (windowHeight - BottomViewPortOffset) ) && ((rect.top + rect.height) >= TopViewPortOffset);
-    var horInView = (rect.left <= windowWidth) && ((rect.left + rect.width) >= 0);
-
-    return (vertInView && horInView);
-}
-
-
-
-function ciIsElementFullyInViewport(el, TopViewPortOffset, BottomViewPortOffset) 
-{
-    if( TopViewPortOffset == undefined || TopViewPortOffset == 'null') {
-        TopViewPortOffset = 0;
-    }
-    if( BottomViewPortOffset == undefined || BottomViewPortOffset  == 'null' ) {
-        BottomViewPortOffset = 0;
-    }
-    //special bonus for those using jQuery
-    // if (typeof jQuery !== 'undefined' && el instanceof jQuery) el = el[0];
-
-    var rect = el.getBoundingClientRect();
-    var windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-    var windowWidth = (window.innerWidth || document.documentElement.clientWidth);
-
-    return (
-           (rect.left >= 0)
-        && (rect.top >= TopViewPortOffset)
-        && ((rect.left + rect.width) <= windowWidth)
-        && ((rect.top + rect.height) <= (windowHeight - BottomViewPortOffset))
-    );
-
-}
-
-
-function ciIsElementPercentHeightInViewport(el, percentInView, TopViewPortOffset, BottomViewPortOffset )
-{
-    if( TopViewPortOffset == undefined || TopViewPortOffset == 'null') {
-        TopViewPortOffset = 0;
-    }
-    if( BottomViewPortOffset == undefined || BottomViewPortOffset  == 'null' ) {
-        BottomViewPortOffset = 0;
-    }
-
-    var rect = el.getBoundingClientRect();
-    var windowHeight = (window.innerHeight || document.documentElement.clientHeight );
-
-    // Take the percentage and convert it to get the remainder
-    percentInView = (100 - percentInView);
-    var offsetTopOfElememnt = (percentInView / 100) * rect.height;
-    var offsetBottomOfElememnt = rect.height - offsetTopOfElememnt;
-
-    var vertInView = (rect.top + offsetBottomOfElememnt <= (windowHeight - BottomViewPortOffset)  ) && ((rect.top + offsetTopOfElememnt)  >= TopViewPortOffset);
-
-    return (vertInView);
-}
-
-
-
 // ---------------------------------------------
 var ciInView = {
 
@@ -112,18 +40,18 @@ var ciInView = {
                     // Check on scroll
                     window.addEventListener('scroll', function (event) {
 
-                        inview.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
+                        ciInView.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
 
                     }, false);
                 })
             } else {
                 // Check on load
-                inview.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
+                ciInView.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
 
                 // Check on scroll
                 window.addEventListener('scroll', function (event) {
 
-                    inview.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
+                    ciInView.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
 
                 }, false);
             }
@@ -266,12 +194,6 @@ var ciInView = {
             }
         }
     }
-
-
-
-
-
-
 
 
 
