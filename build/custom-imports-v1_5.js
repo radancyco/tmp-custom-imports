@@ -1,9 +1,5 @@
-// The prod verison of this file exists on https://services1.tmpwebeng.com/custom-imports/custom-imports.js
+// The prod verison of this file exists on https://services1.tmpwebeng.com/custom-imports/custom-imports-v1_5.js
 
-// Check to See if Jquery is running, if it is not report the error as this script and many of the scripts is calls requires jQuery
-if (!window.jQuery) {
-    console.error("CI Debug - Error: jQuery is needed for the Custom Imports script to work");
-}
 
 // Function to get parameters often times found in urls after a ?
 // Use case:
@@ -116,6 +112,19 @@ function ciDebounce(func, wait, immediate) {
 	};
 };
 
+/// Convert something to boolean
+function ciToBoolean( o ) {
+    if ( null !== o ) {
+        var t = typeof o;
+        if ( "undefined" !== typeof o ) {
+            if ( "string" !== t ) return !!o;
+            o = o.toLowerCase().trim();
+            return "true" === o || "1" === o;
+        }
+    }
+    return false;
+}
+
 // Variable needed to see if QA script has been ran
 // This only setups these varibales if they are already empty
 if (typeof qaMode === 'undefined') {
@@ -194,15 +203,27 @@ function determiningCiMode() { // This function determines which mode the Custom
         qaMode = false;
         localMode = false;
         // Run the script as normal
-        customImports();
+        // customImports();
     }
 
 } // END ciMode
 
+
+
+        // A developer could locally use 
+        $(document).on('ciLoadedAScript', function (e) {
+
+            var scriptName = e.detail.script;
+            if( scriptName == "fancybox" ) {
+                console.log("Fancybox Triggered")
+            }
+
+        })
+
 //
 // The function that will call all other functions
 //
-function  {
+// function customImports() {
     // In console if url contains ?custom-debug then 
     // print to the console which version of the script is running
     if ( matches("?custom-debug", url) ) {
@@ -216,7 +237,7 @@ function  {
     }
 
     // Global variable for paths for scripts
-    var scriptPath = "https://services1.tmpwebeng.com/custom-imports/"
+    var scriptPath = "https://services1.tmpwebeng.com/custom-imports/";
     if ( qaMode ) {
         scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
     } else if ( localMode ) {
@@ -231,209 +252,234 @@ function  {
     // By default the script will load dependencies and css
 
 
-    // <di
-
-    var scripts = [];
-    if (    $('[data-ci-script]').exists() ) { 
-        $('[data-ci-script]').each( function () {
-
-            var script = $($this).attr('data-ci-script]').val();
-
-            if( matches("fancybox", script)   ) {
-                FancyBox()
-            }
-        });
-    }
 
 
-    function FancyBox(params) {
-        
-    
-            $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
-            $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
-                // if ( matches("?custom-debug", url) ) {
-                //     console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
-                // }
+
+    /// Check to see if scripts have been loaded outside of CI by checking if they are functioning and also if they have already been added to the scripts list variable
+
+
+    function isFancyBoxAlreadyLoadedNotViaCutsomImports() {
+        var fbInit = false;
+        if (typeof $._data(document, 'events') !== 'undefined') {
+            $.each($._data(document, 'events').click, function (i, v) {
+                if (v.namespace === 'fb-start') fbInit = true;
             });
         }
 
-    // // Load styles for Fancybox
-    // if ( !matches("fancybox", noStyles) ) {
-    //     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
+        if( fbInit == true && !scripts.includes('fancybox')  ) {
+            scripts.push("fancybox");
+            console.error('CI: Something outside of Custom Imports has loaded Fancy Box')
+        }
+
+    }
+
+    isFancyBoxAlreadyLoadedNotViaCutsomImports();
+
+
+
+    function isSlickSliderAlreadyLoadedNotViaCutsomImports() {
+        var isSlickLoaded = (typeof $.fn.Slick !== 'undefined');
+
+        if ( isSlickLoaded && !scripts.includes('slickslider') ) {
+            scripts.push('slickslider');
+            console.error('CI: Something outside of Custom Imports has loaded Slick slider')
+        }
+
+    }
+
+    isSlickSliderAlreadyLoadedNotViaCutsomImports();
+
+
+
+
+
+    // function ciLoadFancyBox(params) {
+    //     scriptName = "fancybox";
+
+    //     console.log("CI Debug - FancyBox Script Triggered"); 
+    //     if( !scripts.includes(scriptName)  ) {
+    //         scripts.push(scriptName);
+
+    //         $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
+    //         $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
+    //             // if ( matches("?custom-debug", url) ) {
+    //                 console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
+    //             // }
+
+    //                    // Trigger an event that a developer could listen for
+    //     // A developer could locally use $(document).on('hubInitialized', function (e) {})
+
+    //     var ciLoadedAScript = new CustomEvent('ciInitializedAScript', { detail: { 'script': scriptName} } );
+    //     document.dispatchEvent(ciLoadedAScript);
+        
+
+
+    //         });
+
+
+    //     }
+
     // }
 
-    // // Run FancyBox3
-    // $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
-    //     if ( matches("?custom-debug", url) ) {
-    //         console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
-    //     }
-    // });
 
+    // function ciLoadAnyScript(scriptName, scriptPath, cssPath) {
 
+    //     console.log("CI Debug - FancyBox Script Triggered"); 
+    //     if( !scripts.includes(scriptName)  ) {
+    //         scripts.push(scriptName);
 
-    // if ( $('script#js-custom-imports').exists() ) { 
+    //         $('head').append( $('<link rel="stylesheet" type="text/css" href="' + cssPath + '" />'));
+    //         $.getScript( scriptPath , function() {
+    //             if ( matches("?custom-debug", url) ) {
+    //                 console.log("CI Debug - " scriptName + " Loaded")
+    //             }
 
-    //     // Variables of parameters
-    //     var scriptSrc = $('script#js-custom-imports').attr('src');
-    //     var scripts = getParameter("scripts", scriptSrc);
-    //     var css = getParameter("css", scriptSrc);
-    //     var noStyles = getParameter("no-styles", scriptSrc);
-    //     var noDepends = getParameter("no-dependencies", scriptSrc);
+    //             // Trigger an event that a developer could listen for
+    //             // A developer could locally
+    //             // $(document).on('ciInitializedAScript', function (e) {
+    //             //     var scriptName = e.detail.script;
+    //             //     if( scriptName == "fancybox" ) {
+    //             //         console.log("Fancybox Triggered")
+    //             //     }
+    //             // })
+
+    //             var ciLoadedAScript = new CustomEvent('ciInitializedAScript', { detail: { 'script': scriptName} } );
+    //             document.dispatchEvent(ciLoadedAScript);
         
-    //     // Debug report of what is in the variables
-    //     if ( matches("?custom-debug", url) ) {
-    //         console.log("CI Debug - script src: " + scriptSrc)
-    //         console.log("CI Debug - scripts param: " + scripts)
-    //         console.log("CI Debug - css param: " + css)
-    //         console.log("CI Debug - noStyles param: " + noStyles)
-    //         console.log("CI Debug - noDepends param: " + noDepends)
-    //     }
-
-    //     // If there are script parameters
-    //     // This will likely be libraries frequently used like slick slider or custom scripts written
-    //     // for front-end devs to use
-    //     if( scripts ) {
-    //         // alert("script parameters found")
 
 
-    //         // Charts script
-    //         // if charts is present in the scripts param
-    //         if ( matches("charts", scripts) ) {
-
-    //             // Load styles for charts script
-    //             if ( !matches("charts", noStyles) ) {
-    //                 $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/charts/charts.css" + '" />'));
-    //             }
-
-    //             // check to see if dependancy param on D3 is turned off
-    //             if ( matches("charts", noDepends) ) {
-    //                 // Run the charts script with out loading in D3 first
-    //                 $.getScript( scriptPath + "library/charts/charts.js", function() {
-    //                     if ( matches("?custom-debug", url) ) {
-    //                         console.log("CI Debug - Charts Script: Loaded")
-    //                     }
-    //                 });
-    //             } else {
-    //                 // Run D3
-    //                 $.getScript( scriptPath + "library/d3/d3.v5.min.js", function() {
-    //                     if ( matches("?custom-debug", url) ) {
-    //                         console.log("CI Debug - Charts Script: D3 Dependancy Loaded")
-    //                     }
-    //                     // After D3 runs then run the charts script
-    //                     $.getScript( scriptPath + "library/charts/charts.js", function() {
-    //                         if ( matches("?custom-debug", url) ) {
-    //                             console.log("CI Debug - Charts Script: Loaded")
-    //                         }
-    //                     });
-
-    //                 });
-
-
-    //             }
-    //         } // End Charts Script
-
-
-    //         // Video script
-    //         // if Video is present in the scripts param
-    //         if ( matches("video", scripts) ) {
-
-    //             // Load styles for video script
-    //             if ( !matches("charts", noStyles) ) {
-    //                 $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/video/video.css" + '" />'));
-    //             }
-
-    //             // check to see if dependancy param on D3 is turned off
-    //             if ( matches("video", noDepends) ) {
-    //                 // Run the charts script with out loading in D3 first
-    //                 $.getScript( scriptPath + "library/video/video.js", function() {
-    //                     if ( matches("?custom-debug", url) ) {
-    //                         console.log("CI Debug - Video Script: Loaded")
-    //                     }
-    //                 });
-    //             } else {
-
-    //                 // Load styles for Fancybox
-    //                 if ( !matches("fancybox", noStyles) ) {
-    //                     $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
-    //                 }
-
-    //                 // Run FancyBox3
-    //                 $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
-    //                     if ( matches("?custom-debug", url) ) {
-    //                         console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
-    //                     }
-    //                     // After FancyBox3 runs then run the Video script
-    //                     $.getScript( scriptPath + "library/video/video.js", function() {
-    //                         if ( matches("?custom-debug", url) ) {
-    //                             console.log("CI Debug - Video Script: Loaded")
-    //                         }
-    //                     });
-
-    //                 });
-
-    //             }
-    //         } // End Video Script
-
-    //         // HUB script
-    //         // if hub is present in the scripts param
-    //         if ( matches("hub", scripts) ) {
-
-    //             if ( matches("?custom-debug", url) ) {
-    //                 console.log("CI Debug - HUB Script: request detected")
-    //             }
-
-    //             // Load styles for hub script
-    //             if ( !matches("charts", noStyles) ) {
-    //                 $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/hub/hub-functionality.css" + '" />'));
-    //             }
-
-    //             // Run Script
-
-    //             $.getScript( scriptPath + "library/hub/hub.js", function() {
-    //                 if ( matches("?custom-debug", url) ) {
-    //                     console.log("CI Debug - HUB Script: Loaded")
-    //                 }
-    //             });
-
-    //         } // End HUB script
-
-
-    //         // Tracking script
-    //         // should always be the LAST script in this list
-    //         // if tracking is present in the scripts param
-    //         if ( matches("tracking", scripts) ) {
-
-    //             if ( matches("?custom-debug", url) ) {
-    //                 console.log("CI Debug - TB Tracking Script: request detected")
-    //             }
-
-    //             // Run Script
-
-    //             $.getScript( scriptPath + "library/tracking/tb-tracking.js", function() {
-    //                 if ( matches("?custom-debug", url) ) {
-    //                     console.log("CI Debug - TB Tracking Script: Loaded")
-    //                 }
-    //             });
-
-    //         } // End HUB script
+    //         });
 
 
     //     }
 
-    //     // If there are css parameters
-    //     // This will likely be font libraries 
-    //     if( css ) {
-    //         alert("css parameters found")
-    //     }
+    // }
 
 
 
 
-    // } else {
-    //     console.error("CI Debug - Error: Script tag is missing ID of js-custom-imports")
-    // } // end of $('#js-custom-imports').exists()
 
-} // End of customImports function
+// } // End of customImports function
 
 // Start the show on the road
 determiningCiMode()
+
+
+var scriptsLoadedByOrDetectedByCustomImports = [];
+
+
+var ciCustomImports = {
+    Init: function(){
+
+       var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
+
+
+
+            if ( matches("ci-override-path", url) ) {
+                ciLibraryPath = getParameter("ci-override-path", url)[0];
+            }
+            // Use Case:
+            // &ci-override-path=http://localhost/sites/tmp-custom-imports/build/library/
+
+        // Look through the page to see if any data-ci-scripts exist
+        if ( $('[data-ci-script]').exists() ) { 
+            $('[data-ci-script]').each( function () {
+
+                var script = $(this).attr('data-ci-script');
+
+                console.log("CI Debug - data-ci-script = " +  script );
+
+                // data-ci-script="slick"
+                if( matches("fancybox", script)   ) {
+                    ciCustomImports.loadFancyBox(ciLibraryPath)
+                }
+
+                // data-ci-script="slickslider" data-ci-slick-themecss="true"
+                if( matches("slickslider", script) ) {
+                    var themecss = $(this).attr('data-ci-slick-themecss');
+                    // If the setting attribute is not set we are assuming it should be set to true
+                    if( typeof themecss == 'undefined' ) {
+                        themecss = true;
+                    } else {
+                        themecss = ciToBoolean(themecss);
+                    }
+
+                    console.log('slick theme = ' + themecss)
+
+                    ciCustomImports.loadSlickSlider('https://tbcdn.talentbrew.com/company/3461/shared/js/', themecss);
+                }
+            });
+        }
+
+        // ciCustomImports.loadACustomScript('inview', ciLibraryPath + 'inview/inview.js' )
+
+
+
+
+
+    },
+    loadACustomScript: function(scriptName, scriptPath, cssPath) {
+
+        console.log("CI Debug - LoadACustomScript Triggered - " + scriptName ); 
+        if( !scriptsLoadedByOrDetectedByCustomImports.includes(scriptName)  ) {
+            scriptsLoadedByOrDetectedByCustomImports.push(scriptName);
+
+            $('head').append( $('<link rel="stylesheet" type="text/css" href="' + cssPath + '" />'));
+            $.getScript( scriptPath , function() {
+                if ( matches("?custom-debug", url) ) {
+                    console.log("CI Debug - " + scriptName + " Loaded")
+                }
+
+                // Trigger an event that a developer could listen for
+                // A developer could locally
+                // $(document).on('ciLoadedAScript', function (e) {
+                //     var scriptName = e.detail.script;
+                //     if( scriptName == "fancybox" ) {
+                //         console.log("Fancybox Triggered")
+                //     }
+                // })
+
+                var ciLoadedAScript = new CustomEvent('ciLoadedAScript', { detail: { 'script': scriptName} } );
+                document.dispatchEvent(ciLoadedAScript);
+
+
+            });
+
+
+
+
+            
+
+        }
+
+    },
+    loadFancyBox: function(ciLibraryPath) {
+        var scriptPath = ciLibraryPath + 'fancybox/jquery.fancybox.min.js';
+        var cssPath = ciLibraryPath + 'fancybox/jquery.fancybox.min.css';
+        
+        ciCustomImports.loadACustomScript('fancybox', scriptPath, cssPath );
+    },
+    loadSlickSlider: function(ciLibraryPath, optionalThemeCSS) {
+
+
+        var scriptPath = ciLibraryPath + 'slick_v1_8_1/slick-min.js';
+        var cssPath = ciLibraryPath + 'slick_v1_8_1/slick.css';
+        var themeCssPath = ciLibraryPath + 'slick_v1_8_1/slick-theme.css';
+        
+
+
+        if( !scriptsLoadedByOrDetectedByCustomImports.includes('slickslider')  ) {
+            if( optionalThemeCSS )  {
+                $('head').append( $('<link rel="stylesheet" type="text/css" href="' + themeCssPath + '" />'));
+            }
+        }
+        
+        ciCustomImports.loadACustomScript('slickslider', scriptPath, cssPath )
+
+
+
+    }
+
+}
+
+ciCustomImports.Init();
