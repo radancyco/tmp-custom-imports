@@ -1,6 +1,15 @@
 // The prod verison of this file exists on https://services1.tmpwebeng.com/custom-imports/custom-imports-v1_5.js
 
 
+/// Global variables
+var isCiInitialized = false;
+var scriptsLoadedByOrDetectedByCustomImports = [];
+// Set global vairable for url
+var url = window.location.href;
+
+// console.log("I AM DOING A TESTTSTSTSTST")
+
+
 // Function to get parameters often times found in urls after a ?
 // Use case:
 // getParameter("scripts","www.brock.com/?scripts=charts,inpagenav,inview?no-styles=charts?no-dependencies=inview")
@@ -126,8 +135,7 @@ function ciToBoolean( o ) {
 }
 
 
-// Set global vairable for url
-var url = window.location.href;
+
 
 // The following function will determine what version of the script will run
 // if there are no additional parameters in the url of thr browser it will load the production version of the script
@@ -181,19 +189,21 @@ var url = window.location.href;
 
 
     function isHubAlreadyLoadedNotViaCutsomImports() {
+
+        // First check if hub is already initialized 
         hubInialized = document.getElementsByClassName('js-hub initialized')[0];
 
-        console.log(hubInialized)
         
-        // if ( hubInialized != undefined ) {
-        //     scriptsLoadedByOrDetectedByCustomImports.push('hub');
-        //     console.error('CI: Something outside of Custom Imports has loaded HUB')
-        // }
+        if ( hubInialized != undefined ) {
+            scriptsLoadedByOrDetectedByCustomImports.push('hub');
+            console.error('CI: Something outside of Custom Imports has loaded HUB')
+        }
 
-        var scriptTags = document.getElementsByTagName("script");
+
+        // If it is not initialized yet then see if custom imports script has bee added to the page already
 
         if ( hubInialized == undefined ) {
-
+            var scriptTags = document.getElementsByTagName("script");
 
             for (item of scriptTags) { 
                 if( matches("custom-imports.js?scripts=hub", item.outerHTML) ) {
@@ -201,8 +211,7 @@ var url = window.location.href;
                     console.error('CI: Something outside of Custom Imports has loaded HUB')
                     break;
                 }
-              }
-
+            }
 
         }
 
@@ -212,15 +221,13 @@ var url = window.location.href;
 
 
 
-var isCiInitialized = false;
-var scriptsLoadedByOrDetectedByCustomImports = [];
 
 
 var ciCustomImports = {
     Init: function(){
 
     //    var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
-       var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
+     var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
 
 
             if ( matches("ci-override-path", url) ) {
@@ -262,10 +269,15 @@ var ciCustomImports = {
                 if( matches("hub", script)   ) {
                     ciCustomImports.loadHUB(ciLibraryPath)
                 }
+
+                // data-ci-script="hub"
+                if( matches("inview", script)   ) {
+                    ciCustomImports.loadInview(ciLibraryPath)
+                }
             });
         }
 
-        ciCustomImports.loadACustomScript('inview', ciLibraryPath + 'inview/inview.js' )
+        
 
         // Fire event that says Custom Imports has initalized. 
         // A developer could locally
@@ -343,7 +355,20 @@ var ciCustomImports = {
         var scriptPath = ciLibraryPath + 'hub/hub.js';
         var cssPath = ciLibraryPath + 'hub/hub-functionality.css';
         
-        ciCustomImports.loadACustomScript('fancybox', scriptPath, cssPath );
+        ciCustomImports.loadACustomScript('hub', scriptPath, cssPath );
+        ciCustomImports.loadTracking(ciLibraryPath)
+
+    },
+    loadTracking: function(ciLibraryPath) { 
+
+        var scriptPath = ciLibraryPath + 'tracking/tb-tracking.js';
+        
+        ciCustomImports.loadACustomScript('tracking', scriptPath);
+    },
+    loadInview: function(ciLibraryPath) { 
+
+        var scriptPath = ciLibraryPath + 'inview/inview.js';
+        ciCustomImports.loadACustomScript('inview', scriptPath);
     }
 }
 
@@ -352,15 +377,18 @@ var ciCustomImports = {
 
 if ( matches("ci-override-path", url) ) {
     ciLibraryPath = getParameter("ci-override-path", url)[0];
-
-
     ciLibraryPath = ciLibraryPath.replace("library/", "");
 
-    // Run location version of Custom imports
-    $.getScript( ciLibraryPath + "custom-imports-v1_5.js", function() {
-            console.log("CI Debug - Local version of CI running")
-
-    });
+    if( typeof isCiLocalInitialized == undefined ) {
+        // Run location version of Custom imports
+        $.getScript( ciLibraryPath + "custom-imports-v1_5.js", function() {
+                console.log("CI Debug - Local version of CI running")
+                // Makes sure that the local script only loads once
+                const isCiLocalInitialized = true;
+        });
+    } else {
+        ciCustomImports.Init();
+    }
 
 } else {
 
