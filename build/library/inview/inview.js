@@ -174,7 +174,7 @@ var ciInView = {
                 // if class has already been added, skip, otherwise append class to current list
                 // Also make sure we wait till item is fully in view
                 if( curClasses.contains(classToWaitTillSeventy) && !curClasses.contains(classForElementInView) ) {
-                    console.log('isElement75PercentHeightInViewport')
+                    // console.log('isElement75PercentHeightInViewport')
 
                     curClasses = curClasses + " " + classForElementInView;
                     currentItem.setAttribute("class",curClasses);
@@ -224,7 +224,7 @@ var ciInView = {
                 if( !curClasses.contains(classForElementInView) && !curClasses.contains(classToWaitFully) && !curClasses.contains(classToWaitTillHalf) && !curClasses.contains(classToWaitTillSeventy) ){
                     curClasses = curClasses + " " + classForElementInView;
                     currentItem.setAttribute("class",curClasses);
-                    console.log('isElementPartiallyInViewport')
+                    // console.log('isElementPartiallyInViewport')
 
                     
 
@@ -245,7 +245,7 @@ var ciInView = {
                 // if the "exposed class" has already been added and the classToRecheck is present then remove that class so the item can reanimate
                 if( curClasses.contains(classToRecheck) && curClasses.contains(classForElementInView) ) {
                     currentItem.classList.toggle(classForElementInView);
-                    console.log('isElementNOTInViewport')
+                    // console.log('isElementNOTInViewport')
 
                     if( currentItem.hasAttribute('data-inview-trigger') ) {
                         var triggerName = currentItem.getAttribute('data-inview-trigger');

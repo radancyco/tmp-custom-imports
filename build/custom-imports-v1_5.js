@@ -125,132 +125,21 @@ function ciToBoolean( o ) {
     return false;
 }
 
-// Variable needed to see if QA script has been ran
-// This only setups these varibales if they are already empty
-if (typeof qaMode === 'undefined') {
-    var qaMode = "";
-}
-
-// Variable needed to see if Local script has ran 
-// This only setups these varibales if they are already empty
-if (typeof localMode === 'undefined') {
-    var localMode = "";
-    var localModePath = "";
-}
 
 // Set global vairable for url
 var url = window.location.href;
 
 // The following function will determine what version of the script will run
 // if there are no additional parameters in the url of thr browser it will load the production version of the script
-// if it contains ?custom-local-mode it will load the local version of the script
-// if it contains ?custom-qa-mode it will load the qa version of the script
 // if it contains ?custom-debug, it will not change what version of the script is running but it will so all the console logs
-// if it contains ?custom-local-mode&override-path=http://localhost:61651/tmp-custom-imports/build/ it will load the script from the build path you indicate
-
-
-function determiningCiMode() { // This function determines which mode the Custom Imports Script loads
-
-    // Check URL and see if it wants qa version or prod
-
-    if ( matches("?custom-qa-mode", url) ) {
-    
-        // Check variable to make sure it is empty so that a loading script loop does not happen
-        if ( qaMode == "" ) {
-            // set qaMode to true do it does not load the script again
-            qaMode = true;
-            localMode = false;
-            // Load the QA version of the custom script located on github
-            $.getScript("https://tmpworldwide.github.io/tmp-custom-imports/build/custom-imports.js", function() {
-                alert("Custom Imports QA Script now loaded");
-                customImports();
-            });
-        }
-    } else if ( matches("?custom-local-mode", url) ) {
-    
-        // Check variable to make sure it is empty so that a loading script loop does not happen
-        if ( localMode == "" ) {
-            // set qaMode to true do it does not load the script again
-            localMode = true;
-            qaMode = false;
-            // Load the local version of the custom script located on github
-
-
-            localModePath  = "http://localhost/sites/tmp-custom-imports/build/";
-            // Use Case:
-            // ?custom-local-mode&override-path=http://localhost:61651/tmp-custom-imports/build/
-            if ( matches("&override-path", url) ) {
-                localModePath = getParameter("override-path", url)[0];
-            }
-
-
-            $.getScript(localModePath + "custom-imports-v1_5js", function() {
-                alert("Custom Imports Local Script now loaded");
-                // localModePath = "http://localhost/sites/tmp-custom-imports/build/";
-                customImports();
-            }).fail(function(){
-                // $.getScript(localModePath + "custom-imports.js", function() {
-                //     alert("Drew's custom path  for Custom Imports Local Script now loaded");
-                //     localModePath = "http://localhost:61651/tmp-custom-imports/build/";
-                //     customImports();
-                // })
-                alert("Custom Imports FAILED TO LOAD");
-            });
-        }
-
-    } else {
-        // Set QA and local mode to false so the script does not run again
-        qaMode = false;
-        localMode = false;
-        // Run the script as normal
-        // customImports();
-    }
-
-} // END ciMode
+// if it contains ?override-path=http://localhost:61651/tmp-custom-imports/build/ it will load the script from the build path you indicate
 
 
 
-        // A developer could locally use 
-        $(document).on('ciLoadedAScript', function (e) {
-
-            var scriptName = e.detail.script;
-            if( scriptName == "fancybox" ) {
-                console.log("Fancybox Triggered")
-            }
-
-        })
 
 //
 // The function that will call all other functions
 //
-// function customImports() {
-    // In console if url contains ?custom-debug then 
-    // print to the console which version of the script is running
-    if ( matches("?custom-debug", url) ) {
-        if ( qaMode ) {
-        console.log("CI Debug - Loading: QA Script")
-        } else if ( localMode ) {
-            console.log("CI Debug - Loading: Local Script")
-        } else {
-            console.log("CI Debug - Loading: Prod Custom Imports")
-        }
-    }
-
-    // Global variable for paths for scripts
-    var scriptPath = "https://services1.tmpwebeng.com/custom-imports/";
-    if ( qaMode ) {
-        scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
-    } else if ( localMode ) {
-        scriptPath = localModePath;
-    }
-
-    // Find parameters from the src of script file
-    // please note script tag MUST contain ID js-custom-imports
-
-    // when calling script you tell it what you want to do based on your url parameter. The main parameter is "scripts" wring like "?scripts=charts" 
-    // if you want to put multiple scripts you can put in a comma like "?scripts=charts,inpagenav,inview"
-    // By default the script will load dependencies and css
-
 
 
 
@@ -267,7 +156,7 @@ function determiningCiMode() { // This function determines which mode the Custom
         }
 
         if( fbInit == true && !scripts.includes('fancybox')  ) {
-            scripts.push("fancybox");
+            scriptsLoadedByOrDetectedByCustomImports.push("fancybox");
             console.error('CI: Something outside of Custom Imports has loaded Fancy Box')
         }
 
@@ -281,7 +170,7 @@ function determiningCiMode() { // This function determines which mode the Custom
         var isSlickLoaded = (typeof $.fn.Slick !== 'undefined');
 
         if ( isSlickLoaded && !scripts.includes('slickslider') ) {
-            scripts.push('slickslider');
+            scriptsLoadedByOrDetectedByCustomImports.push('slickslider');
             console.error('CI: Something outside of Custom Imports has loaded Slick slider')
         }
 
@@ -291,78 +180,36 @@ function determiningCiMode() { // This function determines which mode the Custom
 
 
 
+    function isHubAlreadyLoadedNotViaCutsomImports() {
+        hubInialized = document.getElementsByClassName('js-hub initialized')[0];
 
-
-    // function ciLoadFancyBox(params) {
-    //     scriptName = "fancybox";
-
-    //     console.log("CI Debug - FancyBox Script Triggered"); 
-    //     if( !scripts.includes(scriptName)  ) {
-    //         scripts.push(scriptName);
-
-    //         $('head').append( $('<link rel="stylesheet" type="text/css" href="' + scriptPath + "library/fancybox/jquery.fancybox.min.css" + '" />'));
-    //         $.getScript( scriptPath + "library/fancybox/jquery.fancybox.min.js", function() {
-    //             // if ( matches("?custom-debug", url) ) {
-    //                 console.log("CI Debug - Video Script: FancyBox3 Dependancy Loaded")
-    //             // }
-
-    //                    // Trigger an event that a developer could listen for
-    //     // A developer could locally use $(document).on('hubInitialized', function (e) {})
-
-    //     var ciLoadedAScript = new CustomEvent('ciInitializedAScript', { detail: { 'script': scriptName} } );
-    //     document.dispatchEvent(ciLoadedAScript);
+        console.log(hubInialized)
         
+        // if ( hubInialized != undefined ) {
+        //     scriptsLoadedByOrDetectedByCustomImports.push('hub');
+        //     console.error('CI: Something outside of Custom Imports has loaded HUB')
+        // }
+
+        var scriptTags = document.getElementsByTagName("script");
+
+        if ( hubInialized == undefined ) {
 
 
-    //         });
+            for (item of scriptTags) { 
+                if( matches("custom-imports.js?scripts=hub", item.outerHTML) ) {
+                    scriptsLoadedByOrDetectedByCustomImports.push('hub');
+                    console.error('CI: Something outside of Custom Imports has loaded HUB')
+                    break;
+                }
+              }
 
 
-    //     }
+        }
 
-    // }
+    }
 
+    isHubAlreadyLoadedNotViaCutsomImports();
 
-    // function ciLoadAnyScript(scriptName, scriptPath, cssPath) {
-
-    //     console.log("CI Debug - FancyBox Script Triggered"); 
-    //     if( !scripts.includes(scriptName)  ) {
-    //         scripts.push(scriptName);
-
-    //         $('head').append( $('<link rel="stylesheet" type="text/css" href="' + cssPath + '" />'));
-    //         $.getScript( scriptPath , function() {
-    //             if ( matches("?custom-debug", url) ) {
-    //                 console.log("CI Debug - " scriptName + " Loaded")
-    //             }
-
-    //             // Trigger an event that a developer could listen for
-    //             // A developer could locally
-    //             // $(document).on('ciInitializedAScript', function (e) {
-    //             //     var scriptName = e.detail.script;
-    //             //     if( scriptName == "fancybox" ) {
-    //             //         console.log("Fancybox Triggered")
-    //             //     }
-    //             // })
-
-    //             var ciLoadedAScript = new CustomEvent('ciInitializedAScript', { detail: { 'script': scriptName} } );
-    //             document.dispatchEvent(ciLoadedAScript);
-        
-
-
-    //         });
-
-
-    //     }
-
-    // }
-
-
-
-
-
-// } // End of customImports function
-
-// Start the show on the road
-determiningCiMode()
 
 
 var isCiInitialized = false;
@@ -409,6 +256,11 @@ var ciCustomImports = {
                     console.log('slick theme = ' + themecss)
 
                     ciCustomImports.loadSlickSlider('https://tbcdn.talentbrew.com/company/3461/shared/js/', themecss);
+                }
+
+                // data-ci-script="hub"
+                if( matches("hub", script)   ) {
+                    ciCustomImports.loadHUB(ciLibraryPath)
                 }
             });
         }
@@ -486,8 +338,31 @@ var ciCustomImports = {
 
 
 
+    },
+    loadHUB: function(ciLibraryPath) {
+        var scriptPath = ciLibraryPath + 'hub/hub.js';
+        var cssPath = ciLibraryPath + 'hub/hub-functionality.css';
+        
+        ciCustomImports.loadACustomScript('fancybox', scriptPath, cssPath );
     }
-
 }
 
-ciCustomImports.Init();
+
+
+
+if ( matches("ci-override-path", url) ) {
+    ciLibraryPath = getParameter("ci-override-path", url)[0];
+
+
+    ciLibraryPath = ciLibraryPath.replace("library/", "");
+
+    // Run location version of Custom imports
+    $.getScript( ciLibraryPath + "custom-imports-v1_5.js", function() {
+            console.log("CI Debug - Local version of CI running")
+
+    });
+
+} else {
+
+    ciCustomImports.Init();
+}
