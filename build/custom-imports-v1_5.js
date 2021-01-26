@@ -274,6 +274,11 @@ var ciCustomImports = {
                 if( matches("inview", script)   ) {
                     ciCustomImports.loadInview(ciLibraryPath)
                 }
+
+                // data-ci-script="video"
+                if( matches("video", script)   ) {
+                    ciCustomImports.loadVideo(ciLibraryPath)
+                }
             });
         }
 
@@ -369,6 +374,11 @@ var ciCustomImports = {
 
         var scriptPath = ciLibraryPath + 'inview/inview.js';
         ciCustomImports.loadACustomScript('inview', scriptPath);
+    },
+    loadVideo: function(ciLibraryPath) { 
+
+        var scriptPath = ciLibraryPath + 'video/video.js';
+        ciCustomImports.loadACustomScript('video', scriptPath);
     }
 }
 
