@@ -1,7 +1,7 @@
 
-ReadMe Last modification: 10/17/2018
+ReadMe Last modification: 01/28/2021
 
-This is a script importer which will easily pull in other script libraries. Visit the [repository](https://github.com/tmpworldwide/tmp-custom-imports) to learn more or [download](https://github.com/tmpworldwide/tmp-custom-imports/archive/gh-pages.zip) now.
+This is a script importer which will easily pull in other script libraries. Visit the [repository](https://github.com/radancyco/tmp-custom-imports) to learn more or [download](https://github.com/radancyco/tmp-custom-imports/archive/gh-pages.zip) now.
 
 ## Table of Contents
 
@@ -16,4 +16,3 @@ This is a script importer which will easily pull in other script libraries.
 ## Techonlogies used
 
 * Comming soon
-
