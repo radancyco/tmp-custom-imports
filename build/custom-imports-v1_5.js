@@ -226,8 +226,8 @@ function ciToBoolean( o ) {
 var ciCustomImports = {
     Init: function(){
 
-    //    var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
-     var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
+        //  var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
+        var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
 
 
             if ( matches("ci-override-path", url) ) {
@@ -301,7 +301,9 @@ var ciCustomImports = {
         if( !scriptsLoadedByOrDetectedByCustomImports.includes(scriptName)  ) {
             scriptsLoadedByOrDetectedByCustomImports.push(scriptName);
 
-            $('head').append( $('<link rel="stylesheet" type="text/css" href="' + cssPath + '" />'));
+            if( typeof cssPath != 'undefined' && cssPath != '') {
+                $('head').append( $('<link rel="stylesheet" type="text/css" href="' + cssPath + '" />'));
+            }
             $.getScript( scriptPath , function() {
                 if ( matches("?custom-debug", url) ) {
                     console.log("CI Debug - " + scriptName + " Loaded")
