@@ -62,7 +62,7 @@ function UrlExists(url, cb){
 // var yourFancyEvent = new CustomEvent('yourFancyEvent');
 // To run the event on speffici elements
 // elem.dispatchEvent('yourFancyEvent');
-// or run it on the whole document 
+// or run it on the whole document
 // $(document).trigger('yourFancyEvent');
 // You then can listen where it is expected to run
 // $(document).on('yourFancyEvent', function (e) { });
@@ -94,7 +94,7 @@ if (!String.prototype.includes) {
 // 	// All the taxing stuff you do
 // }, 250);
 // $(window).on('resize', myEfficientFn);
-// By default this triggers at the end of the event tiggering however 
+// By default this triggers at the end of the event tiggering however
 // If 'immediate' is passed, it will trigger the function on the
 // leading edge, instead of the trailing. As seen here
 // var rightAwayFn = debounce(function() {
@@ -122,7 +122,7 @@ if (typeof qaMode === 'undefined') {
     var qaMode = "";
 }
 
-// Variable needed to see if Local script has ran 
+// Variable needed to see if Local script has ran
 // This only setups these varibales if they are already empty
 if (typeof localMode === 'undefined') {
     var localMode = "";
@@ -145,20 +145,20 @@ function determiningCiMode() { // This function determines which mode the Custom
     // Check URL and see if it wants qa version or prod
 
     if ( matches("?custom-qa-mode", url) ) {
-    
+
         // Check variable to make sure it is empty so that a loading script loop does not happen
         if ( qaMode == "" ) {
             // set qaMode to true do it does not load the script again
             qaMode = true;
             localMode = false;
             // Load the QA version of the custom script located on github
-            $.getScript("https://tmpworldwide.github.io/tmp-custom-imports/build/custom-imports.js", function() {
+            $.getScript("https://tmpworldwide.dev/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports QA Script now loaded");
                 customImports();
             });
         }
     } else if ( matches("?custom-local-mode", url) ) {
-    
+
         // Check variable to make sure it is empty so that a loading script loop does not happen
         if ( localMode == "" ) {
             // set qaMode to true do it does not load the script again
@@ -203,7 +203,7 @@ function determiningCiMode() { // This function determines which mode the Custom
 // The function that will call all other functions
 //
 function customImports() {
-    // In console if url contains ?custom-debug then 
+    // In console if url contains ?custom-debug then
     // print to the console which version of the script is running
     if ( matches("?custom-debug", url) ) {
         if ( qaMode ) {
@@ -226,11 +226,11 @@ function customImports() {
     // Find parameters from the src of script file
     // please note script tag MUST contain ID js-custom-imports
 
-    // when calling script you tell it what you want to do based on your url parameter. The main parameter is "scripts" wring like "?scripts=charts" 
+    // when calling script you tell it what you want to do based on your url parameter. The main parameter is "scripts" wring like "?scripts=charts"
     // if you want to put multiple scripts you can put in a comma like "?scripts=charts,inpagenav,inview"
     // By default the script will load dependencies and css
 
-    if ( $('script#js-custom-imports').exists() ) { 
+    if ( $('script#js-custom-imports').exists() ) {
 
         // Variables of parameters
         var scriptSrc = $('script#js-custom-imports').attr('src');
@@ -238,7 +238,7 @@ function customImports() {
         var css = getParameter("css", scriptSrc);
         var noStyles = getParameter("no-styles", scriptSrc);
         var noDepends = getParameter("no-dependencies", scriptSrc);
-        
+
         // Debug report of what is in the variables
         if ( matches("?custom-debug", url) ) {
             console.log("CI Debug - script src: " + scriptSrc)
@@ -380,7 +380,7 @@ function customImports() {
         }
 
         // If there are css parameters
-        // This will likely be font libraries 
+        // This will likely be font libraries
         if( css ) {
             alert("css parameters found")
         }

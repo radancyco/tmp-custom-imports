@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Custom Imports"
 noindex: true
 ---

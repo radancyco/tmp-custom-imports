@@ -1,6 +1,27 @@
-markdown: kramdown
+charset: utf-8
+company-name: Radancy
+company-url: https://radancy.com
+defaults:
+-
+  values:
+    layout: "default"
+exclude: [
+  README.md,
+  CNAME
+]
 destination: _httpdocs
-repo: https://github.com/tmpworldwide/custom-imports/
-ghpage: https://tmpworldwide.dev/custom-imports/
 gems:
   - jekyll-last-modified-at
+git-name: Web Standards
+git-url: https://tmpworldwide.dev
+highlighter: rouge
+lang: en-US
+markdown: kramdown
+owner-name: Michael Spellacy
+owner-email: michael.spellacy@radancy.com
+owner-image: https://www.gravatar.com/avatar/89e429d4a3effa9601cd19a851c0003e.jpg
+permalink: /:title/
+repo: https://github.com/radancyco/tmp-custom-imports
+sass:
+  style: :compressed
+theme-color: "#6E00EE"
