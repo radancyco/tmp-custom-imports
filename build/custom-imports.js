@@ -218,7 +218,7 @@ function customImports() {
     // Global variable for paths for scripts
     var scriptPath = "https://services1.tmpwebeng.com/custom-imports/"
     if ( qaMode ) {
-        scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
+        scriptPath = "https://tmpworldwide.dev/tmp-custom-imports/build/";
     } else if ( localMode ) {
         scriptPath = localModePath;
     }
