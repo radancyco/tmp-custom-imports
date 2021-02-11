@@ -12,7 +12,7 @@ exclude: [
 destination: _httpdocs
 gems:
   - jekyll-last-modified-at
-git-url: https://tmpworldwide.dev
+git-url: https://radancy.dev
 highlighter: rouge
 lang: en-US
 markdown: kramdown
