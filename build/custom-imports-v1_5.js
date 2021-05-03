@@ -163,7 +163,7 @@ function ciToBoolean( o ) {
             });
         }
 
-        if( fbInit == true && !scripts.includes('fancybox')  ) {
+        if( fbInit == true && !scriptsLoadedByOrDetectedByCustomImports.includes('fancybox')  ) {
             scriptsLoadedByOrDetectedByCustomImports.push("fancybox");
             console.error('CI: Something outside of Custom Imports has loaded Fancy Box')
         }
@@ -177,7 +177,7 @@ function ciToBoolean( o ) {
     function isSlickSliderAlreadyLoadedNotViaCutsomImports() {
         var isSlickLoaded = (typeof $.fn.Slick !== 'undefined');
 
-        if ( isSlickLoaded && !scripts.includes('slickslider') ) {
+        if ( isSlickLoaded && !scriptsLoadedByOrDetectedByCustomImports.includes('slickslider') ) {
             scriptsLoadedByOrDetectedByCustomImports.push('slickslider');
             console.error('CI: Something outside of Custom Imports has loaded Slick slider')
         }
