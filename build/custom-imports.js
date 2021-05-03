@@ -152,7 +152,7 @@ function determiningCiMode() { // This function determines which mode the Custom
             qaMode = true;
             localMode = false;
             // Load the QA version of the custom script located on github
-            $.getScript("https://tmpworldwide.dev/tmp-custom-imports/build/custom-imports.js", function() {
+            $.getScript("https://radancy.dev/tmp-custom-imports/build/custom-imports.js", function() {
                 alert("Custom Imports QA Script now loaded");
                 customImports();
             });
@@ -218,7 +218,7 @@ function customImports() {
     // Global variable for paths for scripts
     var scriptPath = "https://services1.tmpwebeng.com/custom-imports/"
     if ( qaMode ) {
-        scriptPath = "https://tmpworldwide.github.io/tmp-custom-imports/build/";
+        scriptPath = "https://radancy.dev/tmp-custom-imports/build/";
     } else if ( localMode ) {
         scriptPath = localModePath;
     }
