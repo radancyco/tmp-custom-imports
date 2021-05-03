@@ -126,7 +126,14 @@ var ciInView = {
 
                 }, false);
             }
-        
+
+            // Event added 
+            $(document).on('ciInViewReCheck', function (e) {
+
+                    // Check on fire
+                    inview.Check(listenToList, arrayLength, classForElementInView, classToRecheck, classToWaitFully, classToWaitTillHalf, classToWaitTillSeventy)
+
+            })
         }        
 
 
