@@ -102,5 +102,6 @@ if (numberOfHubs == numberOfInitialized) {
 ```
 
 # Troubleshooting
-## Firefox is not sorting by date correctly
-Make sure your sort criteria is using the mm/dd/yyyy format if it is using mm-dd-yyyy then you can change it in razor wiht .Replace("-","/);
+No content pages are showing.
+* Go to the general setting of your page to make sure that under search facets your DPM has setup facets.
+* Go to content page pirority to verify that there are content pages with the correct mapping 

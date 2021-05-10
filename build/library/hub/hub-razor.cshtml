@@ -60,7 +60,11 @@
     /* In order to use custom facets to pre-filter, or filter by form or filter by button it has to be added here first */
     /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
     /* ======================= */
-    @* customFacetFieldNames.Add("ContentType");  /* Example of custom facet (Uncomment it to use) */ *@
+    @* /* Below are the default recommended facets, your project may have differnt ones you can change these as needed. */ *@
+    customFacetFieldNames.Add("hubID"); 
+    customFacetFieldNames.Add("hubDateOverride"); 
+    customFacetFieldNames.Add("hubTopic"); 
+
 
     /* ======================= */
     /* INCLUDE FILTER BY FORM or INCLUDE FILTER BY BUTTONS (Both can not be used on the same HUB simultaneously) */
@@ -96,6 +100,9 @@
 
     /* ======================= */
     /* PRE-FILTERS */
+    /* If you enable prefilters do a search in this code for "PREFILTER SETUP" in order to add the facets you intend to prefilter on  */
+    /* Remember you can have multiple prefilters applied to one HUB */
+    /* NOTE: It is a recommendation that you atleast prefilter by hubID, however by default prefiters are turned off to help during the setup process to just verify that content pages are coming into the feed */
     /* ======================= */
     int usePreFilter = 0;
     /* Keep mappings make it so that in the filter dropdowns it show all facets mapped to that page */
@@ -110,12 +117,12 @@
     /* DEFAULT SORT ON LOAD (1 = Sorting On / 0 = Sorting Off) */
     int sort = 1;
     /* SORT CRITERIA (Must be name of data attriubute found on the item to sort by) */
-    /* Example: If you wanted to sort by a custom facet of EventDate you would add the facet it to the "ADD ANY CUSTOM FACETS YOU MAY NEED" section and then to the "Item level attributes" section and the sortCriteria would be "data-hub-event-date" */
-    string sortCriteria = "data-hub-date-updated";
+    /* NOTE: The default sorting is based on hubDateOverride, if the content page does not have a value it will use the created date instead */
+    string sortCriteria = "data-hub-date-override";
     /* SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
-    /* By default sorting is done alphabetically however if the word date is found in the sortCriteria the JS will convert the data into a universal date format so it does not matter if one content page is formated as YYYY-MM-DD and another content page is MM-DD-YYYY. */
-    /* When dealing with Dates, think of them as a whole number descending is largest number first so for example 03-05-2021 would come before 01-15-2020 */
-    /* When dealding with Alphabets, descending is Z to A */
+    /* Sorting is done alphabetically for excample descending is "Z" to "A" however when dealing with Dates, think of them as a whole number descending is largest number first so for example "03-05-2021" would come before "01-15-2020" */
+    /* Note: If the word date is found in the sortCriteria name the JS will convert the data into a universal date format so it should not matter if one content page is formated as YYYY-MM-DD and another content page is MM-DD-YYYY. */
+
     int sortDirection = 1;
 
     
@@ -257,13 +264,19 @@ var thisCat = "";
         data-no-prefiltered-results-text="@noPrefilteredResults">
         @if(usePreFilter == 1){
             <ul class="hub-prefilter" aria-hidden="true">
-                @* ======================= *@
-                @* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) *@
-                @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
-                @* ======================= *@
+                @* =======================  *@
+                @* /* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) */ *@
+                @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+                @*  =======================  *@
                 
-                @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID)
-                @addPreFilters("Account Services","ALL","ALL","ALL",thisHubID)
+                @*/* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once */ *@
+                @addPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID)
+
+                @* /* Other examples */ *@
+                @* /* Below an example of how to pre filter by category Account Services */ *@
+                @* /* @addPreFilters("Account Services","ALL","ALL","ALL",thisHubID) */ *@
+                @* /* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time */ *@
+                @* /* @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) */ *@
             </ul>
         }
 
@@ -297,21 +310,21 @@ var thisCat = "";
                         @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
                         @* /* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes */ *@
                         @* ======================= *@
-                        @* @addFilter( 1 ,"Content Type","facet-contenttype","Select Content Type", thisHubID)  /* Example of custom facet (Uncomment it to use) */ *@
-                        @addFilter( 1 ,"Category","category","Select Category", thisHubID)
-                        @addFilter( 1 ,"Location","location","Select Location", thisHubID)
-                        @addFilter( 1 ,"Is-telecommute","facet-is-telecommute","Select Is telecommute", thisHubID)
-                        @addFilter( 1 ,"Campaign","facet-campaign","Select Campaign", thisHubID)
-                        @addFilter( 1 ,"Company Name","facet-companyname","Select Company Name", thisHubID)
-                        @addFilter( 1 ,"Industry","facet-industry","Select Industry", thisHubID)
-                        @addFilter( 1 ,"Is Manager","facet-is-manager","Select Is Manager", thisHubID)
-                        @addFilter( 1 ,"Division","facet-job-level","Select Division", thisHubID)
-                        @addFilter( 1 ,"Job Status","facet-job-status","Select Job Status", thisHubID)
-                        @addFilter( 1 ,"Job Type","facet-job-type","Select Job Type", thisHubID)
-                        @addFilter( 1 ,"Travel","facet-travel","Select Travel", thisHubID)
-                        @addFilter( 1 ,"Hours Per Week","facet-hours-per-week","Select Hours Per Week", thisHubID)
-                        @addFilter( 1 ,"Salary Relocation","facet-salary-relocation","Select Salary Relocation", thisHubID)
-                        @addFilter( 1 ,"Salary Time","facet-salary-time","Select Salary Time", thisHubID)
+                        @addFilter( 1 ,"Content Topic","facet-hubtopic","Any Topic", thisHubID)  /* Example of custom facet */
+                        @addFilter( 1 ,"Category","category","Any Category", thisHubID)
+                        @addFilter( 1 ,"Location","location","Any Location", thisHubID)
+                        @addFilter( 1 ,"Is-telecommute","facet-is-telecommute","Any Is telecommute", thisHubID)
+                        @addFilter( 1 ,"Campaign","facet-campaign","Any Campaign", thisHubID)
+                        @addFilter( 1 ,"Company Name","facet-companyname","Any Company Name", thisHubID)
+                        @addFilter( 1 ,"Industry","facet-industry","Any Industry", thisHubID)
+                        @addFilter( 1 ,"Is Manager","facet-is-manager","Any Is Manager", thisHubID)
+                        @addFilter( 1 ,"Division","facet-job-level","Any Division", thisHubID)
+                        @addFilter( 1 ,"Job Status","facet-job-status","Any Job Status", thisHubID)
+                        @addFilter( 1 ,"Job Type","facet-job-type","Any Job Type", thisHubID)
+                        @addFilter( 1 ,"Travel","facet-travel","Any Travel", thisHubID)
+                        @addFilter( 1 ,"Hours Per Week","facet-hours-per-week","Any Hours Per Week", thisHubID)
+                        @addFilter( 1 ,"Salary Relocation","facet-salary-relocation","Any Salary Relocation", thisHubID)
+                        @addFilter( 1 ,"Salary Time","facet-salary-time","Any Salary Time", thisHubID)
                         @if (autoSubmit != 1) {
                             <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
                         }
@@ -371,13 +384,20 @@ var thisCat = "";
                             var customFacetClass = "";
                             var eLinkClass = "";
 
-                            @* /* Example of adding a value from a custom facet to the item level attributes to make the HUB sortable on that data in this case we are using the facet called EventDate */ *@
-                            var eventDate = "";
+                            @* /* Date Override Logic, We check for a override input and if there is none then we use the created date as the value */ *@
+                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* /* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate */ *@
+
                             foreach (var mapping in contentPage.KeywordPageMappings){
-                                if( mapping.CustomFacetFieldNameDisplay == "EventDate" && mapping.CustomFacetFieldValueDisplay != "" ){
-                                    eventDate = mapping.CustomFacetFieldValueDisplay;
+                                if( mapping.CustomFacetFieldNameDisplay == "hubDateOverride" && mapping.CustomFacetFieldValueDisplay != "" ){
+                                
+                                    dateCreatedOrOverride = DateTime.Parse(mapping.CustomFacetFieldValueDisplay);
+                                    
+                                } else {
+                                    // No need to parse this field as it is already a date type
+                                    dateCreatedOrOverride = contentPage.DateCreated;
                                 }
                             }
+
 
                             @* ========================== *@
                             @* /* Item level attributes */ *@
@@ -392,7 +412,7 @@ var thisCat = "";
                                 data-hub-created-by="@pageCreated" 
                                 data-hub-date-updated="@contentPage.DateUpdated.ToString("MM/dd/yyyy HH:mm:ss")" 
                                 data-hub-date-created="@contentPage.DateCreated.ToString("MM/dd/yyyy HH:mm:ss")"
-                                data-hub-event-date="@eventDate">
+                                data-hub-date-override="@dateCreatedOrOverride.ToString("MM/dd/yyyy HH:mm:ss")">
                                 
                                 @* ========================== *@
                                 @* /* Content to return for each record */ *@
@@ -436,20 +456,24 @@ var thisCat = "";
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
 
-                                        @* /* Example of displaying a value from a custom facet in this case called ContentType */ *@
+                                        @if( string.IsNullOrWhiteSpace(contentPage.Description) ) {
+                                            <span class="hub-item__description">@contentPage.Description</span>
+                                        }
+
+                                        <span class="hub-item__fake-button">Learn More</span>
+
+                                        // Displaying the Created by or Override date (No null check because it will always be set)
+                                        // Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA
+                                        <span class="hub-item__date">@dateCreatedOrOverride.ToString("MMMM dd, yyy")</span>
+                                        
+                                        @* /* Example of displaying a value from a custom facet in this case called hubTopic */ *@
                                         @foreach (var mapping in contentPage.KeywordPageMappings){
-                                            if( mapping.CustomFacetFieldNameDisplay == "ContentType" && mapping.CustomFacetFieldValueDisplay != "" ){
-                                                <span class="hub-item__contenttype">
+                                            if( mapping.CustomFacetFieldNameDisplay == "hubTopic" && mapping.CustomFacetFieldValueDisplay != "" ){
+                                                <span class="hub-item__hubtopic">
                                                     @mapping.CustomFacetFieldValueDisplay
                                                 </span>
                                             }
                                         }
-
-                                        <span class="hub-item__description">
-                                            @contentPage.Description
-                                            <span class="hub-item__fake-button">Learn More</span>
-                                        </span>
-                                        
                                     </div>
                                 </a>
                                 
@@ -504,4 +528,4 @@ var thisCat = "";
             @<script id="js-custom-imports" src="https://services1.tmpwebeng.com/custom-imports/custom-imports.js?scripts=hub,tracking"></script>
         );
     }
-}
+} 
