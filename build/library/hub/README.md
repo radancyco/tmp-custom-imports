@@ -42,11 +42,11 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/HUB%20Pages%20Implementati
    * Make sure to read all comments in the razor, as that will help you know what to change and give you examples of how to customize.
    * Make sure to get the correct value from the ticket for the prefilter being based on `hubID`.
    * You may want to add additional prefilters for when you know you will need a section in the card to have a value.
-   * Filter by Forms, by default all options are visible, Do NOT delete the `@addfilter`, instead if you want to not have the filter visible change the 1 to a 0 for that filter.
+
 
 7. SASS Edits
    * Try to keep the same naming convention
-   * If you have several HUBs, most cases the only difference is the HUB Items, so you should add a class to .hub__wrapper to style it differently and in SASS nest that class inside of the .hub-item wrapper via an ampersand
+   * If you have several HUBs, most cases the only difference is the HUB Items, so you should add a class to .hub__wrapper to style it differently and in SASS nest that class inside of the .hub-item wrapper via an ampersand. As demonstrated here https://github.com/radancyco/tmp-custom-imports/blob/main/build/library/hub/scss/hub-defaults.scss#L261
 
 8. Make sure to update the recommended size for thumbnails
    * Go to each Self Service Theme > Image Settings > Related Content
@@ -111,4 +111,4 @@ if (numberOfHubs == numberOfInitialized) {
 # Troubleshooting
 No content pages are showing.
 * Go to the general setting of your page to make sure that under search facets your DPM has setup facets.
-* Go to content page pirority to verify that there are content pages with the correct mapping 
+* Go to content page priority to verify that there are content pages with the correct mapping 
