@@ -1,0 +1,614 @@
+@using Tmp.TalentBrew.Core
+@using Tmp.TalentBrew.Model
+@model PublishedCustomHTMLModuleModel
+@using Tmp.TalentBrew.Core.HtmlHelpers
+
+
+@{
+    var publishedContentPages = Html.GetPublishedContentPages();
+
+    /* ======================= */
+    /* WILL THERE BE MORE THAN ONE HUB ON THIS SAME PAGE? 1 = Yes / 0 = no */ 
+    /* ======================= */
+
+    int moreThanOneHub = 0;
+    
+    /* If there is more than One HUB on the page you need to
+    /* update the following 2 answers to be unique on the page */
+
+    /* ======================= */
+    /* ID FOR THIS HUB - Should always be data-hub-variable just update the number */
+    /* ======================= */
+    var thisHubID = "data-hub-1";
+
+    /* ======================= */
+    /* IN ONE WORD DESCRIBE THE HUB - if there is only one HUB on the page leave blank */
+    /* If there is more than one HUB on the page describe this HUB for example you might have a "Main" and a "Featured" */
+    /* ======================= */
+    var descriptionOfHub = "";
+
+
+    /* ======================= */
+    /* NEEDED FOR TRACKING: DO NOT MODIFY */ 
+    /* ======================= */
+
+    var trackingHubName = "HUB";
+
+    if(moreThanOneHub == 1){
+        trackingHubName = "HUB-" + descriptionOfHub;
+    }
+
+    /* ======================= */
+    /* BASE JOB FACETS: DO NOT MODIFY */ 
+    /* ======================= */
+    var jobFacetFieldNames = new List<string>();
+    jobFacetFieldNames.Add("Campaign");
+    jobFacetFieldNames.Add("Company Name");
+    jobFacetFieldNames.Add("Industry");
+    jobFacetFieldNames.Add("Is Manager");
+    jobFacetFieldNames.Add("Is Telecommute");
+    jobFacetFieldNames.Add("Job Level");
+    jobFacetFieldNames.Add("Job Status");
+    jobFacetFieldNames.Add("Job Type");
+    jobFacetFieldNames.Add("Travel");
+    jobFacetFieldNames.Add("Hours Per Week");
+    jobFacetFieldNames.Add("Salary Relocation");
+    jobFacetFieldNames.Add("Salary Time");
+
+    /* ======================= */
+    /* IF YOU NEED TO ADD ANY CUSTOM JOB FACETS YOU CAN DO HERE  */
+    /* NOTE: Ideally we should be using topics if the data is not coming from the job feed */
+    /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
+    /* ======================= */
+    @*/* EXAMPLE: jobFacetFieldNames.Add("Remote"); */ *@
+
+    /* ======================= */
+    /* TOPICS */ 
+    /* ======================= */
+    var topicFieldNames = new List<string>();
+
+    /* In order to use custom facets to prefilter, or filter by form or filter by button it has to be added here first */
+
+    @*/* TOPIC ADDED */ *@
+    topicFieldNames.Add("hubID"); 
+    topicFieldNames.Add("hubDateOverride"); 
+    topicFieldNames.Add("hubTopic"); 
+    topicFieldNames.Add("hubCareerAreas"); 
+
+
+    /* ======================= */
+    /* INCLUDE FILTER BY FORM or INCLUDE FILTER BY BUTTONS (Both can not be used on the same HUB simultaneously) */
+    /* ======================= */
+    /* 1 = True / 0 = False */
+    int showFilterForm = 1;
+    int showFilterButtons = 0;
+
+    /* ======================= */
+    /* FILTER FORM OPTIONS */
+    /* ======================= */
+    /* FILTER WEIGHTED OR EXACT MATCH  (1 = Weighted Match / 0 = Exact Match) */
+    /* Weighted match will always return a restult, with the most relevant matches first */
+    int filterWeighted = 0;
+    /* Auto submit is only an option when there is only one dropdown so that way Aria live isn't trying to keep updating
+    the user until they are ready  (1 = True / 0 = False) */
+    int autoSubmit = 0;
+    /* Hiding the reset button is only an option when there is only on dropdown, by default that button is there to make it
+    easy for you users with multiple fields  (1 = True / 0 = False) */
+    int hideReset = 0;
+
+    /* ======================= */
+    /* QUERY FILTERS */
+    /* ======================= */
+    /* SHOW ONLY PAGES WITH IMAGES (1 = True / 0 = False) */
+    int imagesOnly = 0;
+    /* SHOW CONTENT PAGE TYPE PAGES (1 = True / 0 = False) */
+    int contentPageType = 1;
+    /* SHOW SELF-SERVICE PAGE TYPE PAGES (1 = True / 0 = False) */
+    int selfServicePageType = 1;
+    /* SHOW ONLY EXTERNAL PAGES (1 = True / 0 = False) */
+    int externalPagesOnly = 0;
+
+    /* ======================= */
+    /* PREFILTERS */
+    /* If you enable prefilters do a search in this code for "PREFILTER SETUP" in order to add the facets you intend to prefilter on  */
+    /* Remember you can have multiple prefilters applied to one HUB */
+    /* NOTE: It is a recommendation that you atleast prefilter by hubID, however by default prefiters are turned off to help during the setup process to just verify that content pages are coming into the feed */
+    /* ======================= */
+    int usePreFilter = 1;
+    /* Keep mappings make it so that in the filter dropdowns it show all facets mapped to that page */
+    int keepMappings = 1;
+    /* Narrow prefilter results by each prefilter it narrows the results down */
+    int narrowMappings = 0;
+
+
+    /* ======================= */
+    /* SORTING */
+    /* ======================= */
+    /* DEFAULT SORT ON LOAD (1 = Sorting On / 0 = Sorting Off) */
+    int sort = 1;
+    /* SORT CRITERIA (Must be name of data attriubute found on the item to sort by) */
+    /* NOTE: The default sorting is based on hubDateOverride, if the content page does not have a value it will use the created date instead */
+    string sortCriteria = "data-hub-date-override";
+    /* SORT DIRECTION (0 = random / 1 = Descending / 2 = Ascending) */
+    /* Sorting is done alphabetically for excample descending is "Z" to "A" however when dealing with Dates, think of them as a whole number descending is largest number first so for example "03-05-2021" would come before "01-15-2020" */
+    /* Note: If the word date is found in the sortCriteria name the JS will convert the data into a universal date format so it should not matter if one content page is formated as YYYY-MM-DD and another content page is MM-DD-YYYY. */
+
+    int sortDirection = 1;
+
+    
+    /* ======================= */
+    /* HOW MANY TO SHOW ON LOAD AND HOW MANY TO SHOW PER CLICK */
+    /* ======================= */
+    /* NUMBER OF RECORDS TO SHOW BEFORE MORE BUTTON (0 disables "more" feature) */
+    int moreDefaultCount = 9;
+    /* NUMBER OF RECORDS TO SHOW WHEN CLICKING MORE (0 will show all) */
+    int moreButtonCount = 3;
+    /* MAX NUMBER OF RECORDS ABLE TO BE SHOW (0 will be no limit) */
+    int moreMaxCount = 0;
+    
+    /* ======================= */
+    /* HOW MANY FLEX COLUMNS */
+    /* ======================= */
+    /* NUMBER OF COLUMNS USING THE DEFAULT STYLES (0 through 6 columns, 0 makes it not flexed and you can ignore default styles) */
+    int systemStyledColumns = 3;
+
+    /* ======================= */
+    /* THUMBNAIL IMAGE SETTINGS */
+    /* ======================= */
+    /* RECOMMENDED THUMBNAIL IMAGE SIZE & SIZE OF SPACER UNTIL IMAGE IS LOADED: Make sure to update the Self Service Theme settings with matching data. SS > Theme > Image Settings > Related Content */
+    /* DO NOT add px after the number */
+    int lazyWidth = 600; 
+    int lazyHeight = 338;
+    /* Default Thumbnail (1 = On / 0 = Off) */
+    int defaultThumbnail = 0;
+    /* Default Thumbnail Source Should be to an image file Hosted on TBCDN */
+    string defaultThumbnailSrc = "https://via.placeholder.com/600x388?text=CP+Tumbnail+Missing";
+
+    /* ======================= */
+    /* ERROR AND ARIA MESSAGES */
+    /* ======================= */
+    /* NO RESULTS FOUND TEXT WHEN USING USERCONTROLED FILTERS (Error and Aria) */
+    string noResults = "No results found, please try picking another combination of filters.";
+    /* RESULTS FOUND WHEN CLICK ON A FILTER OR REST (Aria - will have a number read infront of this string.) */
+    string resultsFound = "Results found.";
+    /* LOAD MORE BUTTON MESSAGE (Aria - will have a number read infront of this string.) */
+    string loadedMsg = "new items have been loaded.";
+    /* NO MORE TO LOAD MESSAGE (Aria - will have a number read infront of this string.) */
+    string finishedMsg = "new items have been loaded and all results are now showing.";
+    /* NO RESULTS FOUND TEXT WHEN USING PREFILTERED FILTERS (Error) */
+    string noPrefilteredResults = "No results found, please come back later.";
+
+    /* ======================= */
+    /* EXTERNAL LINK CONTROLS */
+    /* ======================= */
+    /* DO EXTERNAL LINKS NEED TO OPEN IN A NEW WINODW? (1 = Yes / 0 = No) */
+    int opensNewWidnow = 0;
+    /* This text comes after the title */
+    string ariaWarning = "opens in new window";
+
+    /* ======================= */
+    /* DIAGNOSTICS */
+    /* ======================= */
+    /* Show pages with no mapping  (1 = Yes / 0 = No) */
+    int noMapping = 0; /* ONLY CHANGE THIS IF YOU ARE NOT GETTING PAGES TO APPEAR WITH DEFAULT SETTINGS*/
+}
+
+@* ======================= *@
+@* DO NOT EDIT OR DELETE HELPERS *@
+@* ======================= *@
+
+@* ======================= *@
+@* HELPER: BUILD FILTERS ON PAGE *@
+@* ======================= *@
+@helper addFilter(int selectShow, string selectLabel, string selectFieldName, string selectDefaultText, string currentHub) {
+    if(selectShow == 1){
+        <div class="hub-filter__select-wrapper">
+            <label class="hub-filter__label" for="@currentHub-@selectFieldName">@selectLabel</label>
+            <select class="hub-filter__select" id="@currentHub-@selectFieldName" data-hub-id="@currentHub"><option class="hub-filter__option" value="none">@selectDefaultText</option></select>
+        </div>
+    }
+}
+
+@* ======================= *@
+@* HELPER: PREFILTER ITEMS ON PAGE BASED ON JOB FACETS *@
+@* ======================= *@
+@helper addFacetPreFilters(string cat, string loc, string fName, string fValue, string tName, string tValue, string currentHub) {
+    var thisFacet = "";
+    var thisLoc = "";
+    var thisCat = "";
+
+    if(fName != "ALL"){
+        if(fValue == "ALL") {
+            thisFacet = "[" + @currentHub + "-facet-" + @fName + "]";
+        } else {
+            thisFacet = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
+        }
+    }
+    if(loc != "ALL"){
+        thisLoc = "[" + @currentHub + "-location='" + @loc + "']";
+    }
+    if(cat != "ALL"){
+        thisCat = "[" + @currentHub + "-category='" + @cat + "']";
+    }
+    <li class="js-hub-prefilter" data-query="@thisCat@thisLoc@thisFacet"></li>
+}
+
+@* ======================= *@
+@* HELPER: PREFILTER ITEMS ON PAGE BASED ON TOPIC *@
+@* ======================= *@
+@helper addTopicPreFilters(string tName, string tValue, string currentHub) {
+
+    var thisTopic = "";
+
+    if( !string.IsNullOrWhiteSpace(tName) && tName != "ALL"){
+        if(tValue == "ALL") {
+            thisTopic = "[" + @currentHub + "-topic-" + @tName + "]";
+        } else {
+            thisTopic = "[" + @currentHub + "-topic-" + @tName + "='" + @tValue + "']";
+        }
+    }
+
+    <li class="js-hub-prefilter" data-query="@thisTopic"></li>
+
+}
+    
+@* ======================= *@
+@* HELPER: JOB FACET FILTER BY BUTTONS *@
+@* ======================= *@
+@helper addFacetFilterButton(string cat, string loc, string fName, string fValue, string buttonLabel, string currentHub, string trackingHubName) {
+    var thisString = "";
+    if(fName != "ALL"){
+        thisString = "[" + @currentHub + "-facet-" + @fName + "='" + @fValue + "']";
+    }
+    <li class="hub-filter-btn__item">
+        <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="[@currentHub-category='@cat'][@currentHub-location='@loc']@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName-Filter" data-custom-label="@buttonLabel">@buttonLabel</button>
+    </li>
+}
+
+@* ======================= *@
+@* HELPER: TOPIC FILTER BY BUTTONS *@
+@* ======================= *@
+@helper addTopicFilterButton(string tName, string tValue, string buttonLabel, string currentHub, string trackingHubName) {
+    var thisString = "";
+    if( !string.IsNullOrWhiteSpace(tName) ){
+        thisString = "[" + @currentHub + "-topic-" + @tName + "='" + @tValue + "']";
+    }
+    <li class="hub-filter-btn__item">
+        <button class="js-hub-filter-button js-tb-click-tracking hub-filter-btn__button" data-query="@thisString" data-hub-id="@currentHub" data-custom-category="@trackingHubName-Filter" data-custom-label="@buttonLabel">@buttonLabel</button>
+    </li>
+}
+
+
+    
+@* ======================= *@
+@* HELPER: JOB FACET MAPPINGS FOR ARTICLES *@
+@* ======================= *@
+@helper addFacetMapping(string categoryValue, string locationValue , string facetName, string facetValue, string currentHub) {
+    if(facetName == ""){
+        <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue"></li>
+    }else{
+        <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue" @currentHub-facet-@facetName="@facetValue"></li>
+    }
+}
+
+@* ======================= *@
+@* HELPER: TOPIC MAPPINGS FOR ARTICLES *@
+@* ======================= *@
+@helper addTopicMapping(string topicName, string topicValue, string currentHub) {
+    <li @currentHub-topic-@topicName="@topicValue"></li>
+}
+    
+    
+<section class="js-hub hub__wrapper" 
+        id="@thisHubID" 
+        data-show-form="@showFilterForm" 
+        data-auto-submit="@autoSubmit" 
+        data-prefilter="@usePreFilter"
+        data-keepmappings="@keepMappings"
+        data-narrowmappings="@narrowMappings"
+        data-load-more-default="@moreDefaultCount" 
+        data-load-more-amount="@moreButtonCount"
+        data-load-more-max="@moreMaxCount"
+        data-no-results-text="@noResults"
+        data-results-found-text="@resultsFound"
+        data-no-prefiltered-results-text="@noPrefilteredResults">
+        @if(usePreFilter == 1){
+            <ul class="hub-prefilter" aria-hidden="true">
+                @* =======================  *@
+                @* /* PREFILTER SETUP: You can prefilter by Job Facet and or by Topic */ *@
+                @* /* For Job Facet use addFacetPreFilters and a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+                @* /* For Topic use addTopicPreFilters and a value of ALL for Topic Value if you are filtering just by the Topic Name */ *@
+                @*  =======================  *@
+                
+                @* /* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once */ *@
+                @addTopicPreFilters("hubID","Stories",thisHubID)
+
+
+                @* /* Here is an example of filtering by Job Facet */ *@
+                @* /* @addFacetPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID) */ *@
+                @* /* Below an example of how to pre filter by category Account Services */ *@
+                @* /* @addFacetPreFilters("Account Services","ALL","ALL","ALL",thisHubID) */ *@
+                @* /* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time */ *@
+                @* /* @addFacetPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) */ *@
+            </ul>
+        }
+
+        @if(showFilterButtons == 1 && showFilterForm == 0){
+            @* ======================= *@
+            @* /* FILTER BY BUTTON SETUP: */ *@
+            @* ======================= *@
+            <div class="js-hub-filter-button-wrapper hub-filter-btn__wrapper">
+                <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
+                <ul class="hub-filter-btn__list">
+                    <li class="hub-filter-btn__item"><button class="js-hub-filter-button-reset js-hub-filter-button js-tb-click-tracking hub-filter-btn__button current-active" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Show All">Show All</button></li>
+                
+                @* /* Topic based Buttons (Topic Name, Topic Value, Label of Button, Current Hub, Tracking vairble) */ *@
+                @addTopicFilterButton("hubCareerAreas","Business","Business Topics",thisHubID,trackingHubName)
+
+                @* /* Job Facet based Buttons (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) */ *@
+                @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+                @addFacetFilterButton("Medical Services","New York, NY (City)","job-type","Full Time","Medical (NYC/Full-Time)",thisHubID,trackingHubName)
+                @addFacetFilterButton("Account Services","ALL","ALL","ALL","Account Services (Global)",thisHubID,trackingHubName)
+                </ul>
+            </div>
+        }
+
+
+        @* ======================= *@
+        @* /* FILTER BY FORM  */*@
+        @* ======================= *@
+        @if(showFilterForm == 1 && showFilterButtons == 0 ){
+            <form class="js-hub-filter-form hub-filter">
+                <fieldset class="hub-filter__fieldset">
+                    <legend class="hub-filter__heading">Filter stories</legend>
+                    <div class="hub-filter__controls">
+                        @* ======================= *@
+                        @* /* ADDING AND REMOVING FILTERS */ *@
+                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@ 
+                        @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
+                        @* /* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes */ *@
+                        @* ======================= *@
+                        @addFilter( 1 ,"Content Topic","topic-hubtopic","Any Topic", thisHubID)  @* /* Example of topic */ *@
+                        @addFilter( 1 ,"Content Topic","topic-hubcareerareas","Any", thisHubID) 
+                        @*/* Below are the default Job Facets, there are no issues with re-ordering these before topics */*@
+                        @*/* By default these job feed based filters are turned off, that is due to the encourgment of using topics instead, however if the data is coming from the feed we can use the below filters */*@
+                        @addFilter( 0 ,"Category","category","Any Category", thisHubID)
+                        @addFilter( 0 ,"Location","location","Any Location", thisHubID)
+                        @addFilter( 0 ,"Is-telecommute","facet-is-telecommute","Any Is telecommute", thisHubID)
+                        @addFilter( 0 ,"Campaign","facet-campaign","Any Campaign", thisHubID)
+                        @addFilter( 0 ,"Company Name","facet-companyname","Any Company Name", thisHubID)
+                        @addFilter( 0 ,"Industry","facet-industry","Any Industry", thisHubID)
+                        @addFilter( 0 ,"Is Manager","facet-is-manager","Any Is Manager", thisHubID)
+                        @addFilter( 0 ,"Division","facet-job-level","Any Division", thisHubID)
+                        @addFilter( 0 ,"Job Status","facet-job-status","Any Job Status", thisHubID)
+                        @addFilter( 0 ,"Job Type","facet-job-type","Any Job Type", thisHubID)
+                        @addFilter( 0 ,"Travel","facet-travel","Any Travel", thisHubID)
+                        @addFilter( 0 ,"Hours Per Week","facet-hours-per-week","Any Hours Per Week", thisHubID)
+                        @addFilter( 0 ,"Salary Relocation","facet-salary-relocation","Any Salary Relocation", thisHubID)
+                        @addFilter( 0 ,"Salary Time","facet-salary-time","Any Salary Time", thisHubID)
+                        @if (autoSubmit != 1) {
+                            <button class="js-hub-submit-filters hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter">Filter</button>
+                        }
+                        @if (hideReset != 1) {
+                            <button class="js-hub-reset-filters js-tb-click-tracking hub-filter__button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Reset">Reset</button>
+                        }
+                    </div>
+                </fieldset>
+            </form>
+        }
+
+        @* ======================= *@
+        @* /* Error Message If both Filter form and Filter buttons are enabled */ *@
+        @* ======================= *@
+        @if( showFilterButtons == 1 && showFilterForm == 1 ) {
+            <span styles="font-weight:bold; font-size:24px">Filter Buttons and Filter Form can not bot be used at the same time on the same HUB.</span>
+        }
+
+        <ul class="js-hub-content hub-content__list" 
+            data-sort="@sort" 
+            data-filter-weight="@filterWeighted" 
+            data-sort-criteria="@sortCriteria"
+            data-sort-direction="@sortDirection"
+            data-system-css-columns="@systemStyledColumns">
+            @foreach (var contentPage in publishedContentPages){
+                var pageCreated = contentPage.IsCmsCreated ? "SS created" : "TMP created";
+                int externalPage = 0;
+                if ( contentPage.LinkUrl.StartsWith("/") == false ) {
+                    externalPage = 1;
+                }
+                string ariaAttr = "";
+                if( externalPage == 1 && opensNewWidnow == 1) { 
+                    ariaAttr = "target=\"_blank\" rel=\"noopener\" aria-label=\"" + @contentPage.Title + " (" + ariaWarning + ")\"";
+                }
+                if( ( imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1 ) && 
+                    ( externalPagesOnly == 1 && externalPage == 1 || externalPagesOnly != 1 ) &&
+                    ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){     
+
+                    @* ========================== *@
+                    @* /* Exclusions */ *@
+                    @* ========================== *@
+                    string compareExclude = contentPage.LinkUrl;
+                    int run;
+                    switch(compareExclude){
+                        case "/example-exclusion-url":
+                            run = 0;
+                            break;
+                        default:
+                            run = 1;
+                            break;
+                    }
+                    
+                    if(run == 1){
+                        if ( ( contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any() ) || ( contentPage.ContentPageTopicItems != null && contentPage.ContentPageTopicItems.Any() ) || noMapping == 1 ) {
+                            int v = 0;
+                            var videoType = "";
+                            var contentTypeClass = "";
+                            var eLinkClass = "";
+
+                            @* /* Date Override Logic, We check for a override input and if there is none then we use the created date as the value */ *@
+                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* /* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate */ *@
+
+                            foreach (var mappedTopic in contentPage.ContentPageTopicItems){
+                                if( mappedTopic.Name == "hubDateOverride" && mappedTopic.Value != "" ){
+                                
+                                    dateCreatedOrOverride = DateTime.Parse(mappedTopic.Value);
+                                    
+                                } else {
+                                    // No need to parse this field as it is already a date type
+                                    dateCreatedOrOverride = contentPage.DateCreated;
+                                }
+                            }
+
+
+                            @* ========================== *@
+                            @* /* Item level attributes */ *@
+                            @* ========================== *@
+                            <li class="js-hub-item hub-content__item showing-by-filter"
+                                data-hub-origin="@contentPage.IsCmsCreated"  
+                                data-hub-title="@contentPage.Title"  
+                                data-hub-meta="@contentPage.Description" 
+                                data-hub-url="@contentPage.PageUrl" 
+                                data-hub-link="@contentPage.LinkUrl" 
+                                data-hub-image="@contentPage.ThumbnailFilePath" 
+                                data-hub-created-by="@pageCreated" 
+                                data-hub-date-updated="@contentPage.DateUpdated.ToString("MM/dd/yyyy HH:mm:ss")" 
+                                data-hub-date-created="@contentPage.DateCreated.ToString("MM/dd/yyyy HH:mm:ss")"
+                                data-hub-date-override="@dateCreatedOrOverride.ToString("MM/dd/yyyy HH:mm:ss")">
+                                
+                                @* ========================== *@
+                                @* /* Content to return for each record */ *@
+                                @* /* This where most Front end changes happen */ *@
+                                @* ========================== *@
+                                @if(contentPage.LinkUrl.Contains("youtube")){
+                                    videoType = "video-link youtube";
+                                } else if(contentPage.LinkUrl.Contains("vimeo")){
+                                    videoType = "video-link vimeo";
+                                } else if(contentPage.LinkUrl.Contains(".mp4")){
+                                    videoType = "video-link mp4";
+                                }
+                                @if( externalPage == 1 ) {
+                                    eLinkClass = "external-link";
+                                }
+                                @* ======================= *@
+                                @*/* Example of adding a class to the link based on topic in this case called hubContentType */*@
+                                @* ======================= *@
+                                @foreach (var mappedTopic in contentPage.ContentPageTopicItems){
+                                    if(mappedTopic.Name == "hubContentType"){
+                                        if( mappedTopic.Value == "video" || mappedTopic.Value == "Video" ){
+                                            contentTypeClass = "video-type";
+                                        }
+                                    }
+                                }
+                                @* ======================= *@
+                                @*  
+                                    // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so 
+                                    // ideally we wrap all content in the link.
+                                *@
+                                @* ======================= *@
+                                <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @contentTypeClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
+                                    <div class="hub-item__image-wrapper">
+                                        @* /* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on */ *@
+                                        @if( string.IsNullOrWhiteSpace(contentPage.ThumbnailFilePath) && defaultThumbnail == 1 ) {
+                                            <img class="js-hub-lazy hub-item__image" data-src="@defaultThumbnailSrc" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                        } else {
+                                            <img class="js-hub-lazy hub-item__image" data-src="@contentPage.ThumbnailFilePath" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
+                                        }
+                                    </div>
+                                    <div class="hub-item__text">
+                                        <span class="hub-item__title">@contentPage.Title</span>
+
+                                        @if( string.IsNullOrWhiteSpace(contentPage.Description) ) {
+                                            <span class="hub-item__description">@contentPage.Description</span>
+                                        }
+
+                                        <span class="hub-item__fake-button">Learn More</span>
+
+                                        @* /* Displaying the Created by or Override date (No null check because it will always be set) */  *@
+                                        @* /* Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA */ *@
+                                        <span class="hub-item__date">@dateCreatedOrOverride.ToString("MMMM dd, yyy")</span>
+                                        
+                                        @* /* Example of displaying a value from a job facet in this case called campaign */ *@
+                                        @foreach (var mappedFacet in contentPage.KeywordPageMappings){
+                                            if( mappedFacet.CustomFacetFieldNameDisplay == "Campaign" && mappedFacet.CustomFacetFieldValueDisplay != "" ){
+                                                <span class="hub-item__campaign">
+                                                    @mappedFacet.CustomFacetFieldValueDisplay
+                                                </span>
+                                            }
+                                        }
+
+
+
+                                        @* /* Example of displaying a value from a topic in this case called hubTopic */ *@
+                                        @foreach (var mappedTopic in contentPage.ContentPageTopicItems){
+                                            if( mappedTopic.Name == "hubTopic" && mappedTopic.Value != "" ){
+                                                <span class="hub-item__hubtopic">
+                                                    @mappedTopic.Value
+                                                </span>
+                                            }
+                                        }
+                                    </div>
+                                </a>
+                                
+                                @* ========================== *@
+                                @* Required for filtering *@
+                                @* DO NOT EDIT DO NOT DELETE *@
+                                @* ========================== *@
+                                @if( noMapping == 0 ) {
+                                    <ul class="js-hub-mappings hidden" aria-hidden="true">
+                                        @foreach (var mappedFacet in contentPage.KeywordPageMappings){
+                                            var cat = mappedFacet.CategoryDisplay;
+                                            var loc = mappedFacet.LocationDisplay;
+                                            if(jobFacetFieldNames.Contains(mappedFacet.CustomFacetFieldName)){
+                                                var fName = mappedFacet.CustomFacetFieldNameDisplay.Replace(" ", "-");
+                                                var fValue = mappedFacet.CustomFacetFieldValueDisplay;
+                                                @addFacetMapping(cat, loc, fName , fValue, thisHubID);
+                                            } else{
+                                                @addFacetMapping(cat, loc, "IGNORE", "", thisHubID);
+                                            }                                    
+                                        }
+
+                                        @* TOPIC ADDED *@
+                                        @if(contentPage.ContentPageTopicItems != null && contentPage.ContentPageTopicItems.Any()){
+                                            @foreach(var mappedTopic in contentPage.ContentPageTopicItems)
+                                                {
+                                                    var topicName = mappedTopic.Name;
+                                                    var topicValue = mappedTopic.Value;
+                                                    @addTopicMapping(topicName, topicValue, thisHubID);
+                                            }                                    
+                                        }
+
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    }
+                    
+                }
+            }
+        </ul>    
+        @if( moreDefaultCount > 0 || showFilterForm == 1 || showFilterButtons == 1 ) {
+            <div class="hub__bottom-nav">
+                @if(moreDefaultCount > 0){
+                    <button class="js-hub-load-more-button js-tb-click-tracking hub__load-more-button disabled" data-hub-id="@thisHubID"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
+                }
+                @if(showFilterForm == 1 || showFilterButtons == 1){
+        
+                    <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
+                }
+            </div>
+        }
+        <div class="js-aria-hub-msg hub-visually-hidden" aria-live="polite"></div>
+</section>
+
+@* ======================= *@
+@* Only inject the script on the first instance of the HUB on the page*@
+@* ======================= *@
+
+@if( thisHubID == "data-hub-1" ) {
+    using (var context = Html.BeginScriptContext()) {
+        @* Hub Functionality Script *@
+        Html.AddScriptBlock(
+            @<script id="js-custom-imports" src="https://services1.tmpwebeng.com/custom-imports/custom-imports.js?scripts=hub,tracking"></script>
+        );
+    }
+} 

@@ -1,19 +1,22 @@
 HUB is a JS based tool that when used with the TB Content Helper Razor can be used to dyamnicly bring in content pages and give users the control to filter those pages.
 
+!! Check to see if your site has Topics enabled. If it is not enabled and it is the first time a HUB is being setup for the site then tag Bulmer and Brock on your ticket requesting the Topics flag to be enabled. If there is already a HUB on the site and already pages mapped to that HUB using custom facets discuss with your DPM/CSS the possibility of moving the client over to using Topics.
+
 First thing to do is make sure that you know all the requirements of the project:
 
 # Prerequisites before development:
-* Before you can even start a HUB you are required to have content pages on the site, either made in TB or SS.​​​
-* You should know how the client expects these pages to be organized and the content pages.
-* These pages should have facet mapping applied to them already (This is done by the DPM/AT/Client).
-* It needs to be already decided if the HUB will exist on its own content page or as an addition to an existing page.​
+* Before you can even start a HUB you are required to have content pages (external or internal) on the site made in either TB or SS.​​​
+* You should know how the client expects these pages to be organized and what information will be displayed on the card.
+* These content pages should have topic keys and values mapped to them already (This is done by the DPM/AT/Client).
+* It needs to be already decided if the HUB will exist on its own content page or as an addition to an existing page.
+* All HUBs should be prefiltered by the key `hubID` ​but you need to make sure the DPM provides the value.
 
 
 # Glossary Terms:
-https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#glossary
+https://tmpww.sharepoint.com/sites/delivery/SitePages/HUB%20Pages%20Implementation.aspx#glossary
 
 # Use cases:
-https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
+https://tmpww.sharepoint.com/sites/delivery/SitePages/HUB%20Pages%20Implementation.aspx#use-cases
 
 # UID Setup:
 1. If the HUB will live on a content page, then setup a content page called HUB or has HUB in the name.
@@ -23,7 +26,9 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
    * use the naming convention of "HUB - [Function of this particular HUB]" and if you have multiple HUBs on several pages then add "- [Placement]" to the end
      * ie. SITE1, "HUB - Intern Stories"
      * ie. SITE2, "HUB - Events - Events Page", "HUB - Events - Home Page" and "HUB - Blog - Blog Page"
-   * Replace all of the code in the CustomHTML module with the code from https://github.com/radancyco/tmp-custom-imports/blob/main/build/library/hub/hub-razor.cshtml
+   * Replace all of the code in the CustomHTML module with the code from one of the following:
+      * If using topics: https://github.com/radancyco/tmp-custom-imports/blob/main/build/library/hub/hub-razor-using-topics.cshtml
+      * If using custom facets: https://github.com/radancyco/tmp-custom-imports/blob/main/build/library/hub/hub-razor.cshtml
 
 3. Assign the CustomHTML Module to the page that it will be displayed on.
   * i.e Home Page or Content Page
@@ -33,8 +38,10 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
 5. Without making any changes to the configurations push your changes to your preview site and test to make sure it is working. (If no pages load in, then use the DIAGNOSTICS feature of allowing content pages with no mapping to appear. Often the step of mapping content pages is missed ad the HUB can not work without mappings.)
    * You should be able to click on each filter dropdown and see what is currently mapped to all content pages in the system.
 
-6. Now go through the configuration questions https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#hub-questions and update the options in the module razor
-   * Make sure to read all comments in the razor, as that will help you know what to change and give you examples of how to customize
+6. Check the ticket for any configuration information (this ideally should be in the ticket description but also could be a file attached to the ticket) and update the options in the module razor
+   * Make sure to read all comments in the razor, as that will help you know what to change and give you examples of how to customize.
+   * Make sure to get the correct value from the ticket for the prefilter being based on `hubID`.
+   * You may want to add additional prefilters for when you know you will need a section in the card to have a value.
    * Filter by Forms, by default all options are visible, Do NOT delete the `@addfilter`, instead if you want to not have the filter visible change the 1 to a 0 for that filter.
 
 7. SASS Edits
@@ -61,7 +68,7 @@ https://tmpww.sharepoint.com/sites/delivery/SitePages/TB%20HUB.aspx#use-cases
    You can listen for this event via the following function and even determine when all HUBs on the page have initialized.
 ``` javascript
 $(document).on('hubInitialized', function (e) {
-    console.log('Initialized for HubID: ' + e.detail.hubID + ' Number of HUBs to initialize: ' + e.detail.index + ' All HUBs initialized: ' + e.detail.final)
+    console.log('Initialized for hubID: ' + e.detail.hubID + ' Number of HUBs to initialize: ' + e.detail.index + ' All HUBs initialized: ' + e.detail.final)
 })
 ```
 
@@ -69,7 +76,7 @@ $(document).on('hubInitialized', function (e) {
    Interaction Types: resetFilters, filterByButtonData, filterByFormData
 ``` javascript
 $(document).on('hubInteraction', function (e) {
-    console.log('HUB Event for HubID: ' + e.detail.hubID + ' Interaction Type: ' + e.detail.interactionType + ' Number of Results: ' + e.detail.numberOfResults )
+    console.log('HUB Event for hubID: ' + e.detail.hubID + ' Interaction Type: ' + e.detail.interactionType + ' Number of Results: ' + e.detail.numberOfResults )
 })
 ```
 
