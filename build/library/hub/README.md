@@ -1,6 +1,6 @@
 HUB is a JS based tool that when used with the TB Content Helper Razor can be used to dyamnicly bring in content pages and give users the control to filter those pages.
 
-!! Check to see if your site has Topics enabled. If it is not enabled and it is the first time a HUB is being setup for the site then tag Bulmer and Brock on your ticket requesting the Topics flag to be enabled. If there is already a HUB on the site and already pages mapped to that HUB using custom facets discuss with your DPM/CSS the possibility of moving the client over to using Topics.
+> **⚠ REMEMBER: Check to see if your site has Topics enabled. If it is not enabled and it is the first time a HUB is being setup for the site then tag Bulmer and Brock on your ticket requesting the Topics flag to be enabled. If there is already a HUB on the site and already pages mapped to that HUB using custom facets discuss with your DPM/CSS the possibility of moving the client over to using Topics.
 
 First thing to do is make sure that you know all the requirements of the project:
 
