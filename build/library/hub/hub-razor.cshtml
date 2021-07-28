@@ -8,11 +8,11 @@
     var publishedContentPages = Html.GetPublishedContentPages();
 
     /* ======================= */
-    /* WILL THERE BE MORE THAN ONE HUB ON THIS SAME PAGE? 1 = Yes / 0 = no */ 
+    /* WILL THERE BE MORE THAN ONE HUB ON THIS SAME PAGE? 1 = Yes / 0 = no */
     /* ======================= */
 
     int moreThanOneHub = 0;
-    
+
     /* If there is more than One HUB on the page you need to
     /* update the following 2 answers to be unique on the page */
 
@@ -29,7 +29,7 @@
 
 
     /* ======================= */
-    /* NEEDED FOR TRACKING: DO NOT MODIFY */ 
+    /* NEEDED FOR TRACKING: DO NOT MODIFY */
     /* ======================= */
 
     var trackingHubName = "HUB";
@@ -39,7 +39,7 @@
     }
 
     /* ======================= */
-    /* BASE FACETS: DO NOT MODIFY */ 
+    /* BASE FACETS: DO NOT MODIFY */
     /* ======================= */
     var customFacetFieldNames = new List<string>();
     customFacetFieldNames.Add("Campaign");
@@ -61,9 +61,9 @@
     /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
     /* ======================= */
     @* /* Below are the default recommended facets, your project may have differnt ones you can change these as needed. */ *@
-    customFacetFieldNames.Add("hubID"); 
-    customFacetFieldNames.Add("hubDateOverride"); 
-    customFacetFieldNames.Add("hubTopic"); 
+    customFacetFieldNames.Add("hubID");
+    customFacetFieldNames.Add("hubDateOverride");
+    customFacetFieldNames.Add("hubTopic");
 
 
     /* ======================= */
@@ -125,7 +125,7 @@
 
     int sortDirection = 1;
 
-    
+
     /* ======================= */
     /* HOW MANY TO SHOW ON LOAD AND HOW MANY TO SHOW PER CLICK */
     /* ======================= */
@@ -135,7 +135,7 @@
     int moreButtonCount = 3;
     /* MAX NUMBER OF RECORDS ABLE TO BE SHOW (0 will be no limit) */
     int moreMaxCount = 0;
-    
+
     /* ======================= */
     /* HOW MANY FLEX COLUMNS */
     /* ======================= */
@@ -147,7 +147,7 @@
     /* ======================= */
     /* RECOMMENDED THUMBNAIL IMAGE SIZE & SIZE OF SPACER UNTIL IMAGE IS LOADED: Make sure to update the Self Service Theme settings with matching data. SS > Theme > Image Settings > Related Content */
     /* DO NOT add px after the number */
-    int lazyWidth = 600; 
+    int lazyWidth = 600;
     int lazyHeight = 338;
     /* Default Thumbnail (1 = On / 0 = Off) */
     int defaultThumbnail = 0;
@@ -221,7 +221,7 @@ var thisCat = "";
     }
     <li class="js-hub-prefilter" data-query="@thisCat@thisLoc@thisFacet"></li>
 }
-    
+
 @* ======================= *@
 @* HELPER: YOUR FILTER BY BUTTONS *@
 @* ======================= *@
@@ -236,7 +236,7 @@ var thisCat = "";
 }
 
 
-    
+
 @* ======================= *@
 @* HELPER: MAPPINGS FOR ARTICLES *@
 @* ======================= *@
@@ -247,16 +247,16 @@ var thisCat = "";
         <li @currentHub-category="@categoryValue" @currentHub-location="@locationValue" @currentHub-facet-@facetName="@facetValue"></li>
     }
 }
-    
-    
-<section class="js-hub hub__wrapper" 
-        id="@thisHubID" 
-        data-show-form="@showFilterForm" 
-        data-auto-submit="@autoSubmit" 
+
+
+<section class="js-hub hub__wrapper"
+        id="@thisHubID"
+        data-show-form="@showFilterForm"
+        data-auto-submit="@autoSubmit"
         data-prefilter="@usePreFilter"
         data-keepmappings="@keepMappings"
         data-narrowmappings="@narrowMappings"
-        data-load-more-default="@moreDefaultCount" 
+        data-load-more-default="@moreDefaultCount"
         data-load-more-amount="@moreButtonCount"
         data-load-more-max="@moreMaxCount"
         data-no-results-text="@noResults"
@@ -268,7 +268,7 @@ var thisCat = "";
                 @* /* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) */ *@
                 @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
                 @*  =======================  *@
-                
+
                 @*/* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once */ *@
                 @addPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID)
 
@@ -306,7 +306,7 @@ var thisCat = "";
                     <div class="hub-filter__controls">
                         @* ======================= *@
                         @* /* ADDING AND REMOVING FILTERS */ *@
-                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@ 
+                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@
                         @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
                         @* /* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes */ *@
                         @* ======================= *@
@@ -343,9 +343,9 @@ var thisCat = "";
             <span styles="font-weight:bold; font-size:24px">Filter Buttons and Filter Form can not bot be used at the same time on the same HUB.</span>
         }
 
-        <ul class="js-hub-content hub-content__list" 
-            data-sort="@sort" 
-            data-filter-weight="@filterWeighted" 
+        <ul class="js-hub-content hub-content__list"
+            data-sort="@sort"
+            data-filter-weight="@filterWeighted"
             data-sort-criteria="@sortCriteria"
             data-sort-direction="@sortDirection"
             data-system-css-columns="@systemStyledColumns">
@@ -356,12 +356,12 @@ var thisCat = "";
                     externalPage = 1;
                 }
                 string ariaAttr = "";
-                if( externalPage == 1 && opensNewWidnow == 1) { 
+                if( externalPage == 1 && opensNewWidnow == 1) {
                     ariaAttr = "target=\"_blank\" rel=\"noopener\" aria-label=\"" + @contentPage.Title + " (" + ariaWarning + ")\"";
                 }
-                if( ( imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1 ) && 
+                if( ( imagesOnly == 1 && @contentPage.ThumbnailFilePath != "" || imagesOnly != 1 ) &&
                     ( externalPagesOnly == 1 && externalPage == 1 || externalPagesOnly != 1 ) &&
-                    ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){     
+                    ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){
 
                     @* ========================== *@
                     @* /* Exclusions */ *@
@@ -376,7 +376,7 @@ var thisCat = "";
                             run = 1;
                             break;
                     }
-                    
+
                     if(run == 1){
                         if ( ( contentPage.KeywordPageMappings != null && contentPage.KeywordPageMappings.Any() ) || noMapping == 1 ) {
                             int v = 0;
@@ -389,9 +389,9 @@ var thisCat = "";
 
                             foreach (var mapping in contentPage.KeywordPageMappings){
                                 if( mapping.CustomFacetFieldNameDisplay == "hubDateOverride" && mapping.CustomFacetFieldValueDisplay != "" ){
-                                
+
                                     dateCreatedOrOverride = DateTime.Parse(mapping.CustomFacetFieldValueDisplay);
-                                    
+
                                 } else {
                                     // No need to parse this field as it is already a date type
                                     dateCreatedOrOverride = contentPage.DateCreated;
@@ -403,17 +403,17 @@ var thisCat = "";
                             @* /* Item level attributes */ *@
                             @* ========================== *@
                             <li class="js-hub-item hub-content__item showing-by-filter"
-                                data-hub-origin="@contentPage.IsCmsCreated"  
-                                data-hub-title="@contentPage.Title"  
-                                data-hub-meta="@contentPage.Description" 
-                                data-hub-url="@contentPage.PageUrl" 
-                                data-hub-link="@contentPage.LinkUrl" 
-                                data-hub-image="@contentPage.ThumbnailFilePath" 
-                                data-hub-created-by="@pageCreated" 
-                                data-hub-date-updated="@contentPage.DateUpdated.ToString("MM/dd/yyyy HH:mm:ss")" 
+                                data-hub-origin="@contentPage.IsCmsCreated"
+                                data-hub-title="@contentPage.Title"
+                                data-hub-meta="@contentPage.Description"
+                                data-hub-url="@contentPage.PageUrl"
+                                data-hub-link="@contentPage.LinkUrl"
+                                data-hub-image="@contentPage.ThumbnailFilePath"
+                                data-hub-created-by="@pageCreated"
+                                data-hub-date-updated="@contentPage.DateUpdated.ToString("MM/dd/yyyy HH:mm:ss")"
                                 data-hub-date-created="@contentPage.DateCreated.ToString("MM/dd/yyyy HH:mm:ss")"
                                 data-hub-date-override="@dateCreatedOrOverride.ToString("MM/dd/yyyy HH:mm:ss")">
-                                
+
                                 @* ========================== *@
                                 @* /* Content to return for each record */ *@
                                 @* /* This where most Front end changes happen */ *@
@@ -439,8 +439,8 @@ var thisCat = "";
                                     }
                                 }
                                 @* ======================= *@
-                                @*  
-                                    // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so 
+                                @*
+                                    // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so
                                     // ideally we wrap all content in the link.
                                 *@
                                 @* ======================= *@
@@ -456,7 +456,7 @@ var thisCat = "";
                                     <div class="hub-item__text">
                                         <span class="hub-item__title">@contentPage.Title</span>
 
-                                        @if( string.IsNullOrWhiteSpace(contentPage.Description) ) {
+                                        @if( !string.IsNullOrWhiteSpace(contentPage.Description) ) {
                                             <span class="hub-item__description">@contentPage.Description</span>
                                         }
 
@@ -465,7 +465,7 @@ var thisCat = "";
                                         // Displaying the Created by or Override date (No null check because it will always be set)
                                         // Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA
                                         <span class="hub-item__date">@dateCreatedOrOverride.ToString("MMMM dd, yyy")</span>
-                                        
+
                                         @* /* Example of displaying a value from a custom facet in this case called hubTopic */ *@
                                         @foreach (var mapping in contentPage.KeywordPageMappings){
                                             if( mapping.CustomFacetFieldNameDisplay == "hubTopic" && mapping.CustomFacetFieldValueDisplay != "" ){
@@ -476,7 +476,7 @@ var thisCat = "";
                                         }
                                     </div>
                                 </a>
-                                
+
                                 @* ========================== *@
                                 @* Required for filtering *@
                                 @* DO NOT EDIT DO NOT DELETE *@
@@ -492,24 +492,24 @@ var thisCat = "";
                                                 @addMapping(cat, loc, fName , fValue, thisHubID);
                                             } else{
                                                 @addMapping(cat, loc, "IGNORE", "", thisHubID);
-                                            }                                    
+                                            }
                                         }
                                     </ul>
                                 }
                             </li>
                         }
                     }
-                    
+
                 }
             }
-        </ul>    
+        </ul>
         @if( moreDefaultCount > 0 || showFilterForm == 1 || showFilterButtons == 1 ) {
             <div class="hub__bottom-nav">
                 @if(moreDefaultCount > 0){
                     <button class="js-hub-load-more-button js-tb-click-tracking hub__load-more-button disabled" data-hub-id="@thisHubID"  data-custom-category="@trackingHubName" data-custom-label="Load More" data-items-loaded-msg="@loadedMsg" data-items-finished-msg="@finishedMsg">Load more</button>
                 }
                 @if(showFilterForm == 1 || showFilterButtons == 1){
-        
+
                     <button class="js-hub-back-to-button js-tb-click-tracking hub__back-to-button" data-hub-id="@thisHubID" data-custom-category="@trackingHubName" data-custom-label="Jump back to filters">Back to filters</button>
                 }
             </div>
@@ -528,4 +528,4 @@ var thisCat = "";
             @<script id="js-custom-imports" src="https://services1.tmpwebeng.com/custom-imports/custom-imports.js?scripts=hub,tracking"></script>
         );
     }
-} 
+}
