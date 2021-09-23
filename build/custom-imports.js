@@ -368,7 +368,7 @@ function customImports() {
 
                 // Run Script
 
-                $.getScript( scriptPath + "library/innagenav/inpagenav.js", function() {
+                $.getScript( scriptPath + "library/inpagenav/inpagenav.js", function() {
                     if ( matches("?custom-debug", url) ) {
                         console.log("CI Debug - inPageNav Script: Loaded")
                     }
