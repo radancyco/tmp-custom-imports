@@ -1,0 +1,67 @@
+/* =========================== */
+/* SCSS For inPageNav Feature */
+/* =========================== */
+
+$primary-nav-breakpoint:768px;
+
+html{
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+.inPageNav{
+  &__back-wrapper{
+    text-align:center;
+    display:block;
+    width:100%;
+  }
+  &__back-link{
+    background: #666 no-repeat center center/25px;
+    background-image: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20.26 10.239'%3E %3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' d='M.67 9.66l9.5-9 9.5 9'/%3E %3C/svg%3E");
+    border-radius: 50%;
+    bottom: -1em;
+    display: block;
+    height: 50px;
+    left: 50%;
+    margin-left: -25px;
+    opacity: 0;
+    overflow: hidden;
+    position: fixed;
+    right: 50%;
+    text-indent: -999em;
+    width: 50px;
+    z-index: 10;
+    &:focus{
+      background-color: rgba(102,102,102,0.7);
+      bottom: 1em;
+      opacity: 1;
+    }
+  }  
+  &__btn{
+    /* when button is set to hide content */
+    display:block;
+    @include breakpoint($primary-nav-breakpoint){
+      display:none;
+    }
+    &[aria-expanded="false"]{      
+      & + .inPageNav__content{
+        display:none;
+        @include breakpoint($primary-nav-breakpoint){
+          display:block;
+        }
+      }
+    }
+    /* when button is set to display content */
+    &[aria-expanded="true"]{      
+      + .inPageNav__content{
+        display:block;
+      }
+    }
+  }
+}

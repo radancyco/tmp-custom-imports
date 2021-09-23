@@ -357,6 +357,25 @@ function customImports() {
             } // End HUB script
 
 
+
+            // In page nav script
+
+            if ( matches("inpagenav", scripts) ) {
+
+                if ( matches("?custom-debug", url) ) {
+                    console.log("CI Debug - inPageNav Script: request detected")
+                }
+
+                // Run Script
+
+                $.getScript( scriptPath + "library/innagenav/inpagenav.js", function() {
+                    if ( matches("?custom-debug", url) ) {
+                        console.log("CI Debug - inPageNav Script: Loaded")
+                    }
+                });
+
+            } // End In page nav script
+
             // Tracking script
             // should always be the LAST script in this list
             // if tracking is present in the scripts param
@@ -374,7 +393,8 @@ function customImports() {
                     }
                 });
 
-            } // End HUB script
+            } // End Tracking script
+
 
 
         }
