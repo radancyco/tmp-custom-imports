@@ -14,7 +14,7 @@ gems:
   - jekyll-last-modified-at
 git-url: https://radancy.dev
 highlighter: rouge
-lang: en-US
+lang: en
 markdown: kramdown
 name: Tools
 owner-name: Michael Spellacy
