@@ -11,7 +11,7 @@
     border-radius: 5px;
     box-shadow: 0 0 1px 1px #ddd;
     transform: translate(-50%, -50%);
-    
+
     &::before {
         content: "";
         width: 0;
@@ -53,11 +53,13 @@
     }
 
     &__svg { // .js-ci-pie-chart__svg
+    display: block;
     position: absolute;
     top: 0;
-    left: 0; 
-    width: 100%; height: 100%;
-    }  
+    left: 0;
+    width: 100%;
+    height: 100%;
+    }
 
 }
 
