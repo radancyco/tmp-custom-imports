@@ -60,7 +60,7 @@
     /* NOTE: Ideally we should be using topics if the data is not coming from the job feed */
     /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
     /* ======================= */
-    @*/* EXAMPLE: jobFacetFieldNames.Add("Remote"); */ *@
+    @* EXAMPLE: jobFacetFieldNames.Add("Remote"); *@
 
     /* ======================= */
     /* TOPICS */
@@ -69,7 +69,7 @@
 
     /* In order to use custom facets to prefilter, or filter by form or filter by button it has to be added here first */
 
-    @*/* TOPIC ADDED */ *@
+    @* TOPIC ADDED *@
     topicFieldNames.Add("hubID");
     topicFieldNames.Add("hubDateOverride");
     topicFieldNames.Add("hubTopic");
@@ -315,38 +315,38 @@
         @if(usePreFilter == 1){
             <ul class="hub-prefilter" aria-hidden="true">
                 @* =======================  *@
-                @* /* PREFILTER SETUP: You can prefilter by Job Facet and or by Topic */ *@
-                @* /* For Job Facet use addFacetPreFilters and a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
-                @* /* For Topic use addTopicPreFilters and a value of ALL for Topic Value if you are filtering just by the Topic Name */ *@
+                @* PREFILTER SETUP: You can prefilter by Job Facet and or by Topic *@
+                @* For Job Facet use addFacetPreFilters and a value of ALL for cateogry, location, facet name and facet value if they are unused *@
+                @* For Topic use addTopicPreFilters and a value of ALL for Topic Value if you are filtering just by the Topic Name *@
                 @*  =======================  *@
 
-                @* /* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once */ *@
+                @* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once *@
                 @addTopicPreFilters("hubID","Stories",thisHubID)
 
 
-                @* /* Here is an example of filtering by Job Facet */ *@
-                @* /* @addFacetPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID) */ *@
-                @* /* Below an example of how to pre filter by category Account Services */ *@
-                @* /* @addFacetPreFilters("Account Services","ALL","ALL","ALL",thisHubID) */ *@
-                @* /* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time */ *@
-                @* /* @addFacetPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) */ *@
+                @* Here is an example of filtering by Job Facet *@
+                @* @addFacetPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID) *@
+                @* Below an example of how to pre filter by category Account Services *@
+                @* @addFacetPreFilters("Account Services","ALL","ALL","ALL",thisHubID) *@
+                @* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time *@
+                @* @addFacetPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) *@
             </ul>
         }
 
         @if(showFilterButtons == 1 && showFilterForm == 0){
             @* ======================= *@
-            @* /* FILTER BY BUTTON SETUP: */ *@
+            @* FILTER BY BUTTON SETUP: *@
             @* ======================= *@
             <div class="js-hub-filter-button-wrapper hub-filter-btn__wrapper">
                 <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
                 <ul class="hub-filter-btn__list">
                     <li class="hub-filter-btn__item"><button class="js-hub-filter-button-reset js-hub-filter-button js-tb-click-tracking hub-filter-btn__button current-active" data-hub-id="@thisHubID" data-custom-category="@trackingHubName-Filter" data-custom-label="Show All">Show All</button></li>
 
-                @* /* Topic based Buttons (Topic Name, Topic Value, Label of Button, Current Hub, Tracking vairble) */ *@
+                @* Topic based Buttons (Topic Name, Topic Value, Label of Button, Current Hub, Tracking vairble) *@
                 @addTopicFilterButton("hubCareerAreas","Business","Business Topics",thisHubID,trackingHubName)
 
-                @* /* Job Facet based Buttons (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) */ *@
-                @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+                @* Job Facet based Buttons (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) *@
+                @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
                 @addFacetFilterButton("Medical Services","New York, NY (City)","job-type","Full Time","Medical (NYC/Full-Time)",thisHubID,trackingHubName)
                 @addFacetFilterButton("Account Services","ALL","ALL","ALL","Account Services (Global)",thisHubID,trackingHubName)
                 </ul>
@@ -355,7 +355,7 @@
 
 
         @* ======================= *@
-        @* /* FILTER BY FORM  */*@
+        @* FILTER BY FORM  *@
         @* ======================= *@
         @if(showFilterForm == 1 && showFilterButtons == 0 ){
             <form class="js-hub-filter-form hub-filter">
@@ -363,15 +363,15 @@
                     <legend class="hub-filter__heading">Filter stories</legend>
                     <div class="hub-filter__controls">
                         @* ======================= *@
-                        @* /* ADDING AND REMOVING FILTERS */ *@
-                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@
-                        @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
-                        @* /* Please note the field always starts with a "facet-" or "topic-" prefix and the rest is the facet/topic name all in lowercase with any spaces turned into dashes */ *@
+                        @* ADDING AND REMOVING FILTERS *@
+                        @* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 *@
+                        @* Filters parameters (Hide/Show, Label, field, default value, ID) *@
+                        @* Please note the field always starts with a "facet-" or "topic-" prefix and the rest is the facet/topic name all in lowercase with any spaces turned into dashes *@
                         @* ======================= *@
-                        @addFilter( 1 ,"Content Topic","topic-hubtopic","Any Topic", thisHubID)  @* /* Example of topic */ *@
+                        @addFilter( 1 ,"Content Topic","topic-hubtopic","Any Topic", thisHubID)  @* Example of topic *@
                         @addFilter( 1 ,"Content Topic","topic-hubcareerareas","Any", thisHubID)
-                        @*/* Below are the default Job Facets, there are no issues with re-ordering these before topics */*@
-                        @*/* By default these job feed based filters are turned off, that is due to the encourgment of using topics instead, however if the data is coming from the feed we can use the below filters */*@
+                        @* Below are the default Job Facets, there are no issues with re-ordering these before topics *@
+                        @* By default these job feed based filters are turned off, that is due to the encourgment of using topics instead, however if the data is coming from the feed we can use the below filters *@
                         @addFilter( 0 ,"Category","category","Any Category", thisHubID)
                         @addFilter( 0 ,"Location","location","Any Location", thisHubID)
                         @addFilter( 0 ,"Is-telecommute","facet-is-telecommute","Any Is telecommute", thisHubID)
@@ -398,7 +398,7 @@
         }
 
         @* ======================= *@
-        @* /* Error Message If both Filter form and Filter buttons are enabled */ *@
+        @* Error Message If both Filter form and Filter buttons are enabled *@
         @* ======================= *@
         @if( showFilterButtons == 1 && showFilterForm == 1 ) {
             <span styles="font-weight:bold; font-size:24px">Filter Buttons and Filter Form can not bot be used at the same time on the same HUB.</span>
@@ -425,7 +425,7 @@
                     ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){
 
                     @* ========================== *@
-                    @* /* Exclusions */ *@
+                    @* Exclusions *@
                     @* ========================== *@
                     string compareExclude = contentPage.LinkUrl;
                     int run;
@@ -445,8 +445,8 @@
                             var contentTypeClass = "";
                             var eLinkClass = "";
 
-                            @* /* Date Override Logic, We check for a override input and if there is none then we use the created date as the value */ *@
-                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* /* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate */ *@
+                            @* Date Override Logic, We check for a override input and if there is none then we use the created date as the value *@
+                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate *@
 
                             foreach (var mappedTopic in contentPage.ContentPageTopicItems){
                                 if( mappedTopic.Name == "hubDateOverride" && mappedTopic.Value != "" ){
@@ -461,7 +461,7 @@
 
 
                             @* ========================== *@
-                            @* /* Item level attributes */ *@
+                            @* Item level attributes *@
                             @* ========================== *@
                             <li class="js-hub-item hub-content__item showing-by-filter"
                                 data-hub-origin="@contentPage.IsCmsCreated"
@@ -476,8 +476,8 @@
                                 data-hub-date-override="@dateCreatedOrOverride.ToString("MM/dd/yyyy HH:mm:ss")">
 
                                 @* ========================== *@
-                                @* /* Content to return for each record */ *@
-                                @* /* This where most Front end changes happen */ *@
+                                @* Content to return for each record *@
+                                @* This where most Front end changes happen *@
                                 @* ========================== *@
                                 @if(contentPage.LinkUrl.Contains("youtube")){
                                     videoType = "video-link youtube";
@@ -490,7 +490,7 @@
                                     eLinkClass = "external-link";
                                 }
                                 @* ======================= *@
-                                @*/* Example of adding a class to the link based on topic in this case called hubContentType */*@
+                                @* Example of adding a class to the link based on topic in this case called hubContentType *@
                                 @* ======================= *@
                                 @foreach (var mappedTopic in contentPage.ContentPageTopicItems){
                                     if(mappedTopic.Name == "hubContentType"){
@@ -501,13 +501,12 @@
                                 }
                                 @* ======================= *@
                                 @*
-                                    // You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so
-                                    // ideally we wrap all content in the link.
+                                    You can rearange all of the items from here til required for filtering, just realize that tracking only happening on the Link, so ideally we wrap all content in the link.
                                 *@
                                 @* ======================= *@
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @contentTypeClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
-                                        @* /* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on */ *@
+                                        @* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on *@
                                         @if( string.IsNullOrWhiteSpace(contentPage.ThumbnailFilePath) && defaultThumbnail == 1 ) {
                                             <img class="js-hub-lazy hub-item__image" data-src="@defaultThumbnailSrc" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
                                         } else {
@@ -523,11 +522,11 @@
 
                                         <span class="hub-item__fake-button">Learn More</span>
 
-                                        @* /* Displaying the Created by or Override date (No null check because it will always be set) */  *@
-                                        @* /* Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA */ *@
+                                        @* Displaying the Created by or Override date (No null check because it will always be set) *@
+                                        @* Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA *@
                                         <span class="hub-item__date">@dateCreatedOrOverride.ToString("MMMM dd, yyy")</span>
 
-                                        @* /* Example of displaying a value from a job facet in this case called campaign */ *@
+                                        @* Example of displaying a value from a job facet in this case called campaign *@
                                         @foreach (var mappedFacet in contentPage.KeywordPageMappings){
                                             if( mappedFacet.CustomFacetFieldNameDisplay == "Campaign" && mappedFacet.CustomFacetFieldValueDisplay != "" ){
                                                 <span class="hub-item__campaign">
@@ -538,7 +537,7 @@
 
 
 
-                                        @* /* Example of displaying a value from a topic in this case called hubTopic */ *@
+                                        @* Example of displaying a value from a topic in this case called hubTopic *@
                                         @foreach (var mappedTopic in contentPage.ContentPageTopicItems){
                                             if( mappedTopic.Name == "hubTopic" && mappedTopic.Value != "" ){
                                                 <span class="hub-item__hubtopic">
@@ -601,7 +600,7 @@
 </section>
 
 @* ======================= *@
-@* Only inject the script on the first instance of the HUB on the page*@
+@* Only inject the script on the first instance of the HUB on the page *@
 @* ======================= *@
 
 @if( thisHubID == "data-hub-1" ) {

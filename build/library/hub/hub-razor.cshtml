@@ -60,7 +60,7 @@
     /* In order to use custom facets to pre-filter, or filter by form or filter by button it has to be added here first */
     /* You can find the facet name to use by going to TB Site Settings and under Search Facets use the Facet Type */
     /* ======================= */
-    @* /* Below are the default recommended facets, your project may have differnt ones you can change these as needed. */ *@
+    @* Below are the default recommended facets, your project may have differnt ones you can change these as needed. *@
     customFacetFieldNames.Add("hubID");
     customFacetFieldNames.Add("hubDateOverride");
     customFacetFieldNames.Add("hubTopic");
@@ -265,25 +265,25 @@ var thisCat = "";
         @if(usePreFilter == 1){
             <ul class="hub-prefilter" aria-hidden="true">
                 @* =======================  *@
-                @* /* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) */ *@
-                @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+                @* PREFILTER SETUP: (Category, Location, Facet Name, Facet Value, Current Hub) *@
+                @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
                 @*  =======================  *@
 
-                @*/* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once */ *@
+                @* It is a default recommendation that you at least prefilter by hubID but you can have multiople prefilters applied at once *@
                 @addPreFilters("ALL","ALL","hubID","ReplaceWithTheIDProvidedByTheDPM",thisHubID)
 
-                @* /* Other examples */ *@
-                @* /* Below an example of how to pre filter by category Account Services */ *@
-                @* /* @addPreFilters("Account Services","ALL","ALL","ALL",thisHubID) */ *@
-                @* /* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time */ *@
-                @* /* @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) */ *@
+                @* Other examples *@
+                @* Below an example of how to pre filter by category Account Services *@
+                @* @addPreFilters("Account Services","ALL","ALL","ALL",thisHubID) *@
+                @* Below an example of how to pre filter by category Medical Services" location New York, NY (City) with a facet job-type and value of Full Time *@
+                @* @addPreFilters("Medical Services","New York, NY (City)","job-type","Full Time",thisHubID) *@
             </ul>
         }
 
         @if(showFilterButtons == 1 && showFilterForm == 0){
             @* ======================= *@
-            @* /* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) */ *@
-            @* /* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused */ *@
+            @* FILTER BY BUTTON SETUP: For each filter button you want to apply send (Category, Location, Facet Name, Facet Value, Label of Button, Current Hub, Tracking vairble) *@
+            @* Please provide a value of ALL for cateogry, location, facet name and facet value if they are unused *@
             @* ======================= *@
             <div class="js-hub-filter-button-wrapper hub-filter-btn__wrapper">
                 <h2 class="hub-filter-btn__heading">Filter Buttons</h2>
@@ -297,7 +297,7 @@ var thisCat = "";
 
 
         @* ======================= *@
-        @* /* FILTER BY FORM  */*@
+        @* FILTER BY FORM  *@
         @* ======================= *@
         @if(showFilterForm == 1 && showFilterButtons == 0 ){
             <form class="js-hub-filter-form hub-filter">
@@ -305,10 +305,10 @@ var thisCat = "";
                     <legend class="hub-filter__heading">Filter stories</legend>
                     <div class="hub-filter__controls">
                         @* ======================= *@
-                        @* /* ADDING AND REMOVING FILTERS */ *@
-                        @* /* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 */ *@
-                        @* /* Filters parameters (Hide/Show, Label, field, default value, ID) */ *@
-                        @* /* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes */ *@
+                        @* ADDING AND REMOVING FILTERS *@
+                        @* You should only need to add, rearrange, and update values of the @addFilter lines below. DO NOT DELETE SIMPLY CHANGE THE 1 TO A 0 *@
+                        @* Filters parameters (Hide/Show, Label, field, default value, ID) *@
+                        @* Please note the field always statrs with a "facet-" prefix and the rest is the facet name all in lowercase with any spaces turned into dashes *@
                         @* ======================= *@
                         @addFilter( 1 ,"Content Topic","facet-hubtopic","Any Topic", thisHubID)  /* Example of custom facet */
                         @addFilter( 1 ,"Category","category","Any Category", thisHubID)
@@ -337,7 +337,7 @@ var thisCat = "";
         }
 
         @* ======================= *@
-        @* /* Error Message If both Filter form and Filter buttons are enabled */ *@
+        @* Error Message If both Filter form and Filter buttons are enabled *@
         @* ======================= *@
         @if( showFilterButtons == 1 && showFilterForm == 1 ) {
             <span styles="font-weight:bold; font-size:24px">Filter Buttons and Filter Form can not bot be used at the same time on the same HUB.</span>
@@ -364,7 +364,7 @@ var thisCat = "";
                     ( pageCreated == "SS created" && selfServicePageType == 1 || pageCreated == "TMP created" && contentPageType == 1 ) ){
 
                     @* ========================== *@
-                    @* /* Exclusions */ *@
+                    @* Exclusions *@
                     @* ========================== *@
                     string compareExclude = contentPage.LinkUrl;
                     int run;
@@ -384,8 +384,8 @@ var thisCat = "";
                             var customFacetClass = "";
                             var eLinkClass = "";
 
-                            @* /* Date Override Logic, We check for a override input and if there is none then we use the created date as the value */ *@
-                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* /* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate */ *@
+                            @* Date Override Logic, We check for a override input and if there is none then we use the created date as the value *@
+                            DateTime dateCreatedOrOverride = DateTime.Parse("0001-01-01"); @* The data we are getting from the users input is from mappings it will come in as a string so we have to parse it to turn it into a date. This variable will everually be overwritten by either the created date or the overidedate *@
 
                             foreach (var mapping in contentPage.KeywordPageMappings){
                                 if( mapping.CustomFacetFieldNameDisplay == "hubDateOverride" && mapping.CustomFacetFieldValueDisplay != "" ){
@@ -400,7 +400,7 @@ var thisCat = "";
 
 
                             @* ========================== *@
-                            @* /* Item level attributes */ *@
+                            @* Item level attributes *@
                             @* ========================== *@
                             <li class="js-hub-item hub-content__item showing-by-filter"
                                 data-hub-origin="@contentPage.IsCmsCreated"
@@ -415,8 +415,8 @@ var thisCat = "";
                                 data-hub-date-override="@dateCreatedOrOverride.ToString("MM/dd/yyyy HH:mm:ss")">
 
                                 @* ========================== *@
-                                @* /* Content to return for each record */ *@
-                                @* /* This where most Front end changes happen */ *@
+                                @* Content to return for each record *@
+                                @* This where most Front end changes happen *@
                                 @* ========================== *@
                                 @if(contentPage.LinkUrl.Contains("youtube")){
                                     videoType = "video-link youtube";
@@ -429,7 +429,7 @@ var thisCat = "";
                                     eLinkClass = "external-link";
                                 }
                                 @* ======================= *@
-                                @*/* Example of adding a class to the link based on custom facet */*@
+                                @* Example of adding a class to the link based on custom facet *@
                                 @* ======================= *@
                                 @foreach (var mapping in contentPage.KeywordPageMappings){
                                     if(customFacetFieldNames.Contains(mapping.CustomFacetFieldName)){
@@ -446,7 +446,7 @@ var thisCat = "";
                                 @* ======================= *@
                                 <a href="@contentPage.LinkUrl" class="js-hub-item-link js-tb-click-tracking hub-item__link @videoType @customFacetClass @eLinkClass" data-custom-category="@trackingHubName-ContentPage" data-custom-label="@contentPage.Title" @Html.Raw(ariaAttr)>
                                     <div class="hub-item__image-wrapper">
-                                        @* /* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on */ *@
+                                        @* This if statment is for If the CP doesn't have a Thumbnail and the Default Thumbnail setting on *@
                                         @if( string.IsNullOrWhiteSpace(contentPage.ThumbnailFilePath) && defaultThumbnail == 1 ) {
                                             <img class="js-hub-lazy hub-item__image" data-src="@defaultThumbnailSrc" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 @lazyWidth @lazyHeight'%3E%3C/svg%3E" alt="">
                                         } else {
@@ -466,7 +466,7 @@ var thisCat = "";
                                         // Differnt date formats: https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/RPsyRsaYNAyt2lqq0VbKrA
                                         <span class="hub-item__date">@dateCreatedOrOverride.ToString("MMMM dd, yyy")</span>
 
-                                        @* /* Example of displaying a value from a custom facet in this case called hubTopic */ *@
+                                        @* Example of displaying a value from a custom facet in this case called hubTopic *@
                                         @foreach (var mapping in contentPage.KeywordPageMappings){
                                             if( mapping.CustomFacetFieldNameDisplay == "hubTopic" && mapping.CustomFacetFieldValueDisplay != "" ){
                                                 <span class="hub-item__hubtopic">
@@ -518,7 +518,7 @@ var thisCat = "";
 </section>
 
 @* ======================= *@
-@* Only inject the script on the first instance of the HUB on the page*@
+@* Only inject the script on the first instance of the HUB on the page *@
 @* ======================= *@
 
 @if( thisHubID == "data-hub-1" ) {
