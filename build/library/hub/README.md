@@ -1,6 +1,8 @@
 HUB is a JS based tool that when used with the TB Content Helper Razor can be used to dyamnicly bring in content pages and give users the control to filter those pages.
 
-> **⚠ REMEMBER:** Check to see if your site has Topics enabled. If it is not enabled and it is the first time a HUB is being setup for the site then tag Bulmer and Brock on your ticket requesting the Topics flag to be enabled. If there is already a HUB on the site and already pages mapped to that HUB using custom facets discuss with your DPM/CSS the possibility of moving the client over to using Topics.
+> **⚠ UPDATE (MAY 2022):** Topics are being phased out and should no longer be used a strategy for new HUBs. We are currently updating the UID Setup instructions to reflect this change. (Note: We will keep the documentation for the use of Topics available in this repository, for those assigned to a ticket dealing with an already-created HUB that is currently using Topics instead of Custom Facets.)
+
+> **⚠ FOR GLOBAL SITE TYPES ONLY:** HUBs that live on a GST site are built with the Content Feed module instead of the Custom HTML module (detailed instructions coming soon!) Keep in mind that in its current form, the Content Feed module CANNOT be used as both a HUB *and* as Related Content on the same site. Until further notice is not possible for GST sites to have both a HUB and Related Content. Please check with Brock if you have any questions regarding this limitation.
 
 First thing to do is make sure that you know all the requirements of the project:
 
