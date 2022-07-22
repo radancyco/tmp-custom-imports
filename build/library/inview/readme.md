@@ -1,3 +1,7 @@
+# Inview Script
+
+## Initial Setup
+
 Add this code, ideally at the whole site level. Like in GST you can add this at the settings page.
 
 ```
@@ -32,6 +36,7 @@ You will also need to add this to your JS
 ```
 
 
+## Classes to use
 Add `prod-check-inView` class to any element you want to check for
 
 You can modify how quickly it determines the element is in view by addtionally adding one of the following classes
@@ -39,13 +44,12 @@ You can modify how quickly it determines the element is in view by addtionally a
 `prod-wait-till-half-inView`
 `prod-wait-till-mostly-inView`
 
-
-
 If you want it so that the element can be retriggered when in view then you can add this class `prod-ivVew-recheck`
-
 
 When an element comes in view the class `element-exposed` will be added to it. 
 
+
+## Example SCSS
 Here is an example of triggering animation of 
 
 Avoid stylying directly on just `.element-exposed` and on `prod-check-inView` Instead add a class that will be the animation.
@@ -55,17 +59,17 @@ This allow allows you to use one inview triogger when you want to animate multip
 @keyframes fadeIn {
   from {
     opacity: 0;
-
   }
-
   to {
     opacity: 1;
   }
 }
 
+// For accesibility reasons we make sure we can easily seperate the animations classes from other styling classes so the user can turn off animations 
 @media (prefers-reduced-motion: no-preference) {
 
-  .fadeIn {    
+  .fadeIn,
+  .fadeIn--slow {    
     // first we make all instances of this transparent. 
     opacity: 0;
   }
