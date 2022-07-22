@@ -38,25 +38,28 @@ You will also need to add this to your JS
 ```
 
 
-## Classes to use
-Add `prod-check-inView` class to any element you want to check for
+## Classes to control what elements and when they are considered inview
+Add `prod-check-inView` class to any element you want to check to see if it is in view.
 
-You can modify how quickly it determines the element is in view by addtionally adding one of the following classes
-`prod-wait-till-fully-inView`
-`prod-wait-till-half-inView`
-`prod-wait-till-mostly-inView`
+You can modify how quickly it determines the element is in view by addtionally adding one of the following classes to the same element. 
+* `prod-wait-till-fully-inView`
+* `prod-wait-till-half-inView`
+* `prod-wait-till-mostly-inView`
 
-If you want it so that the element can be retriggered when in view then you can add this class `prod-ivVew-recheck`
+If you want it so that the element can be retriggered after you scroll passed it and back when in view again then you can add this class `prod-ivVew-recheck` that element.
+
+
+## Classes to style on
 
 When an element comes in view the class `element-exposed` will be added to it. 
 
+Avoid stylying directly on just `.element-exposed` and on `prod-check-inView` Instead add a new unique class that will be the animation. This allow allows you to use one inview triogger when you want to animate multiple elements inside of a section, and it allows you to easily account for accesibilty concerns. 
+
+
+
+Here is an example of triggering a fadein animation 
 
 ## Example SCSS
-Here is an example of triggering animation of 
-
-Avoid stylying directly on just `.element-exposed` and on `prod-check-inView` Instead add a class that will be the animation.
-This allow allows you to use one inview triogger when you want to animate multiple elements inside of a section.
-
 ```
 @keyframes fadeIn {
   from {
@@ -97,3 +100,32 @@ This allow allows you to use one inview triogger when you want to animate multip
 }
 ```
 
+## Example HTML
+
+In this example, the whole div block would fade in once it is in view
+
+```
+<div class="prod-check-inView fadeIn">
+
+<h1>Headline</h1>
+
+<p>Copy</p>
+
+</div>
+
+
+In this example, just the "copy" would fade in once it's parent div is half-way in view.
+
+```
+<div class="prod-check-inView prod-wait-till-half-inView">
+
+<h1>Headline</h1>
+
+<p class="fadeIn">Copy</p>
+
+</div>
+
+```
+
+
+```
