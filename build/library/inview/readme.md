@@ -1,5 +1,7 @@
 # Inview Script
 
+Note: this script is using custom-imports-v1_5
+
 ## Initial Setup
 
 Add this code, ideally at the whole site level. Like in GST you can add this at the settings page.
