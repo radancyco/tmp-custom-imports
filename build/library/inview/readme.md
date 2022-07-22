@@ -112,7 +112,7 @@ In this example, the whole div block would fade in once it is in view
 <p>Copy</p>
 
 </div>
-
+```
 
 In this example, just the "copy" would fade in once it's parent div is half-way in view.
 
@@ -127,5 +127,3 @@ In this example, just the "copy" would fade in once it's parent div is half-way 
 
 ```
 
-
-```
