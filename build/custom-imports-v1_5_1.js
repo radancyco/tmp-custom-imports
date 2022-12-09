@@ -344,10 +344,10 @@ var ciCustomImports = {
         var scriptPath = ciLibraryPath + 'accessible-slick-1_0_1/slick.min.js';
         var cssPath = ciLibraryPath + 'accessible-slick-1_0_1/slick.min.css';
         var themeCssPath = ciLibraryPath + 'accessible-slick-1_0_1/accessible-slick-theme.min.css';        
-        
-        ciCustomImports.loadACustomScript('slickslider', scriptPath, cssPath )
 
         if( !scriptsLoadedByOrDetectedByCustomImports.includes('slickslider')  ) {
+            ciCustomImports.loadACustomScript('slickslider', scriptPath, cssPath )
+
             if( optionalThemeCSS )  {
                 $('head').append( $('<link rel="stylesheet" type="text/css" href="' + themeCssPath + '" />'));
             }
