@@ -21,3 +21,8 @@ For example, let's say we have we a hub featured on a page with a url such as **
 3. Locate the last code block in the script, where you'll see the `'hubInitialized'` (Legacy) or `'contentFeedInitialized'` (GST) event listener. In this event listener you'll need to replace the arguments in the `filterByUrlParam()` function call with the correct values for your hub. If your hub is implemented on a GST site using a Content Feed Module, the first argument should be the hub section's unique class name mentioned above (for example, `'.unique-class-name'`). If your hub is implemented on a legacy site using a Custom HTML module, the first argument should be the hub section's id (By default this is `'#data-hub-1'` but double-check to be sure.) The second argument will always be the filter name (for example, `'category'` or `'location'`.) Note: if you're filtering by more than one URL parameter, this function will need to be called for each filter/parameter.
 
 4. Be sure to publish all changes to preview, and then test the filtering by URL parameter functionality.
+
+## Working Demos
+
+-   Legacy: https://jamesciskaniktest.runmytests.com/hub?category=Nursing
+-   GST: https://jamesciskanikgsttest.runmytests.com/news?category=Nursing
