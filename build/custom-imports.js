@@ -274,7 +274,7 @@ function customImports() {
                     });
                 } else {
                     // Run D3
-                    $.getScript( scriptPath + "library/d3/d3.v5.min.js", function() {
+                    $.getScript( scriptPath + "library/d3/d3.v7.min.js", function() {
                         if ( matches("?custom-debug", url) ) {
                             console.log("CI Debug - Charts Script: D3 Dependancy Loaded")
                         }

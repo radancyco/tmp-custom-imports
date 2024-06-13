@@ -33,7 +33,7 @@ var ciChartInitialized = new CustomEvent('ciChartInitialized');
 var ciAnimateGraph = new CustomEvent('ciAnimateGraph');
 
 
-if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) {
+if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exists() ) { 
 
     $('.js-ci-pie-chart__legend').each(function() {
 
@@ -79,7 +79,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     console.log( 'CI Debug - Donut/Pie Chart ' + chartNumber + ' label ' + $(this).attr('data-label')  + ' Data Color: ' + $(this).attr('data-color') )
                 }
                 var color = $(this).attr('data-color');
-
+                
                 // check to see if a custom icon is already added and if not prepend the icon
                 if( $(this).find('.js-ci-pie-chart__data-icon').length <= 0 ) {
                     $(this).prepend('<span class="js-ci-pie-chart__data-icon"></span>')
@@ -195,7 +195,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
                 // Function for updating chart data
                 function updatingData(chartNumber) {
-
+                    
                     // Resetting Data Variable so that it actually updates
                     data = "";
                     data = $('.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"] .js-ci-pie-chart__data');
@@ -207,8 +207,8 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     .data(legendToPie(data))
                     .enter()
                     .append("path")
-
-
+                    
+                    
                     // Deleting any extra paths that are not needed for the current ammount of data
                     svg.selectAll("path").each(function(d,i){
                         if ( i > numberOfslices ) {
@@ -216,7 +216,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                         }
                     })
                 }
-
+                
                 // Animation on the Graph
                 if ( animateGraph ) {
 
@@ -224,7 +224,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                 updatingData(chartNumber);
 
                 // FadeIn Animation on the graph
-
+                
                 if ( matches("fadein", animateGraphType) ) {
 
                     var items = 0;
@@ -238,7 +238,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     .delay(function(d,i){return animateDelay * i }) // delay every path by animateDelay times how ever many items are before it
                     .style('opacity',1) // set opacity to 1 animated
                     .each(function(d,i){ return items += 1 });
-
+                    
                     d3.select( pieChartHolder + ' .ci-pie-chart__center-img')
                     .interrupt()
                     .style('opacity',0) // set opacity to 0, to animate
@@ -246,67 +246,67 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     .duration(animateDuration) // set animateSpeed duration
                     .delay( animateDelay * items ) // delay every path by animateDelay times how ever many items are before it
                     .style('opacity',1); // set opacity to 1 animated
-
+                
                 }  // END FadeIn Anaimation on the graph
-
+                
                 // Pie Filling Anaimtion on the graph
 
                 else if ( matches("pie-filling", animateGraphType) ) {
-
+                    
 
                     // checking variable on legend to see if we should tween between excisting arcs or not
                     tweeningBetweenData = $('.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"]').attr('data-tweening') == 'true' ? true : false;
-
+                    
                     // Animating between the angles that were there to the new angles
-                    svg.selectAll("path").attr('fill', function(d,i){ return $(d.data).attr('data-color'); }).attr("d", arc).transition().duration(animateDuration).attrTween("d", function (d) {
+                    svg.selectAll("path").attr('fill', function(d,i){ return $(d.data).attr('data-color'); }).attr("d", arc).transition().duration(animateDuration).attrTween("d", function (d) { 
                         // Default startinging and end is 0
-                        var thisStart = 0;
-                        var thisEnd = 0;
+                        var thisStart = 0; 
+                        var thisEnd = 0; 
 
-                        // We are replacing existing data we will use previous datat variable to get starting angles
+                        // We are replacing existing data we will use previous datat variable to get starting angles 
                         if ( tweeningBetweenData ) {
                             if ( previousData.get(this) != undefined ) {
-                                thisStart = previousData.get(this).startAngle;
-                                thisEnd = previousData.get(this).endAngle;
+                                thisStart = previousData.get(this).startAngle; 
+                                thisEnd = previousData.get(this).endAngle; 
                             } else {
-                                thisStart =  d.startAngle;
-                                thisEnd =  d.startAngle;
+                                thisStart =  d.startAngle; 
+                                thisEnd =  d.startAngle; 
                             }
                         }
 
 
                         var start = {startAngle: thisStart, endAngle: thisEnd};
                         var interpolate = d3.interpolate(start, d);
-
+                        
                         // Sonce the math has been done for the tweening we can overwrite the previous data with the new data
                         previousData.set(this, d);
                         return function (t) {
                             return arc(interpolate(t));
-                        }
+                        }               
 
                     })
 
-
+                    
 
 
                 }// END Pie Filling Anaimtion on the graph
 
-
+                
 
                 } // END Animation on the Graph
-
+                
                 // Animation on the Legend
 
                 if ( animateLegend ) {
 
                     // FadeIn Anaimation on the Legend
-
+                    
                     if ( matches("fadein", animateLegendType) ) {
 
                         var legendItems = 0;
 
                         d3.selectAll( '.js-ci-pie-chart__legend[data-chart="'+ chartNumber + '"] [data-animate-legend-item]' )
-                        .each(function(d,i){
+                        .each(function(d,i){ 
                             d3.select(this).interrupt()
                         .style('opacity',0) // set opacity to 0, to animate
                         .transition() // enable transition
@@ -324,7 +324,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
         // Tooltip is set in legend
         if(tooltip) {
-            donutChartTooltip(paths, hoverEffect)
+            donutChartTooltip(paths, hoverEffect) 
         }
 
     }).promise().done( function(){ // Promise will wait for the loop to complete  // end loop for each legend
@@ -351,7 +351,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         resetChartTooltip();
 
     }, 250);
-
+    
     $(window).on('resize', tooltipWindowWidthUpdate);
 
     // Create our tooltip
@@ -383,7 +383,7 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
         var g = (num & 0x0000FF) + amt;
         if (g > 255) g = 255;
         else if (g < 0) g = 0;
-
+    
         return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
     }
 
@@ -402,8 +402,8 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
 
     // Function for placing the tooltip on the donut chart
     function donutChartTooltip(paths, hoverEffect) {
-
-        paths.on('mousemove',function(d,i){ // On mousemove over the paths
+        //replaced (d,i) width (event, d) -- https://observablehq.com/@d3/d3v6-migration-guide -- event management 4/2023
+        paths.on('mousemove',function(event, d){ // On mousemove over the paths
             if ( matches("?custom-debug", url) ) {
                 console.log('Mouse move')
             }
@@ -412,9 +412,10 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
             if( toolTipText != null && toolTipText != ""  ) {
 
                 chartToolTip.html(toolTipText); // set tooltip text
-
+                
                 //
-                var tooltipX = d3.event.pageX;
+                // change d3.event.pageX to event.pageX --4/2023
+                var tooltipX = event.pageX;
                 var toolTipWidth = d3.select("#js-ci-chart__tooltip").node().getBoundingClientRect().width;
                 var tooltipCenterPoint = parseInt(toolTipWidth / 2);
 
@@ -431,9 +432,10 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                 chartToolTip // Select tooltip
                 .style('visibility','visible') // Set to visible
                 .style('left', tooltipX + "px") // set left
-                .style('top',d3.event.pageY - 25 + "px") // set top
+                //change ('top', d3.event.pageY - 25 +"px") to ('top', .event.pageY - 25 +"px") -- 4/2023
+                .style('top', event.pageY - 25 + "px") // set top
             }
-
+        
             //Hover effect
             if(hoverEffect) {
                 var originalColor = $(d.data).attr('data-color');
@@ -448,12 +450,12 @@ if ( $('.js-ci-pie-chart__legend').exists() && $('.js-ci-pie-chart__graph').exis
                     }
                 }
             }
-
+        
         });
 
         paths.on('mouseout', function(d,i){ // on mouseout
             d3.select("#js-ci-chart__tooltip").style('visibility','hidden'); // hide tooltip
-
+        
             // reset hover effect color
             if(hoverEffect) {
                 var originalColor = $(d.data).attr('data-color');
