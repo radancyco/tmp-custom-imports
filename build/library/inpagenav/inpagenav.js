@@ -9,7 +9,9 @@ var inPageNavContentWrapper = document.getElementsByClassName("inPageNav__conten
 // inpage nav links
 var inPageNavLinks = document.querySelectorAll(".inPageNav__content a");
 // get callback function if it exists
-var inPageNavCallback = inPageNavButton.getAttribute("data-callback");
+if (inPageNavButton && inPageNavButton.hasAttribute("data-callback")) {
+    inPageNavCallback = inPageNavButton.getAttribute("data-callback");
+}
 // get the first link and the last link for listeners
 var inPageNavLinkInitial = inPageNavLinks[0];
 if(inPageNavLinks){
@@ -220,6 +222,8 @@ var inPageNavHelper = {
 }
 
 // Initialize Navigation
-if(inPageNav){
+if(inPageNav && inPageNavButton && inPageNavContentWrapper){
   inPageNavHelper.init();
+} else {
+    console.log('%c The InPageNav JS has been loaded via Custom Imports, but it appears the necessary mobile code is not being utilized. If you are seeing this message on an AJD, please ensure the mobile code is included from the following link: https://tbadmin.radancy.net/layoutmanagement/editdesignlayoutitem/79 ', 'background: #fa6400; color: #fff');
 }
