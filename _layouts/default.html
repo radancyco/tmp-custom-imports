@@ -1,0 +1,147 @@
+{% if site.name == "Component Library" %}
+
+  {% assign current_id = page.id %}
+  {% assign module = page.module %}
+  {% assign component = site.data.module[module] | where: "id", current_id | first %}
+
+  {% assign selectedComponents = site.data.module.components %}
+  {% assign selectedFeeds = site.data.module.feeds %}
+  {% assign allSelections = selectedComponents | concat: selectedFeeds %}
+
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="{{ site.lang }}" class="no-js">
+<head>
+    <meta charset="{{ site.charset }}">
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+    <meta content="noindex, nofollow" name="robots">
+    <meta content="{{ site.theme-color }}" name="theme-color">{% if page.slick %}
+    <link href="{{ site.git-url }}/lib/a11y-slick-1.0.1/slick.min.css" rel="stylesheet">{% endif %}{% if page.accordion %}
+    <link href="{{ site.git-url }}/component-library/accordion/init.css" rel="stylesheet">{% endif %}{% if page.in-page %}
+    <link href="{{ site.git-url }}/component-library/select-internal/init.css" rel="stylesheet">{% endif %}{% if page.read-more %}
+    <link href="{{ site.git-url }}/component-library/read-more/init.css" rel="stylesheet">{% endif %}{% if page.tabcordion %}
+    <link href="{{ site.git-url }}/component-library/tabcordion/init.css" rel="stylesheet">{% endif %}{% if page.tablist %}
+    <link href="{{ site.git-url }}/component-library/tablist/init.css" rel="stylesheet">{% endif %}{% if page.card %}
+    <link href="{{ site.git-url }}/component-library/card/init.css" rel="stylesheet">{% endif %}
+    <link href="{{ site.git-url }}/css/init.css" rel="stylesheet">{% if page.librarycss %}
+    <link href="{{ page.librarycss}}" rel="stylesheet">{% endif %}{% if page.localcss %}
+    <link href="{{ page.localcss }}" rel="stylesheet">{% endif %}{% for component in allSelections %}{% if component.id == current_id %}{% for example in component.examples %}{% if example.customcss %}
+    <link href="{{ example.customcss }}.css" rel="stylesheet">{% endif %}{% endfor %}{% endif %}{% endfor %}
+    <link href="{{ site.git-url }}/favicon.ico" rel="icon">
+    <link href="{{ site.git-url }}/manifest.json" rel="manifest">
+    <title>{% if component %}{{ component.title }} v{{ component.version }}{% else %}{{ page.title }}{% endif %} - {{ site.company-name }}</title>
+</head>
+
+<body id="rad-{{ page.path | replace:'.html',''|  replace:'.md','' | replace:'_','' | replace: '/', '-' | replace:'feeds-',''}}"{% if page.section %} class="{{ page.section }}"{% endif %}>
+
+  <div id="page">
+
+    <header id="banner">
+
+      <a href="/"><img src="{{ site.git-url }}/img/logo.svg" alt="{{ site.company-name }}"> <span>{{ site.name }}</span></a>
+
+      {% if site.navigation %}
+
+        {% if page.navigation != false %}
+
+          <nav aria-label="Main" class="main-navigation">
+
+            <div class="main-navigation__content">
+
+              {% include navigation.html %}
+
+            </div>
+
+          </nav>
+
+        {% endif %}
+
+      {% endif %}
+
+    </header>
+
+    <main{% if page.constrain != false %} id="content"{% endif %}>
+
+      {% if component %}
+      
+        <h1 class="primary-heading">{{ component.title }} v{{ component.version }}</h1>
+      
+      {% else if page.title %}
+
+        {% if page.heading != false %}
+      
+          <h1 class="primary-heading">{{ page.title }}</h1>
+
+        {% endif %}
+      
+      {% endif %}
+
+      {% if page.layout == "micropubpost" %}
+
+      <div class="post-overview">
+
+        <div>
+
+          <img src="{{ page.img }}" alt="Headshot of {{ page.author }}">
+          
+        </div>
+
+        <div>
+
+          <ul>
+            <li><span class="visually-hidden">Posted by:</span> <a href='mailto:{{ page.email }}?Subject={{ page.title | replace: " ", "%20" }}'>{{ page.author }}</a>{% if page.role %}, {{ page.role }}{% endif %}</li>
+            {% if page.pronouns %}
+            <li><span class="visually-hidden">Pronouns:</span> {{ page.pronouns }}</li>
+            {% endif %}
+            <li><span class="visually-hidden">Posted:</span> {{ page.date | date: "%A, %B %e, %Y" }}</li>
+            {% if page.update %}
+            <li><span>Update:</span> {{ page.update | date: "%A, %B %e, %Y" }}</li>
+            {% endif %}
+          </ul>
+
+        </div>
+
+      </div>
+
+      {% endif %}
+
+      {% if page.toc %}
+
+      <details class="nav">
+
+        <summary class="btn">Table of Contents</summary>
+
+        {% include toc.html html=content h_max=4 ordered=true %}
+
+      </details>
+
+      {% endif %}
+
+      {{ content }}
+
+    </main>
+
+    <footer{% if page.constrain != false %} id="contentinfo"{% endif %}>
+
+      <p><small>&copy; {{ "now" | date: "%Y" }} {{ site.company-name }}. An equal opportunity employer. <a href="/contribute/">Contributions</a> to this project are welcome.</small></p>
+
+    </footer>
+
+  </div>
+  {% if page.jquery == true %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>{% endif %}{% if page.slick %}
+  <script src="{{ site.git-url }}/lib/a11y-slick-1.0.1/slick.min.js"></script>{% endif %}{% if page.accordion %}
+  <script src="{{ site.git-url }}/component-library/accordion/init.js"></script>{% endif %}{% if page.disclosure %}
+  <script src="{{ site.git-url }}/component-library/disclosure/init.js"></script>{% endif %}{% if page.in-page %}
+  <script src="{{ site.git-url }}/component-library/select-internal/init.js"></script>{% endif %}{% if page.read-more %}
+  <script src="{{ site.git-url }}/component-library/read-more/init.js"></script>{% endif %}{% if page.tabcordion %}
+  <script src="{{ site.git-url }}/component-library/tabcordion/init.js"></script>{% endif %}{% if page.tablist %}
+  <script src="{{ site.git-url }}/component-library/tablist/init.js"></script>{% endif %}
+  <script src="{{ site.git-url }}/js/init.js"></script>{% if page.libraryjs %}
+  <script src="{{ page.libraryjs}}"></script>{% endif %}{% if page.localjs %}
+  <script src="{{ page.localjs }}"></script>{% endif %}{% for component in allSelections %}{% if component.id == current_id %}{% for example in component.examples %}{% if example.customjs %}
+  <script src="{{ example.customjs }}"></script>{% endif %}{% endfor %}{% endif %}{% endfor %}
+
+</body>
+</html>
