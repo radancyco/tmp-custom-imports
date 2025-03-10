@@ -229,6 +229,7 @@ var ciCustomImports = {
         //  var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
         var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
 
+			/* Commenting ci-override-path CW-4670 - as it allow load external script cause DOM XSS */
 			/*
             if ( matches("ci-override-path", url) ) {
                 ciLibraryPath = getParameter("ci-override-path", url)[0];
