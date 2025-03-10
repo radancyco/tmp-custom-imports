@@ -229,11 +229,11 @@ var ciCustomImports = {
         //  var ciLibraryPath = 'http://localhost/sites/tmp-custom-imports/build/library/';
         var ciLibraryPath = 'https://services1.tmpwebeng.com/custom-imports/library/';
 
-
+			/*
             if ( matches("ci-override-path", url) ) {
                 ciLibraryPath = getParameter("ci-override-path", url)[0];
                 console.log("CI - Path Override " + ciLibraryPath)
-            }
+            }*/
             // Use Case:
             // &ci-override-path=http://localhost/sites/tmp-custom-imports/build/library/
 
